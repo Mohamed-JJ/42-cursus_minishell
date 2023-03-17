@@ -1,36 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/17 18:10:50 by mjarboua         ###   ########.fr       */
+/*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
+/*   Updated: 2023/03/17 17:52:21 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <string.h>
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-typedef struct l_input
+int	ft_strlen(char *str)
 {
-	char			*str;
-	int				literal;
-	int				op;
-	struct l_input	*next;
-}		t_input;
+	int	i;
 
-char	**ft_split(char const *s, char c);
-char	*ft_strdup(char *str);
-int		ft_strlen(char *str);
+	i = 0;
+	if (str)
+		while (str[i])
+			i++;
+	return (i);
+}
 
-#endif
+char	*ft_strdup(char *s1)
+{
+	char	*s2;
+	int		size;
+	int		i;
+
+	i = 0;
+	size = ft_strlen(s1);
+	s2 = malloc((size + 1) * sizeof(char));
+	if (!s2)
+		return (NULL);
+	while (s1[i])
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}

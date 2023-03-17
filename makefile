@@ -1,8 +1,8 @@
 NAME = minishell
 
-SRC = execution/built_ins/pwd.c \
-		execution/built_ins/ls_exe.c \
-		minishell.c \
+SRC = minishell.c \
+		utils.c \
+		ft_split.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -18,7 +18,7 @@ all : $(NAME)
 	@$(CC) $(FLAGS) $< -c -o $@ -g
 
 $(NAME) : $(OBJ) minishell.h
-	@$(CC) $(FLAGS) $(OBJ) -o $(NAME) -g
+	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME) -g
 
 clean : $(OBJ) $(OBJ_B)
 	@$(RM) $(OBJ) $(OBJ_B)
