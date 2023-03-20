@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/17 18:10:50 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:52:58 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,29 @@ typedef struct l_input
 	struct l_input	*next;
 }		t_input;
 
-char	**ft_split(char const *s, char c);
+typedef struct l_cmd
+{
+	char			*str;
+	int				literal;
+	int				p;
+	int				red_file;
+	int				input_in_file;
+	int				append;
+	int				heredoc;
+	struct l_cmd	*next;
+}			t_cmd;
+
+char	**ft_split(char *s, char c);
 char	*ft_strdup(char *str);
+char	*ft_strchr(char *s, int c);
 int		ft_strlen(char *str);
+int		ft_isdigit(int c);
+int		ft_isalpha(int c);
+
+void	ft_lstadd_back(t_input **lst, t_input *new);
+t_input	*ft_lstnew(char	*content, int type);
+
+int		ft_isprint(int c);
+char	*ft_substr(char *s, int start, int len);
 
 #endif

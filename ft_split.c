@@ -6,36 +6,13 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 16:55:28 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/17 17:53:34 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/20 14:32:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*ft_substr(char *s, int start, int len)
-{
-	int	j;
-	char	*str;
 
-	if (!s)
-		return (NULL);
-	if (ft_strlen(s) == 0 || len <= 0)
-		return (ft_strdup(""));
-	if (start > ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s + start);
-	str = malloc((len + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	j = 0;
-	while (j < len && s[start])
-	{
-		str[j++] = s[start++];
-	}
-	str[j] = '\0';
-	return (str);
-}
 static int	w_counter(char *s, char c)
 {
 	int	i;
@@ -96,7 +73,7 @@ static char	**allocate(char **str, char *s, char c)
 	return (str);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**str;
 
