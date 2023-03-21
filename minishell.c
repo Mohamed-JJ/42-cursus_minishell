@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/20 18:00:47 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/21 21:44:53 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,23 +96,16 @@ char	*expanded_string(char *str)
 	return (ret);
 }
 
-t_cmd	*syntax_analyser(t_input *f)
+void	commence(char *v)
 {
-	while (f)
-}
 
-int	main(int c, char **v, char **env)
-{
 	t_input	*d;
 	int		i;
 	char	*str;
 	char	**arr;
 
 	i = 0;
-	(void)c;
-	(void)v;
-	(void)env;
-	str = expanded_string(v[1]);
+	str = expanded_string(v);
 	arr = ft_split(str, ' ');
 	d = lex_input(arr);
 	while (d)
@@ -123,5 +116,13 @@ int	main(int c, char **v, char **env)
 			printf("the token | %s | type is operator\n", d->str);
 		d = d->next;
 	}
+}
+
+int	main(int c, char **v, char **env)
+{
+	(void)c;
+	(void)v;
+	(void)env;
+	commence(v[1]);
 	return (0);
 }
