@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/22 18:58:35 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/22 19:13:14 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,65 +118,67 @@ int	check_double_quotes(char *str)
 	return (0);
 }
 
-void	do_change(char c, int character)
+void	do_change(char *c, int character)
 {
-	if (c == character)
-		c = '.';
+	if (*c == character)
+		*c = '\t';
 }
 
-char	*handle_what_inside_quote(char *str)
+void	handle_what_inside_quote(char *str)
 {
 	int	i;
 
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i])
 	{
-		if (str[i] == '\'')
+		printf("%d\n", (int)str[i]);
+		if (str[i] == 39)
 		{
-			while (str[++i] != '\'')
+			i++;
+			while (str[i] != 39)
 			{
-				do_change(str[i], ' ');
+				do_change(&str[i], ' ');
 				i++;
 			}
 		}
-		else if (str[i] == '\"')
+		else if (str[i] == 34)
 		{
-			while (str[++i] != '\"')
+			i++;
+			while (str[i] != 34)
 			{
-				do_change(str[i], ' ');
+				do_change(&str[i], ' ');
 				i++;
 			}
 		}
 		i++;
 	}
-	return (str);
 }
 
-void	commence(char *v)
-{
-	t_input	*d;
-	char	*str;
-	char	**arr;
+// void	commence(char *v)
+// {
+// 	t_input	*d;
+// 	char	*str;
+// 	char	**arr;
 
-	str = expanded_string(v);
-	// if (check_double_quotes(str) == 1)
-	str = handle_what_inside_quote(str);
-	return ((void)printf("%s\n", str));
-	arr = ft_split(str, ' ');
-	d = lex_input(arr);
-}
+// 	str = expanded_string(v);
+// 	// if (check_double_quotes(str) == 1)
+// 	str = handle_what_inside_quote(str);
+// 	return ((void)printf("%s\n", str));
+// 	arr = ft_split(str, ' ');
+// 	d = lex_input(arr);
+// }
 
 int	main(int c, char **v, char **env)
 {
-	char	input[] = "hello kjhsfg \"svjdlvrjlhgaos oieagr\"";
-	char	*history;
+	char	*input =ft_strdup("hello kjhsfg \"svjdlvrjlhgaos oieagr\"");
+	// char	*history;
 
 	(void)c;
 	(void)v;
 	(void)env;
 	printf("%s\n", input);
-	history = handle_what_inside_quote(input);
-	printf("%s\n", history);
+	handle_what_inside_quote(input);
+	printf("%s\n", input);
 	// while (1)
 	// {
 	// 	input = readline("mini9lawi$>:");
