@@ -6,11 +6,13 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/21 21:44:53 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:58:35 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+#define out 0
 
 int	is_op(char *str)
 {
@@ -96,33 +98,90 @@ char	*expanded_string(char *str)
 	return (ret);
 }
 
+int	check_double_quotes(char *str)
+{
+	int	s;
+	int	d;
+
+	d = 0;
+	s = 0;
+	while (*str)
+	{
+		if (*str == '\'')
+			s++;
+		else if (*str == '\"')
+			d++;
+		str++;
+	}
+	if (d % 2 == 1 || s % 2 == 1)
+		return (1);
+	return (0);
+}
+
+void	do_change(char c, int character)
+{
+	if (c == character)
+		c = '.';
+}
+
+char	*handle_what_inside_quote(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '\'')
+		{
+			while (str[++i] != '\'')
+			{
+				do_change(str[i], ' ');
+				i++;
+			}
+		}
+		else if (str[i] == '\"')
+		{
+			while (str[++i] != '\"')
+			{
+				do_change(str[i], ' ');
+				i++;
+			}
+		}
+		i++;
+	}
+	return (str);
+}
+
 void	commence(char *v)
 {
-
 	t_input	*d;
-	int		i;
 	char	*str;
 	char	**arr;
 
-	i = 0;
 	str = expanded_string(v);
+	// if (check_double_quotes(str) == 1)
+	str = handle_what_inside_quote(str);
+	return ((void)printf("%s\n", str));
 	arr = ft_split(str, ' ');
 	d = lex_input(arr);
-	while (d)
-	{
-		if (d->literal == 1)
-			printf("the token | %s | and its type is literal\n", d->str);
-		else
-			printf("the token | %s | type is operator\n", d->str);
-		d = d->next;
-	}
 }
 
 int	main(int c, char **v, char **env)
 {
+	char	input[] = "hello kjhsfg \"svjdlvrjlhgaos oieagr\"";
+	char	*history;
+
 	(void)c;
 	(void)v;
 	(void)env;
-	commence(v[1]);
+	printf("%s\n", input);
+	history = handle_what_inside_quote(input);
+	printf("%s\n", history);
+	// while (1)
+	// {
+	// 	input = readline("mini9lawi$>:");
+	// 	read_history(history);
+	// 	commence(input);	
+	// }
 	return (0);
 }
