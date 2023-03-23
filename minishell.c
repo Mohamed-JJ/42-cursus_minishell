@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/22 19:13:14 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/23 13:30:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,44 +134,34 @@ void	handle_what_inside_quote(char *str)
 		printf("%d\n", (int)str[i]);
 		if (str[i] == 39)
 		{
-			i++;
-			while (str[i] != 39)
-			{
+			while (str[++i] != 39)
 				do_change(&str[i], ' ');
-				i++;
-			}
 		}
 		else if (str[i] == 34)
-		{
-			i++;
-			while (str[i] != 34)
-			{
+			while (str[++i] != 34)
 				do_change(&str[i], ' ');
-				i++;
-			}
-		}
 		i++;
 	}
 }
 
-// void	commence(char *v)
-// {
-// 	t_input	*d;
-// 	char	*str;
-// 	char	**arr;
+void	commence(char *v)
+{
+	t_input	*d;
+	char	*str;
+	char	**arr;
 
-// 	str = expanded_string(v);
-// 	// if (check_double_quotes(str) == 1)
-// 	str = handle_what_inside_quote(str);
-// 	return ((void)printf("%s\n", str));
-// 	arr = ft_split(str, ' ');
-// 	d = lex_input(arr);
-// }
+	str = expanded_string(v);
+	// if (check_double_quotes(str) == 1)
+	str = handle_what_inside_quote(str);
+	return ((void)printf("%s\n", str));
+	arr = ft_split(str, ' ');
+	d = lex_input(arr);
+}
 
 int	main(int c, char **v, char **env)
 {
-	char	*input =ft_strdup("hello kjhsfg \"svjdlvrjlhgaos oieagr\"");
-	// char	*history;
+	char	*input;
+	char	*history;
 
 	(void)c;
 	(void)v;
@@ -179,11 +169,11 @@ int	main(int c, char **v, char **env)
 	printf("%s\n", input);
 	handle_what_inside_quote(input);
 	printf("%s\n", input);
-	// while (1)
-	// {
-	// 	input = readline("mini9lawi$>:");
-	// 	read_history(history);
-	// 	commence(input);	
-	// }
+	while (1)
+	{
+		input = readline("mini9lawi$>:");
+		read_history(history);
+		commence(input);	
+	}
 	return (0);
 }
