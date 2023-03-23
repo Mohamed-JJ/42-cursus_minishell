@@ -21,22 +21,22 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct l_input
-{
-	char			*str;
-	int				literal;
-	int				op;
-	struct l_input	*next;
-}		t_input;
+// typedef struct l_input
+// {
+// 	char			*str;
+// 	int				literal;
+// 	int				op;
+// 	struct l_input	*next;
+// }		t_input;
 
 typedef struct l_cmd
 {
-	char			*str;
-	int				literal;
+	char			*cmd;
+	char			**args;
 	int				p;
-	int				red_file;
-	int				input_in_file;
-	int				append;
+	int				r_out;
+	int				r_in;
+	int				app;
 	int				heredoc;
 	struct l_cmd	*next;
 }			t_cmd;
@@ -48,7 +48,7 @@ int		ft_strlen(char *str);
 int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 
-void	ft_lstadd_back(t_input **lst, t_input *new);
+void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 t_input	*ft_lstnew(char	*content, int type);
 
 int		ft_isprint(int c);

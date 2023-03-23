@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-#define out 0
-
 int	is_op(char *str)
 {
 	int		i;
@@ -131,12 +129,9 @@ void	handle_what_inside_quote(char *str)
 	i = 0;
 	while (str[i])
 	{
-		printf("%d\n", (int)str[i]);
 		if (str[i] == 39)
-		{
 			while (str[++i] != 39)
 				do_change(&str[i], ' ');
-		}
 		else if (str[i] == 34)
 			while (str[++i] != 34)
 				do_change(&str[i], ' ');
@@ -144,36 +139,57 @@ void	handle_what_inside_quote(char *str)
 	}
 }
 
+t_cmd	*syntax_analyser(char **str)
+{
+	t_cmd	*h;
+	int		i;
+	int		status;
+
+	i = -1;
+	i = 0;
+	status = NULL;
+	while (str[++i])
+	{
+		if (is_command(str, i) == 0)
+		{
+			ft_lstadd_back()
+			status = 1;
+		}
+			
+		else if (is_arg(str, i))
+
+		else if (is_pipe(str, i))
+		
+		else if (in_out_heredoc(str, i))
+
+	}
+}
+
 void	commence(char *v)
 {
-	t_input	*d;
+	t_cmd	*h;
 	char	*str;
 	char	**arr;
 
 	str = expanded_string(v);
-	// if (check_double_quotes(str) == 1)
-	str = handle_what_inside_quote(str);
-	return ((void)printf("%s\n", str));
+	handle_what_inside_quote(str);
 	arr = ft_split(str, ' ');
-	d = lex_input(arr);
+	free(str);
+	h = syntax_analyser(arr);
 }
 
 int	main(int c, char **v, char **env)
 {
 	char	*input;
-	char	*history;
-
 	(void)c;
 	(void)v;
 	(void)env;
-	printf("%s\n", input);
-	handle_what_inside_quote(input);
-	printf("%s\n", input);
 	while (1)
 	{
-		input = readline("mini9lawi$>:");
-		read_history(history);
-		commence(input);	
+		input = readline("minimlawi$>:");
+		input[ft_strlen(input) - 1] = '\0';
+		read_history(input);
+		commence(input);
 	}
 	return (0);
 }

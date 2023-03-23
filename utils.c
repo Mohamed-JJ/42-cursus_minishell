@@ -71,9 +71,9 @@ int	ft_isalpha(int c)
 	return (1);
 }
 
-void	ft_lstadd_back(t_input **lst, t_input *new)
+void	ft_lstadd_back(t_cmd **lst, t_cmd *new)
 {
-	t_input	*node;
+	t_cmd	*node;
 
 	node = *lst;
 	if (*lst == NULL)
@@ -86,23 +86,39 @@ void	ft_lstadd_back(t_input **lst, t_input *new)
 	}
 }
 
-t_input	*ft_lstnew(char	*content, int type)
+int  arr_len(char **str)
 {
-	t_input	*new;
+	int	i;
 
-	new = malloc(sizeof(t_input));
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+t_cmd	*ft_lstnew(char	**content, int status)
+{
+	t_cmd	*new;
+	int		i;
+	int		x;
+
+	i = 0;
+	x = 0;
+	new = malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
-	new->str = content;
-	if (type == 0)
+	if (status == 0)
+		new->cmd = *content;
+	else if (status == 1)
 	{
-		new->literal = 1;
-		new->op = 0;
-	}
-	else
-	{
-		new->literal = 0;
-		new->op = 1;
+		i = arr_len(content);
+		new->args = malloc(sizeof(char *) * i);
+		while (content[x])
+		{
+			new->args[x] = ft_strdup(content[x]);
+			x++;
+		}
+		new->args[x] = NULL;
 	}
 	new->next = NULL;
 	return (new);
