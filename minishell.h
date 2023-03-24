@@ -49,7 +49,7 @@ int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 
 void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
-t_input	*ft_lstnew(char	*content, int type);
+t_cmd	*ft_lstnew(char	*content, int type);
 
 int		ft_isprint(int c);
 char	*ft_substr(char *s, int start, int len);
