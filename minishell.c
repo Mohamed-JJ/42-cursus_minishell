@@ -6,45 +6,18 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/23 13:30:50 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:01:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_op(char *str)
+typedef struct l_var
 {
 	int		i;
-	char	*ops;
-
-	i = 0;
-	ops = ft_strdup("|><");
-	while (str[i])
-	{
-		if (ft_strchr(ops, str[i]))
-			return (free(ops), 1);
-		i++;
-	}
-	return (free(ops), 0);
-}
-
-t_input	*lex_input(char **str)
-{
-	t_input	*ret;
-	int		i;
-
-	ret = NULL;
-	i = 0;
-	while (str[i])
-	{
-		if (is_op(str[i]))
-			ft_lstadd_back(&ret, ft_lstnew(str[i], 1));
-		else
-			ft_lstadd_back(&ret, ft_lstnew(str[i], 0));
-		i++;
-	}
-	return (ret);
-}
+	int		j;
+	int		x;
+}		t_var;
 
 char	*string_with_spaces(char *string, int i, int counter)
 {
@@ -139,30 +112,44 @@ void	handle_what_inside_quote(char *str)
 	}
 }
 
+t_cmd	*fill_list(char **str, int start, int end, int pipe)
+{
+	t_cmd	*h;
+	int		i;
+
+	i = 1;
+	h->cmd = str[0];
+	while (str[i])
+	{
+		if (in_out_red(str[i]))
+		{
+			handle_red(str, &i); // we need to handle the red in/out and i need to pass an address of the iterator in order to keep everything in order
+		}
+	}
+	return (h);
+}
+
 t_cmd	*syntax_analyser(char **str)
 {
 	t_cmd	*h;
 	int		i;
-	int		status;
+	int		s;
 
 	i = -1;
-	i = 0;
-	status = NULL;
+	s = 0;
 	while (str[++i])
 	{
-		if (is_command(str, i) == 0)
+		if (is_pipe(str[i]))
 		{
-			ft_lstadd_back()
-			status = 1;
+			h = fill_list(str, s, i, 1);
+			s = i;
 		}
-			
-		else if (is_arg(str, i))
-
-		else if (is_pipe(str, i))
-		
-		else if (in_out_heredoc(str, i))
-
+		else if (is_pipe(str[i]) == -1)
+			write(1, "syntax error\n", 14);
 	}
+	fill_list(str, s, i, 0);
+	// check if a pipe is in the array. if its true fill the list until the pipe, else fill it regularly
+	return (h);
 }
 
 void	commence(char *v)
