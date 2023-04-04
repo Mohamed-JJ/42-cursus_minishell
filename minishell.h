@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/04 16:18:21 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:40:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int		ft_isalpha(int c);
 
 // void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 // t_cmd	*ft_lstnew(char	*content, int type);
+
+void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
+t_cmd	*ft_lstnew(char	*content, int type);
 
 int		ft_isprint(int c);
 char	*ft_substr(char *s, int start, int len);

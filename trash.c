@@ -6,9 +6,10 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/04 15:00:28 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:41:01 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -94,4 +95,5 @@ void	commence(char *v)
 	arr = ft_split(str, ' ');
 	free(str);
 	h = syntax_analyser(arr);
+}
 }

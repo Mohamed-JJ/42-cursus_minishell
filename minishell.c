@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/04 21:45:18 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:40:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ char	*handle_qoutes(char *input)
 	}
 } // this function return to a anotheer function. this function is just a utility function, we pass a pointer to the string from the index
 // we want to handle the double quotes inside and we return whats inside double quotes one after the other
-
 // generate a function that 
 
 int	main(int c, char **v, char **env)
