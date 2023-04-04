@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/03/24 16:01:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:45:18 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,6 @@ char	*expanded_string(char *str)
 	return (ret);
 }
 
-int	check_double_quotes(char *str)
-{
-	int	s;
-	int	d;
-
-	d = 0;
-	s = 0;
-	while (*str)
-	{
-		if (*str == '\'')
-			s++;
-		else if (*str == '\"')
-			d++;
-		str++;
-	}
-	if (d % 2 == 1 || s % 2 == 1)
-		return (1);
-	return (0);
-}
-
 void	do_change(char *c, int character)
 {
 	if (*c == character)
@@ -112,71 +92,48 @@ void	handle_what_inside_quote(char *str)
 	}
 }
 
-t_cmd	*fill_list(char **str, int start, int end, int pipe)
+char	*handle_qoutes(char *input)
 {
-	t_cmd	*h;
-	int		i;
-
-	i = 1;
-	h->cmd = str[0];
-	while (str[i])
-	{
-		if (in_out_red(str[i]))
-		{
-			handle_red(str, &i); // we need to handle the red in/out and i need to pass an address of the iterator in order to keep everything in order
-		}
-	}
-	return (h);
-}
-
-t_cmd	*syntax_analyser(char **str)
-{
-	t_cmd	*h;
 	int		i;
 	int		s;
+	int		e;
 
 	i = -1;
 	s = 0;
-	while (str[++i])
+	e = 0;
+	if (input[i] == '\"')
 	{
-		if (is_pipe(str[i]))
-		{
-			h = fill_list(str, s, i, 1);
-			s = i;
-		}
-		else if (is_pipe(str[i]) == -1)
-			write(1, "syntax error\n", 14);
+		while (input[++i]);
+
 	}
-	fill_list(str, s, i, 0);
-	// check if a pipe is in the array. if its true fill the list until the pipe, else fill it regularly
-	return (h);
-}
+	else if (input[i] == '\'')
+	{
+		while (input[++i])
+		{
+		}
+	}
+} // this function return to a anotheer function. this function is just a utility function, we pass a pointer to the string from the index
+// we want to handle the double quotes inside and we return whats inside double quotes one after the other
 
-void	commence(char *v)
-{
-	t_cmd	*h;
-	char	*str;
-	char	**arr;
-
-	str = expanded_string(v);
-	handle_what_inside_quote(str);
-	arr = ft_split(str, ' ');
-	free(str);
-	h = syntax_analyser(arr);
-}
+// generate a function that 
 
 int	main(int c, char **v, char **env)
 {
 	char	*input;
+
 	(void)c;
 	(void)v;
 	(void)env;
 	while (1)
 	{
 		input = readline("minimlawi$>:");
-		input[ft_strlen(input) - 1] = '\0';
-		read_history(input);
-		commence(input);
+		if (ft_strlen(input) > 0)
+			input[ft_strlen(input)] = '\0';
+		add_history(input);
+		handle_qoutes(input);
 	}
 	return (0);
 }
+
+// you consider making your delimiter a redirection
+// of any type and pipe operators or the and operator
