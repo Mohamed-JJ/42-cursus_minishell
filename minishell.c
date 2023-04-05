@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/04 22:40:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:44:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,29 +92,53 @@ void	handle_what_inside_quote(char *str)
 	}
 }
 
-char	*handle_qoutes(char *input)
+char	*handle_qoutes(char *input, int *i)
 {
-	int		i;
 	int		s;
 	int		e;
 
-	i = -1;
 	s = 0;
 	e = 0;
-	if (input[i] == '\"')
+	if (input[*i] == '\"')
 	{
-		while (input[++i]);
+		s = *i;
+		while (input[++*i])
+			if (input[*i] == '\"')
+				return (ft_substr(input, s, *i - s + 1));
 
 	}
-	else if (input[i] == '\'')
+	else if (input[*i] == '\'')
 	{
-		while (input[++i])
-		{
-		}
+		s = *i;
+		while (input[++*i])
+			if (input[*i] == '\'')
+				return (ft_substr(input, s, *i - s + 1));
 	}
-} // this function return to a anotheer function. this function is just a utility function, we pass a pointer to the string from the index
-// we want to handle the double quotes inside and we return whats inside double quotes one after the other
-// generate a function that 
+	else
+	{
+		while (input[*i] && input[*i] != ' ')
+			(*i)++;
+		return (ft_substr(input, s, *i - s));
+	}
+	return (NULL);
+}
+
+void	lexer(char *input)
+{
+	int		i;
+	char	*joined;
+
+	i = -1;
+	while (input[++i])
+	{
+		if (input[i] == ' ')
+			continue ;
+		else if (input[i] == '\"' || input[i] == '\'')
+			handle_qoutes(input, &i);
+		else
+			handle_qoutes(input, &i);
+	}
+}
 
 int	main(int c, char **v, char **env)
 {
@@ -129,10 +153,13 @@ int	main(int c, char **v, char **env)
 		if (ft_strlen(input) > 0)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
-		handle_qoutes(input);
+		handle_qoutes(input, &i);
 	}
 	return (0);
 }
 
 // you consider making your delimiter a redirection
 // of any type and pipe operators or the and operator
+
+// first we should work on orgainzing our commands and their arguments and manage the redirections and pipes
+// as soon as we find a redirection or a pipe we should split the string into part according to how many redirections and pipes we have
