@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/05 15:44:49 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:24:55 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,26 +123,75 @@ char	*handle_qoutes(char *input, int *i)
 	return (NULL);
 }
 
-void	lexer(char *input)
+// void	lexer(char *input)
+// {
+// 	int		i;
+// 	char	*joined;
+
+// 	i = -1;
+// 	while (input[++i])
+// 	{
+// 		if (input[i] == ' ')
+// 			continue ;
+// 		else if (input[i] == '\"' || input[i] == '\'')
+// 			handle_qoutes(input, &i);
+// 		else
+// 			handle_qoutes(input, &i);
+// 	}
+// }
+
+int	check_if_operator(char *str)
+{
+	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ">") == 0
+		|| ft_strcmp(str, "<") == 0 || ft_strcmp(str, ">>") == 0
+		|| ft_strcmp(str, "<<") == 0 || ft_strcmp(str, "||") == 0
+		|| ft_strcmp(str, "&&") == 0)
+		return (1);
+	return (0);
+}
+
+char	*extract_from_quote(char *str, int *iter, char quote)
 {
 	int		i;
-	char	*joined;
+	char	*ret;
 
-	i = -1;
-	while (input[++i])
+	i = *iter;
+	ret = NULL;
+	while (str[i] && str[i] != quote)
 	{
-		if (input[i] == ' ')
-			continue ;
-		else if (input[i] == '\"' || input[i] == '\'')
-			handle_qoutes(input, &i);
-		else
-			handle_qoutes(input, &i);
+		ret = ft_strjoin(ret, str[i]);
+		i++;
 	}
+	return (ret);
+}
+
+t_lex	*lexer(char *input)
+{
+	char	*holder;
+	t_lex	*lex;
+	int		i;
+
+	i = 0;
+	lex = NULL;
+	while (input[i])
+	{
+		if (input[i] == '\'')
+		{
+			holder = extract_from_quote(input, &i, '\'');
+			ft_lstadd_back(&lex, ft_lstnew(holder, WORD));
+		}
+		else if (input[i] == '\"')
+		{
+			holder = extract_from_quote(input, &i, '\'');
+			ft_lstadd_back(&lex, ft_lstnew(holder, WORD));
+		}
+	}
+	return (lex);
 }
 
 int	main(int c, char **v, char **env)
 {
-	char	*input;
+	t_lex	*lex;
 
 	(void)c;
 	(void)v;
@@ -153,9 +202,17 @@ int	main(int c, char **v, char **env)
 		if (ft_strlen(input) > 0)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
-		handle_qoutes(input, &i);
+		handle_what_inside_quote(input);
+		lex = lexer(input);
+		while (lex)
+		{
+			if (!lex->op)
+				printf("%s and its type is literal\n\n", lex->str);
+			else
+				printf("%s and it's type is operator\n\n", lex->str);
+			lex = lex->next;
+		}
 	}
-	return (0);
 }
 
 // you consider making your delimiter a redirection
