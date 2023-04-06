@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/05 21:02:44 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/06 16:05:29 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char character)
+char	*ft_strjoin_characters(char *s1, char character)
 {
 	size_t	i;
 	size_t	c;
@@ -190,5 +190,14 @@ int	ft_strcmp(char *s1, char *s2)
 			return (1);
 		i++;
 	}
+	return (0);
+}
+
+int	check_if_operator(char *str)
+{
+	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ">") == 0
+		|| ft_strcmp(str, "<") == 0 || ft_strcmp(str, ">>") == 0
+		|| ft_strcmp(str, "<<") == 0)
+		return (1);
 	return (0);
 }

@@ -6,30 +6,23 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/05 18:24:17 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/06 16:54:12 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lex	*new_lex(char *str, int type)
+t_lex	*new_lex(char **str, int type)
 {
 	t_lex	*new;
 
 	new = malloc(sizeof(t_lex));
-	new->str = str;
-	if (type == 0)
-	{
-		new->literal = 1;
-		new->op = 0;
-	}
-	else
-	{
-		new->literal = 0;
-		new->op = 1;
-	}
+	new->str = ft_strdup(*str);
+	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;
+	free(*str);
+	*str = NULL;
 	return (new);
 }
 

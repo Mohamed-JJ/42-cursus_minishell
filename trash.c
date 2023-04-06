@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/04 22:41:01 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/06 16:59:09 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,72 @@ void	commence(char *v)
 	free(str);
 	h = syntax_analyser(arr);
 }
+
+
+char	*extract_from_quote(char *str, int *iter, char quote)
+{
+	int		i;
+	char	*ret;
+
+	i = *iter;
+	ret = NULL;
+	while (str[i] && str[i] != quote)
+	{
+		ret = ft_strjoin_characters(ret, str[i]);
+		i++;
+	}
+	return (ret);
+}
+
+char	*handle_qoutes(char *input, int *i)
+{
+	int		s;
+	int		e;
+
+	s = 0;
+	e = 0;
+	if (input[*i] == '\"')
+	{
+		s = *i + 1;
+		while (input[++*i])
+			if (input[*i] == '\"')
+				return (ft_substr(input, s, *i - s - 1));
+	}
+	else if (input[*i] == '\'')
+	{
+		s = *i;
+		while (input[++*i])
+			if (input[*i] == '\'')
+				return (ft_substr(input, s, *i - s + 1));
+	}
+	else
+	{
+		while (input[*i] && input[*i] != ' ')
+			(*i)++;
+		return (ft_substr(input, s, *i - s));
+	}
+	return (NULL);
+}
+
+void	handle_what_inside_quote(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == 39)
+			while (str[++i] != 39)
+				do_change(&str[i], ' ');
+		else if (str[i] == 34)
+			while (str[++i] != 34)
+				do_change(&str[i], ' ');
+		i++;
+	}
+}
+
+void	do_change(char *c, int character)
+{
+	if (*c == character)
+		*c = '\t';
 }

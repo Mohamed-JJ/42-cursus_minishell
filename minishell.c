@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/05 22:24:55 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/06 18:45:07 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,46 @@ typedef struct l_var
 	int		x;
 }		t_var;
 
+void	fill_with_space(char *string, t_var *f, char **ret, char c)
+{
+	(*ret)[f->j++] = ' ';
+	while (string[f->i] == c)
+		(*ret)[f->j++] = string[f->i++];
+	(*ret)[f->j++] = ' ';
+	(*ret)[f->j] = string[f->i];
+}
+
 char	*string_with_spaces(char *string, int i, int counter)
 {
-	int		f;
-	int		x;
+	t_var	var;
 	char	*ret;
 
-	x = 0;
-	f = 0;
-	ret = malloc(i + counter + 1);
-	while (string[x])
+	var.i = 0;
+	var.j = 0;
+	(void)i;
+	ret = malloc(var.i + counter + 1);
+	while (string[var.i])
 	{
-		if (string[x] == '|' || string[x] == '>' || string[x] == '<')
-		{
-			ret[f++] = ' ';
-			while (string[x] == '|' || string[x] == '>' || string[x] == '<')
-				ret[f++] = string[x++];
-			ret[f++] = ' ';
-			ret[f] = string[x];
-		}
+		if (string[var.i] == '|')
+			fill_with_space(string, &var, &ret, string[var.i]);
+		else if (string[var.i] == '>')
+			fill_with_space(string, &var, &ret, string[var.i]);
+		else if (string[var.i] == '<')
+			fill_with_space(string, &var, &ret, string[var.i]);
 		else
-			ret[f] = string[x];
-		f++;
-		x++;
+			ret[var.j] = string[var.i];
+		var.j++;
+		var.i++;
 	}
-	ret[f] = '\0';
+	ret[var.j] = '\0';
 	return (ret);
+}
+
+int	skip_special_characters(char *str, int *i, char c)
+{
+	while (str[*i] && str[*i] == c)
+		(*i)++;
+	return (2);
 }
 
 char	*expanded_string(char *str)
@@ -57,162 +71,109 @@ char	*expanded_string(char *str)
 	counter = 0;
 	while (str[i])
 	{
-		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
-		{
-			counter += 2;
-			while (str[i] == '|' && str[i] == '<' && str[i] == '>')
-				i++;
-		}
+		if (str[i] == '>')
+			counter += skip_special_characters(str, &i, str[i]);
+		else if (str[i] == '<')
+			counter += skip_special_characters(str, &i, str[i]);
+		else if (str[i] == '|')
+			counter += skip_special_characters(str, &i, str[i]);
 		i++;
 	}
 	ret = string_with_spaces(str, i, counter);
 	return (ret);
 }
 
-void	do_change(char *c, int character)
-{
-	if (*c == character)
-		*c = '\t';
-}
 
-void	handle_what_inside_quote(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == 39)
-			while (str[++i] != 39)
-				do_change(&str[i], ' ');
-		else if (str[i] == 34)
-			while (str[++i] != 34)
-				do_change(&str[i], ' ');
-		i++;
-	}
-}
-
-char	*handle_qoutes(char *input, int *i)
-{
-	int		s;
-	int		e;
-
-	s = 0;
-	e = 0;
-	if (input[*i] == '\"')
-	{
-		s = *i;
-		while (input[++*i])
-			if (input[*i] == '\"')
-				return (ft_substr(input, s, *i - s + 1));
-
-	}
-	else if (input[*i] == '\'')
-	{
-		s = *i;
-		while (input[++*i])
-			if (input[*i] == '\'')
-				return (ft_substr(input, s, *i - s + 1));
-	}
-	else
-	{
-		while (input[*i] && input[*i] != ' ')
-			(*i)++;
-		return (ft_substr(input, s, *i - s));
-	}
-	return (NULL);
-}
-
-// void	lexer(char *input)
-// {
-// 	int		i;
-// 	char	*joined;
-
-// 	i = -1;
-// 	while (input[++i])
-// 	{
-// 		if (input[i] == ' ')
-// 			continue ;
-// 		else if (input[i] == '\"' || input[i] == '\'')
-// 			handle_qoutes(input, &i);
-// 		else
-// 			handle_qoutes(input, &i);
-// 	}
-// }
-
-int	check_if_operator(char *str)
-{
-	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ">") == 0
-		|| ft_strcmp(str, "<") == 0 || ft_strcmp(str, ">>") == 0
-		|| ft_strcmp(str, "<<") == 0 || ft_strcmp(str, "||") == 0
-		|| ft_strcmp(str, "&&") == 0)
-		return (1);
-	return (0);
-}
-
-char	*extract_from_quote(char *str, int *iter, char quote)
-{
-	int		i;
-	char	*ret;
-
-	i = *iter;
-	ret = NULL;
-	while (str[i] && str[i] != quote)
-	{
-		ret = ft_strjoin(ret, str[i]);
-		i++;
-	}
-	return (ret);
-}
 
 t_lex	*lexer(char *input)
 {
 	char	*holder;
 	t_lex	*lex;
 	int		i;
+	int		beginning;
 
 	i = 0;
+	beginning = 0;
 	lex = NULL;
 	while (input[i])
 	{
-		if (input[i] == '\'')
+		if (!beginning)
 		{
-			holder = extract_from_quote(input, &i, '\'');
-			ft_lstadd_back(&lex, ft_lstnew(holder, WORD));
+			while (input[i] != ' ' && input[i])
+			{
+				holder = ft_strjoin_characters(holder, input[i]);
+				i++;
+			}
+			ft_lstadd_back_lexer(&lex, new_lex(&holder, COMMAND));
+			beginning = 1;
 		}
-		else if (input[i] == '\"')
+		else
 		{
-			holder = extract_from_quote(input, &i, '\'');
-			ft_lstadd_back(&lex, ft_lstnew(holder, WORD));
+			while (input[i] && input[i] != ' ')
+			{
+				holder = ft_strjoin_characters(holder, input[i]);
+				i++;
+			}
+			if (check_if_operator(holder))
+			{
+				if (!ft_strcmp(holder, "|"))
+					ft_lstadd_back_lexer(&lex, new_lex(&holder, PIPE));
+				else if (!ft_strcmp(holder, ">"))
+					ft_lstadd_back_lexer(&lex, new_lex(&holder, REDIRECT));
+				else if (!ft_strcmp(holder, "<"))
+					ft_lstadd_back_lexer(&lex, new_lex(&holder, READ_INPUT));
+				else if (!ft_strcmp(holder, ">>"))
+					ft_lstadd_back_lexer(&lex, new_lex(&holder, APPEND));
+				else if (!ft_strcmp(holder, "<<"))
+					ft_lstadd_back_lexer(&lex, new_lex(&holder, HEREDOC));
+				beginning = 0;
+			}
+			else
+				ft_lstadd_back_lexer(&lex, new_lex(&holder, ARGUMENT));
 		}
+		i++;
 	}
 	return (lex);
 }
 
 int	main(int c, char **v, char **env)
 {
-	t_lex	*lex;
+	// t_lex	*lex;
+	char	*input;
 
 	(void)c;
 	(void)v;
 	(void)env;
-	while (1)
-	{
-		input = readline("minimlawi$>:");
-		if (ft_strlen(input) > 0)
-			input[ft_strlen(input)] = '\0';
-		add_history(input);
-		handle_what_inside_quote(input);
-		lex = lexer(input);
-		while (lex)
-		{
-			if (!lex->op)
-				printf("%s and its type is literal\n\n", lex->str);
-			else
-				printf("%s and it's type is operator\n\n", lex->str);
-			lex = lex->next;
-		}
-	}
+
+	input = expanded_string("hello>|>there");
+	printf("%s", input);
+	// while (1)
+	// {
+	// 	input = readline("minimlawi$>:");
+	// 	if (ft_strlen(input) > 0)
+	// 		input[ft_strlen(input)] = '\0';
+	// 	add_history(input);
+	// 	// input = expanded_string(input);
+	// 	lex = lexer(input);
+	// 	while (lex)
+	// 	{
+	// 		if (lex->type == COMMAND)
+	// 			printf("%s and its type is command\n", lex->str);
+	// 		else if (lex->type == ARGUMENT)
+	// 			printf("%s and it's type is argument\n", lex->str);
+	// 		else if (lex->type == PIPE)
+	// 			printf("%s and it's type is pipe\n", lex->str);
+	// 		else if (lex->type == REDIRECT)
+	// 			printf("%s and it's type is redirect\n", lex->str);
+	// 		else if (lex->type == READ_INPUT)
+	// 			printf("%s and it's type is read input\n", lex->str);
+	// 		else if (lex->type == APPEND)
+	// 			printf("%s and it's type is append\n", lex->str);
+	// 		else if (lex->type == HEREDOC)
+	// 			printf("%s and it's type is heredoc\n", lex->str);
+	// 		lex = lex->next;
+	// 	}
+	// }
 }
 
 // you consider making your delimiter a redirection
