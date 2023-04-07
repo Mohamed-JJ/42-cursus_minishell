@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/06 18:45:07 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 00:35:43 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,12 @@ char	*string_with_spaces(char *string, int i, int counter)
 
 	var.i = 0;
 	var.j = 0;
-	(void)i;
-	ret = malloc(var.i + counter + 1);
+	printf("counter: %d\n", i);
+	ret = malloc(i + counter + 1);
 	while (string[var.i])
 	{
-		if (string[var.i] == '|')
-			fill_with_space(string, &var, &ret, string[var.i]);
-		else if (string[var.i] == '>')
-			fill_with_space(string, &var, &ret, string[var.i]);
-		else if (string[var.i] == '<')
+		if (string[var.i] == '|' || string[var.i] == '>'
+			|| string[var.i] == '<')
 			fill_with_space(string, &var, &ret, string[var.i]);
 		else
 			ret[var.j] = string[var.i];
@@ -51,6 +48,7 @@ char	*string_with_spaces(char *string, int i, int counter)
 		var.i++;
 	}
 	ret[var.j] = '\0';
+	printf("hna\n");
 	return (ret);
 }
 
@@ -71,15 +69,16 @@ char	*expanded_string(char *str)
 	counter = 0;
 	while (str[i])
 	{
-		if (str[i] == '>')
+		printf("wasup\n");
+		if (str[i] == '>' || str[i] == '<' || str[i] == '|')
 			counter += skip_special_characters(str, &i, str[i]);
-		else if (str[i] == '<')
-			counter += skip_special_characters(str, &i, str[i]);
-		else if (str[i] == '|')
-			counter += skip_special_characters(str, &i, str[i]);
+		if (!str[i])
+			break ;
 		i++;
 	}
 	ret = string_with_spaces(str, i, counter);
+	// free(str);
+	// str = NULL;
 	return (ret);
 }
 
@@ -138,42 +137,39 @@ t_lex	*lexer(char *input)
 
 int	main(int c, char **v, char **env)
 {
-	// t_lex	*lex;
+	t_lex	*lex;
 	char	*input;
 
 	(void)c;
 	(void)v;
 	(void)env;
-
-	input = expanded_string("hello>|>there");
-	printf("%s", input);
-	// while (1)
-	// {
-	// 	input = readline("minimlawi$>:");
-	// 	if (ft_strlen(input) > 0)
-	// 		input[ft_strlen(input)] = '\0';
-	// 	add_history(input);
-	// 	// input = expanded_string(input);
-	// 	lex = lexer(input);
-	// 	while (lex)
-	// 	{
-	// 		if (lex->type == COMMAND)
-	// 			printf("%s and its type is command\n", lex->str);
-	// 		else if (lex->type == ARGUMENT)
-	// 			printf("%s and it's type is argument\n", lex->str);
-	// 		else if (lex->type == PIPE)
-	// 			printf("%s and it's type is pipe\n", lex->str);
-	// 		else if (lex->type == REDIRECT)
-	// 			printf("%s and it's type is redirect\n", lex->str);
-	// 		else if (lex->type == READ_INPUT)
-	// 			printf("%s and it's type is read input\n", lex->str);
-	// 		else if (lex->type == APPEND)
-	// 			printf("%s and it's type is append\n", lex->str);
-	// 		else if (lex->type == HEREDOC)
-	// 			printf("%s and it's type is heredoc\n", lex->str);
-	// 		lex = lex->next;
-	// 	}
-	// }
+	while (1)
+	{
+		input = readline("minimlawi$>:");
+		if (ft_strlen(input) > 0)
+			input[ft_strlen(input)] = '\0';
+		add_history(input);
+		// input = expanded_string(input);
+		lex = lexer(input);
+		while (lex)
+		{
+			if (lex->type == COMMAND)
+				printf("%s and its type is command\n", lex->str);
+			else if (lex->type == ARGUMENT)
+				printf("%s and it's type is argument\n", lex->str);
+			else if (lex->type == PIPE)
+				printf("%s and it's type is pipe\n", lex->str);
+			else if (lex->type == REDIRECT)
+				printf("%s and it's type is redirect\n", lex->str);
+			else if (lex->type == READ_INPUT)
+				printf("%s and it's type is read input\n", lex->str);
+			else if (lex->type == APPEND)
+				printf("%s and it's type is append\n", lex->str);
+			else if (lex->type == HEREDOC)
+				printf("%s and it's type is heredoc\n", lex->str);
+			lex = lex->next;
+		}
+	}
 }
 
 // you consider making your delimiter a redirection
