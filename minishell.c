@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 00:35:43 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 17:32:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,6 @@ typedef struct l_var
 	int		x;
 }		t_var;
 
-void	fill_with_space(char *string, t_var *f, char **ret, char c)
-{
-	(*ret)[f->j++] = ' ';
-	while (string[f->i] == c)
-		(*ret)[f->j++] = string[f->i++];
-	(*ret)[f->j++] = ' ';
-	(*ret)[f->j] = string[f->i];
-}
-
-char	*string_with_spaces(char *string, int i, int counter)
-{
-	t_var	var;
-	char	*ret;
-
-	var.i = 0;
-	var.j = 0;
-	printf("counter: %d\n", i);
-	ret = malloc(i + counter + 1);
-	while (string[var.i])
-	{
-		if (string[var.i] == '|' || string[var.i] == '>'
-			|| string[var.i] == '<')
-			fill_with_space(string, &var, &ret, string[var.i]);
-		else
-			ret[var.j] = string[var.i];
-		var.j++;
-		var.i++;
-	}
-	ret[var.j] = '\0';
-	printf("hna\n");
-	return (ret);
-}
-
 int	skip_special_characters(char *str, int *i, char c)
 {
 	while (str[*i] && str[*i] == c)
@@ -59,30 +26,21 @@ int	skip_special_characters(char *str, int *i, char c)
 	return (2);
 }
 
-char	*expanded_string(char *str)
+char	*token_(char *str, int *iter)
 {
 	int		i;
-	int		counter;
 	char	*ret;
 
-	i = 0;
-	counter = 0;
-	while (str[i])
+	i = *iter;
+	ret = NULL;
+	while (str[i] != ' ' && str[i])
 	{
-		printf("wasup\n");
-		if (str[i] == '>' || str[i] == '<' || str[i] == '|')
-			counter += skip_special_characters(str, &i, str[i]);
-		if (!str[i])
-			break ;
+		ret = ft_strjoin_characters(ret, str[i]);
 		i++;
 	}
-	ret = string_with_spaces(str, i, counter);
-	// free(str);
-	// str = NULL;
+	*iter = i;
 	return (ret);
 }
-
-
 
 t_lex	*lexer(char *input)
 {
@@ -98,41 +56,68 @@ t_lex	*lexer(char *input)
 	{
 		if (!beginning)
 		{
-			while (input[i] != ' ' && input[i])
-			{
-				holder = ft_strjoin_characters(holder, input[i]);
-				i++;
-			}
-			ft_lstadd_back_lexer(&lex, new_lex(&holder, COMMAND));
+			holder = token_(input, &i);
+			ft_lstadd_back_lexer(&lex, new_lex(holder, COMMAND));
 			beginning = 1;
 		}
 		else
 		{
-			while (input[i] && input[i] != ' ')
-			{
-				holder = ft_strjoin_characters(holder, input[i]);
-				i++;
-			}
+			holder = token_(input, &i);
 			if (check_if_operator(holder))
 			{
 				if (!ft_strcmp(holder, "|"))
-					ft_lstadd_back_lexer(&lex, new_lex(&holder, PIPE));
+					ft_lstadd_back_lexer(&lex, new_lex(holder, PIPE));
 				else if (!ft_strcmp(holder, ">"))
-					ft_lstadd_back_lexer(&lex, new_lex(&holder, REDIRECT));
+					ft_lstadd_back_lexer(&lex, new_lex(holder, REDIRECT));
 				else if (!ft_strcmp(holder, "<"))
-					ft_lstadd_back_lexer(&lex, new_lex(&holder, READ_INPUT));
+					ft_lstadd_back_lexer(&lex, new_lex(holder, READ_INPUT));
 				else if (!ft_strcmp(holder, ">>"))
-					ft_lstadd_back_lexer(&lex, new_lex(&holder, APPEND));
+					ft_lstadd_back_lexer(&lex, new_lex(holder, APPEND));
 				else if (!ft_strcmp(holder, "<<"))
-					ft_lstadd_back_lexer(&lex, new_lex(&holder, HEREDOC));
+					ft_lstadd_back_lexer(&lex, new_lex(holder, HEREDOC));
 				beginning = 0;
 			}
 			else
-				ft_lstadd_back_lexer(&lex, new_lex(&holder, ARGUMENT));
+				ft_lstadd_back_lexer(&lex, new_lex(holder, ARGUMENT));
 		}
 		i++;
 	}
-	return (lex);
+	return (free(input), lex);
+}
+
+// char	*()
+
+
+
+char	*insert_spaces(char *input)
+{
+	int		i;
+	char	*ret;
+	char	character;
+
+	i = -1;
+	ret = NULL;
+	while (input[++i])
+	{
+		while (input[i] == ' ' && input[i])
+			i++;
+		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		{
+			character = input[i];
+			ret = ft_strjoin_characters(ret, ' ');
+			while (input[i] == character && input[i])
+			{
+				ret = ft_strjoin_characters(ret, input[i++]);
+				if (input[i + 1] != character)
+					break ;
+			}
+			ret = ft_strjoin_characters(ret, input[i]);
+			ret = ft_strjoin_characters(ret, ' ');
+		}
+		else
+			ret = ft_strjoin_characters(ret, input[i]);
+	}
+	return (ret);
 }
 
 int	main(int c, char **v, char **env)
@@ -149,7 +134,7 @@ int	main(int c, char **v, char **env)
 		if (ft_strlen(input) > 0)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
-		// input = expanded_string(input);
+		input = insert_spaces(input);
 		lex = lexer(input);
 		while (lex)
 		{

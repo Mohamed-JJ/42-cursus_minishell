@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/06 16:59:09 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 17:30:13 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,4 +164,96 @@ void	do_change(char *c, int character)
 {
 	if (*c == character)
 		*c = '\t';
+}
+
+void	fill_with_space(char *string, t_var *f, char **ret, char c)
+{
+	(*ret)[f->j++] = ' ';
+	while (string[f->i] == c)
+		(*ret)[f->j++] = string[f->i++];
+	(*ret)[f->j++] = ' ';
+	(*ret)[f->j] = string[f->i];
+}
+
+char	*string_with_spaces(char *string, int i, int counter)
+{
+	t_var	var;
+	char	*ret;
+
+	var.i = 0;
+	var.j = 0;
+	printf("counter: %d\n", i);
+	ret = malloc(i + counter + 1);
+	while (string[var.i])
+	{
+		if (string[var.i] == '|' || string[var.i] == '>'
+			|| string[var.i] == '<')
+			fill_with_space(string, &var, &ret, string[var.i]);
+		else
+			ret[var.j] = string[var.i];
+		var.j++;
+		var.i++;
+	}
+	ret[var.j] = '\0';
+	printf("hna\n");
+	return (ret);
+}
+
+char	*expanded_string(char *str)
+{
+	int		i;
+	int		counter;
+	char	*ret;
+
+	i = 0;
+	counter = 0;
+	while (str[i])
+	{
+		printf("wasup\n");
+		if (str[i] == '>' || str[i] == '<' || str[i] == '|')
+			counter += skip_special_characters(str, &i, str[i]);
+		if (!str[i])
+			break ;
+		i++;
+	}
+	ret = string_with_spaces(str, i, counter);
+	// free(str);
+	// str = NULL;
+	return (ret);
+}
+
+char	*expand_string(char *str)
+{
+	char	*ret;
+	char	character;
+	int		i;
+
+	i = -1;
+	while (str[++i])
+	{
+		while ((str[i] == ' ' || str[i] == '\t') && str[i])
+			i++;
+		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+		{
+			character = str[i];
+			ret = ft_strjoin_characters(ret, ' ');
+			while (str[i] == character && str[i])
+			{
+				ret = ft_strjoin_characters(ret, character);
+				i++;
+			}
+			ret = ft_strjoin_characters(ret, ' ');
+			ret = ft_strjoin_characters(ret, str[i]);
+		}
+		else
+		{
+			while (str[i] != ' ' && str[i] != '|'
+				&& str[i] != '>' && str[i] != '<' && str[i])
+			{
+				ret = ft_strjoin_characters(ret, character);
+				i++;
+			}
+		}
+	}
+	return (ret);
 }

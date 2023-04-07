@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/06 22:29:42 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 17:29:14 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct l_lex
 	struct l_lex	*prev;
 }		t_lex;
 
-t_lex	*new_lex(char **str, int type);
+t_lex	*new_lex(char *str, int type);
 void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);
 t_lex	*ft_lstlast_lexer(t_lex *lst);
 
