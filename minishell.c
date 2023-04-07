@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 17:32:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 20:30:05 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,8 @@ typedef struct l_var
 	int		i;
 	int		j;
 	int		x;
+	char	*str;
 }		t_var;
-
-int	skip_special_characters(char *str, int *i, char c)
-{
-	while (str[*i] && str[*i] == c)
-		(*i)++;
-	return (2);
-}
 
 char	*token_(char *str, int *iter)
 {
@@ -42,6 +36,26 @@ char	*token_(char *str, int *iter)
 	return (ret);
 }
 
+void	add_back_type(t_lex **lex, char *holder, int *i)
+{
+	if (check_if_operator(holder))
+	{
+		if (!ft_strcmp(holder, "|"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, PIPE));
+		else if (!ft_strcmp(holder, ">"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, REDIRECT));
+		else if (!ft_strcmp(holder, "<"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, READ_INPUT));
+		else if (!ft_strcmp(holder, ">>"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, APPEND));
+		else if (!ft_strcmp(holder, "<<"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, HEREDOC));
+		*i = 0;
+	}
+	else
+		ft_lstadd_back_lexer(lex, new_lex(holder, ARGUMENT));
+}
+
 t_lex	*lexer(char *input)
 {
 	char	*holder;
@@ -49,10 +63,10 @@ t_lex	*lexer(char *input)
 	int		i;
 	int		beginning;
 
-	i = 0;
+	i = -1;
 	beginning = 0;
 	lex = NULL;
-	while (input[i])
+	while (input[++i])
 	{
 		if (!beginning)
 		{
@@ -63,31 +77,18 @@ t_lex	*lexer(char *input)
 		else
 		{
 			holder = token_(input, &i);
-			if (check_if_operator(holder))
-			{
-				if (!ft_strcmp(holder, "|"))
-					ft_lstadd_back_lexer(&lex, new_lex(holder, PIPE));
-				else if (!ft_strcmp(holder, ">"))
-					ft_lstadd_back_lexer(&lex, new_lex(holder, REDIRECT));
-				else if (!ft_strcmp(holder, "<"))
-					ft_lstadd_back_lexer(&lex, new_lex(holder, READ_INPUT));
-				else if (!ft_strcmp(holder, ">>"))
-					ft_lstadd_back_lexer(&lex, new_lex(holder, APPEND));
-				else if (!ft_strcmp(holder, "<<"))
-					ft_lstadd_back_lexer(&lex, new_lex(holder, HEREDOC));
-				beginning = 0;
-			}
-			else
-				ft_lstadd_back_lexer(&lex, new_lex(holder, ARGUMENT));
+			add_back_type(&lex, holder, &beginning);
 		}
-		i++;
 	}
 	return (free(input), lex);
 }
 
-// char	*()
-
-
+int	skip_special_characters(char *str, int *i, char c)
+{
+	while (str[*i] && str[*i] == c)
+		(*i)++;
+	return (2);
+}
 
 char	*insert_spaces(char *input)
 {
@@ -99,8 +100,7 @@ char	*insert_spaces(char *input)
 	ret = NULL;
 	while (input[++i])
 	{
-		while (input[i] == ' ' && input[i])
-			i++;
+		skip_special_characters(input, &i, ' ');
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			character = input[i];
@@ -156,9 +156,3 @@ int	main(int c, char **v, char **env)
 		}
 	}
 }
-
-// you consider making your delimiter a redirection
-// of any type and pipe operators or the and operator
-
-// first we should work on orgainzing our commands and their arguments and manage the redirections and pipes
-// as soon as we find a redirection or a pipe we should split the string into part according to how many redirections and pipes we have
