@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 00:25:39 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:25:57 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_lex	*new_lex(char *str, int type)
 {

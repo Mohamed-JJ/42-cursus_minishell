@@ -2,7 +2,7 @@ NAME = minishell
 
 SRC = minishell.c \
 		utils.c \
-		lexer_lists.c \
+		lexer/lexer_lists.c \
 
 OBJ = $(SRC:.c=.o)
 
