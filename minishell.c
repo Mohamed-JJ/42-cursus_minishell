@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 00:23:15 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 00:27:42 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ t_lex	*lexer(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (is_quote(input[i]));
+		if (is_quote(input[i]))
+		{
+			print("");
+		}
 	}
 }
 

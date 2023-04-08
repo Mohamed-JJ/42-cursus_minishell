@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 23:39:39 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 00:27:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,37 +20,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-enum e_type
-{
-	PIPE,
-	REDIRECT,
-	APPEND,
-	HEREDOC,
-	COMMAND,
-	ARGUMENT,
-	READ_INPUT,
-	OUTPUT_FILE,
-	INPUT_FILE,
-	HEREDOC_CONTENT,
-	SPACE
-};
-
-/*          lexer related functions and data           */
-
-typedef struct l_lex
-{
-	char			*str;
-	int				type;
-	struct l_lex	*next;
-	struct l_lex	*prev;
-}		t_lex;
-
-t_lex	*new_lex(char *str, int type);
-void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);
-t_lex	*ft_lstlast_lexer(t_lex *lst);
-
-/*          parser related functions and data          */
+# include <lexer/lexer.h>
 
 typedef struct l_cmd
 {
