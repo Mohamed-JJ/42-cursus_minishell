@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 20:28:36 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 00:07:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,4 +258,78 @@ char	*expand_string(char *str)
 	return (ret);
 }
 
+char	*insert_spaces(char *input)
+{
+	int		i;
+	char	*ret;
+	char	character;
 
+	i = -1;
+	ret = NULL;
+	while (input[++i])
+	{
+		skip_special_characters(input, &i, ' ');
+		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		{
+			character = input[i];
+			ret = ft_strjoin_characters(ret, ' ');
+			while (input[i] == character && input[i])
+			{
+				if (input[i + 1] != character)
+					break ;
+				ret = ft_strjoin_characters(ret, input[i++]);
+			}
+			ret = ft_strjoin_characters(ret, input[i]);
+			ret = ft_strjoin_characters(ret, ' ');
+		}
+		else
+			ret = ft_strjoin_characters(ret, input[i]);
+	}
+	return (ret);
+}
+
+int	skip_special_characters(char *str, int *i, char c)
+{
+	while (str[*i] && str[*i] == c)
+		(*i)++;
+	return (2);
+}
+
+void	add_back_type(t_lex **lex, char *holder, int *i)
+{
+	if (check_if_operator(holder))
+	{
+		if (!ft_strcmp(holder, "|"))
+		{
+			ft_lstadd_back_lexer(lex, new_lex(holder, PIPE));
+			*i = 0;
+		}
+		else if (!ft_strcmp(holder, ">"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, REDIRECT));
+		else if (!ft_strcmp(holder, "<"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, READ_INPUT));
+		else if (!ft_strcmp(holder, ">>"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, APPEND));
+		else if (!ft_strcmp(holder, "<<"))
+			ft_lstadd_back_lexer(lex, new_lex(holder, HEREDOC));
+	}
+	else
+		ft_lstadd_back_lexer(lex, new_lex(holder, ARGUMENT));
+		// check_add_argument(lex, holder);
+}
+
+char	*token_(char *str, int *iter)
+{
+	int		i;
+	char	*ret;
+
+	i = *iter;
+	ret = NULL;
+	while (str[i] != ' ' && str[i])
+	{
+		ret = ft_strjoin_characters(ret, str[i]);
+		i++;
+	}
+	*iter = i;
+	return (ret);
+}

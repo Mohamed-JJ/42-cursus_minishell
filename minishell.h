@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 18:21:16 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:39:39 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ enum e_type
 	READ_INPUT,
 	OUTPUT_FILE,
 	INPUT_FILE,
+	HEREDOC_CONTENT,
 	SPACE
 };
 
