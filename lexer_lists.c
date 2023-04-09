@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 17:30:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:37:03 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ t_lex	*new_lex(char *str, int type)
 	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;
-	free(str);
-	str = NULL;
+	// free(str);
+	// str = NULL;
 	return (new);
 }
 

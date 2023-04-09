@@ -6,79 +6,70 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 20:30:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/09 00:53:30 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-typedef struct l_var
+typedef struct l_data
 {
-	int		i;
-	int		j;
-	int		x;
-	char	*str;
-}		t_var;
+	char		c;
+	char		*s;
+	int			i;
+	int			j;
+}	t_data;
 
-char	*token_(char *str, int *iter)
+void	qoute_handler(char *str, t_data *data, t_lex **lex)
 {
-	int		i;
-	char	*ret;
-
-	i = *iter;
-	ret = NULL;
-	while (str[i] != ' ' && str[i])
+	data->i++;
+	printf("the string   %s\n", data->s);
+	printf("the string   %s\n", str);
+	while (str[data->i] && str[data->i] != data->c)
 	{
-		ret = ft_strjoin_characters(ret, str[i]);
-		i++;
+		data->s = ft_strjoin_characters(data->s, str[data->i]);
+		printf("the string   %s\n", data->s);
+		data->i++;
 	}
-	*iter = i;
-	return (ret);
-}
-
-void	add_back_type(t_lex **lex, char *holder, int *i)
-{
-	if (check_if_operator(holder))
-	{
-		if (!ft_strcmp(holder, "|"))
-			ft_lstadd_back_lexer(lex, new_lex(holder, PIPE));
-		else if (!ft_strcmp(holder, ">"))
-			ft_lstadd_back_lexer(lex, new_lex(holder, REDIRECT));
-		else if (!ft_strcmp(holder, "<"))
-			ft_lstadd_back_lexer(lex, new_lex(holder, READ_INPUT));
-		else if (!ft_strcmp(holder, ">>"))
-			ft_lstadd_back_lexer(lex, new_lex(holder, APPEND));
-		else if (!ft_strcmp(holder, "<<"))
-			ft_lstadd_back_lexer(lex, new_lex(holder, HEREDOC));
-		*i = 0;
-	}
+	if (!str[data->i])
+		printf("error in quotation\n");
+	data->i++;
+	if (str[data->i] == '\"')
+		qoute_handler(str, data, lex);
 	else
-		ft_lstadd_back_lexer(lex, new_lex(holder, ARGUMENT));
+		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD));
 }
 
 t_lex	*lexer(char *input)
 {
-	char	*holder;
 	t_lex	*lex;
-	int		i;
-	int		beginning;
+	t_data	data;
 
-	i = -1;
-	beginning = 0;
+	data.i = 0;
 	lex = NULL;
-	while (input[++i])
+	data.s = NULL;
+	while (input[data.i])
 	{
-		if (!beginning)
+		if (input[data.i] == '\"' || input[data.i] == '\'')
 		{
-			holder = token_(input, &i);
-			ft_lstadd_back_lexer(&lex, new_lex(holder, COMMAND));
-			beginning = 1;
-		}
-		else
+			data.c = input[data.i];
+			qoute_handler(input, &data, &lex);
+			free(data.s);
+			data.s = NULL;
+		}		else
 		{
-			holder = token_(input, &i);
-			add_back_type(&lex, holder, &beginning);
+			// while (input[data.i] == ' ' && input[data.i])
+			// 	data.i++;
+			while (input[data.i] != ' ' && input[data.i])
+			{
+				data.s = ft_strjoin_characters(data.s, input[data.i]);
+				data.i++;
+			}
+			ft_lstadd_back_lexer(&lex, new_lex(data.s, WORD));
+			free(data.s);
+			data.s = NULL;
 		}
+		data.i++;
 	}
 	return (free(input), lex);
 }
@@ -107,9 +98,9 @@ char	*insert_spaces(char *input)
 			ret = ft_strjoin_characters(ret, ' ');
 			while (input[i] == character && input[i])
 			{
-				ret = ft_strjoin_characters(ret, input[i++]);
 				if (input[i + 1] != character)
 					break ;
+				ret = ft_strjoin_characters(ret, input[i++]);
 			}
 			ret = ft_strjoin_characters(ret, input[i]);
 			ret = ft_strjoin_characters(ret, ' ');
@@ -135,23 +126,11 @@ int	main(int c, char **v, char **env)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = insert_spaces(input);
+		printf("intput is %s\n", input);
 		lex = lexer(input);
 		while (lex)
 		{
-			if (lex->type == COMMAND)
-				printf("%s and its type is command\n", lex->str);
-			else if (lex->type == ARGUMENT)
-				printf("%s and it's type is argument\n", lex->str);
-			else if (lex->type == PIPE)
-				printf("%s and it's type is pipe\n", lex->str);
-			else if (lex->type == REDIRECT)
-				printf("%s and it's type is redirect\n", lex->str);
-			else if (lex->type == READ_INPUT)
-				printf("%s and it's type is read input\n", lex->str);
-			else if (lex->type == APPEND)
-				printf("%s and it's type is append\n", lex->str);
-			else if (lex->type == HEREDOC)
-				printf("%s and it's type is heredoc\n", lex->str);
+			printf("|   %s  | and its type is word\n", lex->str);
 			lex = lex->next;
 		}
 	}

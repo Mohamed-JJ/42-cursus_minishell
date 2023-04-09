@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/07 18:21:16 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:23:05 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ enum e_type
 	REDIRECT,
 	APPEND,
 	HEREDOC,
-	COMMAND,
-	ARGUMENT,
-	READ_INPUT,
-	OUTPUT_FILE,
-	INPUT_FILE,
+	WORD,
 	SPACE
 };
 
