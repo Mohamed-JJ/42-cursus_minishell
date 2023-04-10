@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/06 16:05:29 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/10 13:07:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,4 +200,11 @@ int	check_if_operator(char *str)
 		|| ft_strcmp(str, "<<") == 0)
 		return (1);
 	return (0);
+}
+
+int	skip_special_characters(char *str, int *i, char c)
+{
+	while (str[*i] && str[*i] == c)
+		(*i)++;
+	return (2);
 }

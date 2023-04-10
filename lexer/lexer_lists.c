@@ -6,11 +6,12 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 20:25:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/10 14:05:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "lexer.h"
 
 t_lex	*new_lex(char *str, int type)
 {
@@ -21,8 +22,6 @@ t_lex	*new_lex(char *str, int type)
 	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;
-	free(str);
-	str = NULL;
 	return (new);
 }
 

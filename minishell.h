@@ -6,14 +6,14 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 15:44:03 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/10 14:05:07 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "./lexer/lexer.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -21,12 +21,18 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "lexer/lexer.h"
 
-# define ERROR -1
-# define SUCCESS 1
-# define TRUE 1
-# define FALSE 0
-# define FAILURE 0
+enum e_type
+{
+	PIPE,
+	REDIRECT,
+	APPEND,
+	HEREDOC,
+	READ_INPUT,
+	WORD,
+	SPACE
+};
 
 typedef struct l_cmd
 {
@@ -40,12 +46,13 @@ typedef struct l_cmd
 	int				heredoc;
 	struct l_cmd	*next;
 }			t_cmd;
-/*       				linked list functions						*/
 
 void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 t_cmd	*ft_lstnew(char	**content, int type);
 
-/*------------------------------------------------------------------*/
+/*-----------------------------------------------------*/
+
+/*						utils functions					*/
 
 char	**ft_split(char *s, char c);
 char	*ft_strdup(char *str);
@@ -57,4 +64,8 @@ char	*ft_strjoin_characters(char *s1, char c);
 int		ft_isprint(int c);
 char	*ft_substr(char *s, int start, int len);
 int		ft_strcmp(char *s1, char *s2);
+int		check_if_operator(char *str);
+int		skip_special_characters(char *str, int *i, char c);
+
+
 #endif
