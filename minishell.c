@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/09 00:53:30 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/10 14:01:21 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,71 +14,71 @@
 
 typedef struct l_data
 {
-	char		c;
-	char		*s;
-	int			i;
-	int			j;
-}	t_data;
+	int		i;
+	char	c;
+	char	*s;
+}		t_data;
 
-void	qoute_handler(char *str, t_data *data, t_lex **lex)
+char	*token_(char *str, int *iter)
+{
+	int		i;
+	char	*ret;
+
+	i = *iter;
+	ret = NULL;
+	while (str[i] != ' ' && str[i])
+	{
+		ret = ft_strjoin_characters(ret, str[i]);
+		i++;
+	}
+	*iter = i;
+	return (ret);
+}
+
+void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 {
 	data->i++;
-	printf("the string   %s\n", data->s);
-	printf("the string   %s\n", str);
-	while (str[data->i] && str[data->i] != data->c)
+	while (str[data->i] && str[data->i] != '\"')
 	{
 		data->s = ft_strjoin_characters(data->s, str[data->i]);
-		printf("the string   %s\n", data->s);
 		data->i++;
 	}
 	if (!str[data->i])
 		printf("error in quotation\n");
 	data->i++;
 	if (str[data->i] == '\"')
-		qoute_handler(str, data, lex);
+		dqoute_handler(str, data, lex);
 	else
 		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD));
 }
 
 t_lex	*lexer(char *input)
 {
+	t_data	h;
 	t_lex	*lex;
-	t_data	data;
 
-	data.i = 0;
+	h.i = -1;
 	lex = NULL;
-	data.s = NULL;
-	while (input[data.i])
+	h.s = NULL;
+	while (input[++h.i])
 	{
-		if (input[data.i] == '\"' || input[data.i] == '\'')
+		if (input[(h.i)] == '\'' || input[h.i] == '\"')
+			dqoute_handler(input, &h, &lex);
+		else
 		{
-			data.c = input[data.i];
-			qoute_handler(input, &data, &lex);
-			free(data.s);
-			data.s = NULL;
-		}		else
-		{
-			// while (input[data.i] == ' ' && input[data.i])
-			// 	data.i++;
-			while (input[data.i] != ' ' && input[data.i])
+			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
 			{
-				data.s = ft_strjoin_characters(data.s, input[data.i]);
-				data.i++;
+				h.s = ft_strjoin_characters(h.s, input[h.i]);
+				h.i++;
 			}
-			ft_lstadd_back_lexer(&lex, new_lex(data.s, WORD));
-			free(data.s);
-			data.s = NULL;
+			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD));
 		}
-		data.i++;
+		free(h.s);
+		h.s = NULL;
+		if (!input[h.i])
+			break ;
 	}
-	return (free(input), lex);
-}
-
-int	skip_special_characters(char *str, int *i, char c)
-{
-	while (str[*i] && str[*i] == c)
-		(*i)++;
-	return (2);
+	return (lex);
 }
 
 char	*insert_spaces(char *input)
@@ -91,7 +91,7 @@ char	*insert_spaces(char *input)
 	ret = NULL;
 	while (input[++i])
 	{
-		skip_special_characters(input, &i, ' ');
+		// skip_special_characters(input, &i, ' ');
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			character = input[i];
@@ -108,17 +108,15 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
+	printf("the string after the insertion %s\n", ret);
 	return (ret);
 }
 
-int	main(int c, char **v, char **env)
+int	main(void)
 {
 	t_lex	*lex;
 	char	*input;
 
-	(void)c;
-	(void)v;
-	(void)env;
 	while (1)
 	{
 		input = readline("minimlawi$>:");
@@ -126,11 +124,10 @@ int	main(int c, char **v, char **env)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = insert_spaces(input);
-		printf("intput is %s\n", input);
 		lex = lexer(input);
 		while (lex)
 		{
-			printf("|   %s  | and its type is word\n", lex->str);
+			printf("%s and it's type is word\n", lex->str);
 			lex = lex->next;
 		}
 	}

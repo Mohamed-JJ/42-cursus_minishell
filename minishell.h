@@ -6,9 +6,10 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 21:23:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/10 13:20:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -20,6 +21,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "lexer/lexer.h"
 
 enum e_type
 {
@@ -27,25 +29,10 @@ enum e_type
 	REDIRECT,
 	APPEND,
 	HEREDOC,
+	READ_INPUT,
 	WORD,
 	SPACE
 };
-
-/*          lexer related functions and data           */
-
-typedef struct l_lex
-{
-	char			*str;
-	int				type;
-	struct l_lex	*next;
-	struct l_lex	*prev;
-}		t_lex;
-
-t_lex	*new_lex(char *str, int type);
-void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);
-t_lex	*ft_lstlast_lexer(t_lex *lst);
-
-/*          parser related functions and data          */
 
 typedef struct l_cmd
 {
@@ -59,12 +46,6 @@ typedef struct l_cmd
 	int				heredoc;
 	struct l_cmd	*next;
 }			t_cmd;
-
-
-
-
-
-
 
 void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 t_cmd	*ft_lstnew(char	**content, int type);
@@ -84,5 +65,7 @@ int		ft_isprint(int c);
 char	*ft_substr(char *s, int start, int len);
 int		ft_strcmp(char *s1, char *s2);
 int		check_if_operator(char *str);
+int		skip_special_characters(char *str, int *i, char c);
+
 
 #endif
