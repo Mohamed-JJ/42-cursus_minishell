@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/08 00:07:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:58:58 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ int	is_op(char *str)
 		i++;
 	}
 	return (free(ops), 0);
+}
+
+char	*token_(char *str, int *iter)
+{
+	int		i;
+	char	*ret;
+
+	i = *iter;
+	ret = NULL;
+	while (str[i] != ' ' && str[i])
+	{
+		ret = ft_strjoin_characters(ret, str[i]);
+		i++;
+	}
+	*iter = i;
+	return (ret);
 }
 
 t_input	*lex_input(char **str)

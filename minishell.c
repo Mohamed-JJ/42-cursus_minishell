@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/10 14:04:47 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:51:55 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@ typedef struct l_data
 	char	c;
 	char	*s;
 }		t_data;
-
-char	*token_(char *str, int *iter)
-{
-	int		i;
-	char	*ret;
-
-	i = *iter;
-	ret = NULL;
-	while (str[i] != ' ' && str[i])
-	{
-		ret = ft_strjoin_characters(ret, str[i]);
-		i++;
-	}
-	*iter = i;
-	return (ret);
-}
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 {
@@ -66,6 +50,8 @@ t_lex	*lexer(char *input)
 			dqoute_handler(input, &h, &lex);
 		else
 		{
+			while (input[h.i] == ' ' || input[h.i] == '\t')
+				h.i++;
 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
 			{
 				h.s = ft_strjoin_characters(h.s, input[h.i]);
@@ -81,6 +67,60 @@ t_lex	*lexer(char *input)
 	return (lex);
 }
 
+void	check_rest_type(t_lex *p, int *i)
+{
+	if (!(*i))
+	{
+		p->type = COMMAND;
+		*i = 1;
+	}
+	else if (!ft_strcmp("|", p->str))
+	{
+		printf("here\n");
+		*i = 0;
+		p->type = PIPE;
+	}
+	else if (p->prev->type == APPEND)
+	{
+		printf("hello\n");
+		p->type = OUT_FILE;
+	}
+	else if (p->prev->type == REDIRECT)
+		p->type = OUT_FILE;
+	else if (p->prev->type == HEREDOC)
+		p->type = HEREDOC_DEL;
+}
+
+void	assign_type(t_lex *p)
+{
+	int		i;
+	t_lex	*tmp;
+
+	tmp = p;
+	i = 0;
+	while (p)
+	{
+		if (!ft_strcmp(">", p->str))
+			p->type = REDIRECT;
+		else if (!ft_strcmp(">>", p->str))
+		{
+			printf("apppend\n");
+			p->type = APPEND;
+		}
+		else if (!ft_strcmp("<", p->str))
+		{
+			p->prev->type = IN_FILE;
+			p->type = READ_INPUT;
+		}
+		else if (!ft_strcmp("<<", p->str))
+			p->type = HEREDOC;
+		else
+			check_rest_type(p, &i);
+		p = p->next;
+	}
+	p = tmp;
+}
+
 char	*insert_spaces(char *input)
 {
 	int		i;
@@ -91,7 +131,6 @@ char	*insert_spaces(char *input)
 	ret = NULL;
 	while (input[++i])
 	{
-		// skip_special_characters(input, &i, ' ');
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			character = input[i];
@@ -108,7 +147,6 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
-	printf("the string after the insertion %s\n", ret);
 	return (ret);
 }
 
@@ -124,10 +162,34 @@ int	main(void)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = insert_spaces(input);
+		printf("before\n");
 		lex = lexer(input);
+		// printf("after\n");
+		assign_type(lex);
+		
 		while (lex)
 		{
-			printf("%s and it's type is word\n", lex->str);
+			if (lex->type == COMMAND)
+				printf("%s is a command\n", lex->str);
+			else if (lex->type == PIPE)
+				printf("%s is a pipe\n", lex->str);
+			else if (lex->type == REDIRECT)
+				printf("%s is a redirect\n", lex->str);
+			else if (lex->type == HEREDOC)
+				printf("%s is a heredoc\n", lex->str);
+			else if (lex->type == APPEND)
+				printf("%s is a append\n", lex->str);
+			else if (lex->type == IN_FILE)
+				printf("%s is a input file\n", lex->str);
+			else if (lex->type == OUT_FILE)
+				printf("%s is a output file\n", lex->str);
+			else if (lex->type == READ_INPUT)
+				printf("%s is a read input\n", lex->str);
+			else if (lex->type == HEREDOC_DEL)
+				printf("%s is a heredoc delimiter\n", lex->str);
+			else
+				printf("%s is an argument\n", lex->str);
+			// printf("%s and it's type is word\n", lex->str);
 			lex = lex->next;
 		}
 	}

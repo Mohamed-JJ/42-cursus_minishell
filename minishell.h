@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/10 14:05:07 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:05:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,15 @@
 enum e_type
 {
 	PIPE,
+	COMMAND,
 	REDIRECT,
 	APPEND,
 	HEREDOC,
 	READ_INPUT,
+	OUT_FILE,
+	IN_FILE,
 	WORD,
+	HEREDOC_DEL,
 	SPACE
 };
 
