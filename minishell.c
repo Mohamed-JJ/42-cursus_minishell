@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/11 15:51:55 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:02:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,30 +67,6 @@ t_lex	*lexer(char *input)
 	return (lex);
 }
 
-void	check_rest_type(t_lex *p, int *i)
-{
-	if (!(*i))
-	{
-		p->type = COMMAND;
-		*i = 1;
-	}
-	else if (!ft_strcmp("|", p->str))
-	{
-		printf("here\n");
-		*i = 0;
-		p->type = PIPE;
-	}
-	else if (p->prev->type == APPEND)
-	{
-		printf("hello\n");
-		p->type = OUT_FILE;
-	}
-	else if (p->prev->type == REDIRECT)
-		p->type = OUT_FILE;
-	else if (p->prev->type == HEREDOC)
-		p->type = HEREDOC_DEL;
-}
-
 void	assign_type(t_lex *p)
 {
 	int		i;
@@ -103,10 +79,7 @@ void	assign_type(t_lex *p)
 		if (!ft_strcmp(">", p->str))
 			p->type = REDIRECT;
 		else if (!ft_strcmp(">>", p->str))
-		{
-			printf("apppend\n");
 			p->type = APPEND;
-		}
 		else if (!ft_strcmp("<", p->str))
 		{
 			p->prev->type = IN_FILE;
@@ -162,9 +135,7 @@ int	main(void)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = insert_spaces(input);
-		printf("before\n");
 		lex = lexer(input);
-		// printf("after\n");
 		assign_type(lex);
 		
 		while (lex)
