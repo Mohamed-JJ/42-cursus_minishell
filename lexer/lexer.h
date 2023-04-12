@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 00:25:04 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/11 16:51:33 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:45:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 # define LEXER_H
 
 #include "../minishell.h"
+
+typedef struct l_data
+{
+	int		i;
+	char	c;
+	char	*s;
+}		t_data;
 
 typedef struct l_lex
 {

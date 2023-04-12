@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/10 13:07:11 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:25:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,3 +208,21 @@ int	skip_special_characters(char *str, int *i, char c)
 		(*i)++;
 	return (2);
 }
+
+void	dqoute_handler(char *str, t_data *data, t_lex **lex)
+{
+	data->i++;
+	while (str[data->i] && str[data->i] != '\"')
+	{
+		data->s = ft_strjoin_characters(data->s, str[data->i]);
+		data->i++;
+	}
+	if (!str[data->i])
+		printf("error in quotation\n");
+	data->i++;
+	if (str[data->i] == '\"')
+		dqoute_handler(str, data, lex);
+	else
+		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD));
+}
+

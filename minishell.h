@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/11 15:05:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:25:29 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ enum e_type
 	HEREDOC_DEL,
 	SPACE
 };
+
+typedef struct l_exp
+{
+	char			*value;
+	char			*name;
+	struct l_exp	*next;
+}			t_exp;
 
 typedef struct l_cmd
 {
@@ -70,6 +77,6 @@ char	*ft_substr(char *s, int start, int len);
 int		ft_strcmp(char *s1, char *s2);
 int		check_if_operator(char *str);
 int		skip_special_characters(char *str, int *i, char c);
-
+void	dqoute_handler(char *str, t_data *data, t_lex **lex);
 
 #endif
