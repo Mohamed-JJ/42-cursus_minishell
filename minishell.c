@@ -6,12 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/12 18:25:10 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/12 22:05:10 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_lex	*lexer(char *input)
 {
@@ -130,6 +129,27 @@ void	print_list(t_lex *lex)
 
 t_exp	*store_var(char *input)
 {
+	char	**var;
+	t_exp *p;
+	t_data h;
+
+	h.i = 0;
+	h.s = NULL;
+	p = NULL;
+	while (input[h.i])
+	{
+		if (input[h.i] == '=')
+		{
+			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
+				h.i--;
+			while (input[h.i] != '=' && input[h.i])
+			{
+				h.s = ft_strjoin_characters(h.s, input[h.i]);
+				h.i++;
+			}
+			
+		}
+	}
 	// in this function we will store the variables in a linked list of local variables
 	// and we will need a function that gets the value of the variable invoked in the input to replace it
 }

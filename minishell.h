@@ -6,10 +6,9 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/12 18:25:29 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/12 21:56:36 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -60,10 +59,6 @@ typedef struct l_cmd
 
 void	ft_lstadd_back(t_cmd **lst, t_cmd *new);
 t_cmd	*ft_lstnew(char	**content, int type);
-
-/*-----------------------------------------------------*/
-
-/*						utils functions					*/
 
 char	**ft_split(char *s, char c);
 char	*ft_strdup(char *str);
