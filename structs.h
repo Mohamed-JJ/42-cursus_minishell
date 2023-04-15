@@ -6,12 +6,28 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 20:44:36 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:30:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+enum e_status
+{
+	TO_BE_PIPED,
+	TO_BE_EXECUTED,
+	TO_BE_REDIRECTED,
+	TO_BE_APPENDED,
+	TO_BE_HEREDOC,
+	TO_BE_READ_INPUT
+}
+
+enum e_exc
+{
+	MANUAL,
+	AUTO,
+}
 
 typedef struct l_data
 {
@@ -49,6 +65,11 @@ typedef struct l_cmd
 {
 	char			*cmd;
 	char			**args;
+	int				status;
+	int				type;
+	char			*heredoc;
+	char			*infile;
+	char			*outfile;
 	struct l_cmd	*next;
 }			t_cmd;
 

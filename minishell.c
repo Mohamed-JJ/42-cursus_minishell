@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 21:06:44 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:17:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,18 +156,5 @@ int	main(int c, char **v, char **env)
 	(void)v;
 	anv = get_env(env);
 	exp = get_exp(env);
-	while (anv)
-	{
-		// puts("-------------------->1\n");
-		printf("%s=%s\n", anv->name, anv->value);
-		anv = anv->next;
-	}
-	// system("echo '1 + 1'");
-	while (exp)
-	{
-		// puts("----------------------->2\n");
-		printf("%s\n", exp->s);
-		exp = exp->next;
-	}
 	return (0);
 }
