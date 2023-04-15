@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/12 21:54:36 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/14 20:49:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,4 +347,106 @@ char	*token_(char *str, int *iter)
 	}
 	*iter = i;
 	return (ret);
+}
+
+// char	*expand_variables(char *input, t_exp *p)
+// {
+// 	char	*ret;
+// 	int		i;
+
+// 	i = 0;
+// 	ret = NULL;
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '$')
+// 		{
+// 			i++;
+// 			while (p)
+// 			{
+// 				if (input[i] == p->name[0])
+// 				{
+// 					ret = ft_strjoin_characters(ret, p->value);
+// 					break ;
+// 				}
+// 				p = p->next;
+// 			}
+// 		}
+// 		else
+// 			ret = ft_strjoin_characters(ret, input[i]);
+// 		i++;
+// 	}
+// }
+
+t_exp	*store_local_var(char *input)
+{
+	char	**arr;
+	t_exp	*p;
+	t_data	h;
+
+	h.i = 0;
+	arr = malloc(sizeof(char *) * 3);
+	arr[3] = NULL;
+	p = NULL;
+	while (input[h.i])
+	{
+		if (input[h.i] == '=')
+		{
+			while ((input[h.i] != '\t' || input[h.i] != ' ') && input[h.i])
+				h.i--;
+			h.i++;
+			while (input[h.i] && input[h.i] != '=')
+			{
+				arr[0] = ft_strjoin_characters(arr[0], input[h.i]);
+				h.i++;
+			}
+			h.i++;
+			while (input[h.i] != '\t' && input[h.i] != ' ' && input[h.i])
+			{
+				arr[1] = ft_strjoin_characters(arr[1], input[h.i]);
+				h.i++;
+			}
+			ft_lstadd_back_expander(&p, new_exp(arr));
+			free(arr[0]);
+			free(arr[1]);
+			arr[0] = NULL;
+			arr[1] = NULL;
+		}
+		// while ((input[h.i] == '\t' || input[h.i] != ' ') && input[h.i])
+		// 	h.i++;
+		// while (input[h.i] != '\t' && input[h.i] != ' ' && input[h.i])
+			// i++;
+		if (input[h.i])
+			h.i++;
+		else
+			break ;
+	}
+	return (p);
+}
+
+void	print_list(t_lex *lex)
+{
+	while (lex)
+	{
+		if (lex->type == COMMAND)
+			printf("%s is a command\n", lex->str);
+		else if (lex->type == PIPE)
+			printf("%s is a pipe\n", lex->str);
+		else if (lex->type == REDIRECT)
+			printf("%s is a redirect\n", lex->str);
+		else if (lex->type == HEREDOC)
+			printf("%s is a heredoc\n", lex->str);
+		else if (lex->type == APPEND)
+			printf("%s is a append\n", lex->str);
+		else if (lex->type == IN_FILE)
+			printf("%s is a input file\n", lex->str);
+		else if (lex->type == OUT_FILE)
+			printf("%s is a output file\n", lex->str);
+		else if (lex->type == READ_INPUT)
+			printf("%s is a read input\n", lex->str);
+		else if (lex->type == HEREDOC_DEL)
+			printf("%s is a heredoc delimiter\n", lex->str);
+		else
+			printf("%s is an argument\n", lex->str);
+		lex = lex->next;
+	}
 }

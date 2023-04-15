@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/10 14:05:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/14 16:10:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,3 @@ t_lex	*ft_lstlast_lexer(t_lex *lst)
 		lst = lst->next;
 	return (lst);
 }
-

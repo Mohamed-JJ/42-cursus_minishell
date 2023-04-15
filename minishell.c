@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/12 22:05:10 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:06:44 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ t_lex	*lexer(char *input)
 			while (input[h.i] == ' ' || input[h.i] == '\t')
 				h.i++;
 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
-			{
-				h.s = ft_strjoin_characters(h.s, input[h.i]);
-				h.i++;
-			}
+				h.s = ft_strjoin_characters(h.s, input[h.i++]);
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD));
 		}
 		free(h.s);
@@ -99,76 +96,78 @@ char	*insert_spaces(char *input)
 	return (ret);
 }
 
-void	print_list(t_lex *lex)
+t_env	*get_env(char **env)
 {
-	while (lex)
-	{
-		if (lex->type == COMMAND)
-			printf("%s is a command\n", lex->str);
-		else if (lex->type == PIPE)
-			printf("%s is a pipe\n", lex->str);
-		else if (lex->type == REDIRECT)
-			printf("%s is a redirect\n", lex->str);
-		else if (lex->type == HEREDOC)
-			printf("%s is a heredoc\n", lex->str);
-		else if (lex->type == APPEND)
-			printf("%s is a append\n", lex->str);
-		else if (lex->type == IN_FILE)
-			printf("%s is a input file\n", lex->str);
-		else if (lex->type == OUT_FILE)
-			printf("%s is a output file\n", lex->str);
-		else if (lex->type == READ_INPUT)
-			printf("%s is a read input\n", lex->str);
-		else if (lex->type == HEREDOC_DEL)
-			printf("%s is a heredoc delimiter\n", lex->str);
-		else
-			printf("%s is an argument\n", lex->str);
-		lex = lex->next;
-	}
-}
-
-t_exp	*store_var(char *input)
-{
-	char	**var;
-	t_exp *p;
-	t_data h;
+	int		s;
+	t_data	h;
+	t_env	*envp;
 
 	h.i = 0;
-	h.s = NULL;
-	p = NULL;
-	while (input[h.i])
+	s = 0;
+	envp = NULL;
+	while (env[h.i])
 	{
-		if (input[h.i] == '=')
+		h.j = 0;
+		s = 0;
+		while (env[h.i][h.j])
 		{
-			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
-				h.i--;
-			while (input[h.i] != '=' && input[h.i])
+			while ((env[h.i][h.j] == ' '
+				|| env[h.i][h.j] == '\t') && env[h.i][h.j])
+				h.j++;
+			if (env[h.i][h.j] == '=' && s == 0)
 			{
-				h.s = ft_strjoin_characters(h.s, input[h.i]);
-				h.i++;
+				h.arr[0] = ft_substr(env[h.i], s, h.j);
+				s = h.j + 1;
 			}
-			
+			else if (s)
+			{
+				h.arr[1] = ft_strdup(&env[h.i][s]);
+				ft_lstadd_back_env(&envp, lst_new_env(h.arr[0], h.arr[1]));
+				break ;
+			}
+			h.j++;
 		}
+		h.i++;
 	}
-	// in this function we will store the variables in a linked list of local variables
-	// and we will need a function that gets the value of the variable invoked in the input to replace it
+	return (envp);
 }
 
-int	main(void)
+t_exp	*get_exp(char **env)
 {
-	t_lex	*lex;
 	t_exp	*exp;
-	char	*input;
+	int		i;
 
-	while (1)
+	exp = NULL;
+	i = 0;
+	while (env[i])
 	{
-		input = readline("minimlawi$>:");
-		if (ft_strlen(input) > 0)
-			input[ft_strlen(input)] = '\0';
-		add_history(input);
-		exp = expand_var(input);
-		input = insert_spaces(input);
-		lex = lexer(input);
-		assign_type(lex);
+		ft_lstadd_back_exp(&exp, lst_new_exp(env[i]));
+		i++;
 	}
+	return (exp);
+}
+
+int	main(int c, char **v, char **env)
+{
+	t_exp	*exp;
+	t_env	*anv;
+
+	(void)c;
+	(void)v;
+	anv = get_env(env);
+	exp = get_exp(env);
+	while (anv)
+	{
+		// puts("-------------------->1\n");
+		printf("%s=%s\n", anv->name, anv->value);
+		anv = anv->next;
+	}
+	// system("echo '1 + 1'");
+	while (exp)
+	{
+		// puts("----------------------->2\n");
+		printf("%s\n", exp->s);
+		exp = exp->next;
+	}
+	return (0);
 }

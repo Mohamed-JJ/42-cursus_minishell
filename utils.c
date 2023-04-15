@@ -6,11 +6,12 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/12 18:25:17 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/15 16:52:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+# include "./lexer/lexer.h"
 
 int	ft_strlen(char *str)
 {
@@ -226,3 +227,42 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD));
 }
 
+void	dqoute_handler_expander(char *str, t_data *data)
+{
+	data->i++;
+	while (str[data->i] && str[data->i] != '\"')
+	{
+		data->s = ft_strjoin_characters(data->s, str[data->i]);
+		data->i++;
+	}
+	if (!str[data->i])
+		printf("error in quotation\n");
+	data->i++;
+	if (str[data->i] == '\"')
+		dqoute_handler_expander(str, data);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	i;
+	size_t	c;
+	char	*str;
+
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		s1 = ft_strdup("");
+	str = malloc((ft_strlen(s1)
+				+ ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	c = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[c] != '\0')
+		str[i++] = s2[c++];
+	str[i] = '\0';
+	return (free(s1), str);
+}
