@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 21:17:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/15 22:11:14 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,3 +158,6 @@ int	main(int c, char **v, char **env)
 	exp = get_exp(env);
 	return (0);
 }
+
+
+// whats next is to get the final linked list ready for it is important to organize the input in order to make it easier to execute it
