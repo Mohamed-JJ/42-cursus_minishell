@@ -6,12 +6,12 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 16:52:50 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/16 16:12:38 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-# include "./lexer/lexer.h"
+#include "./lexer/lexer.h"
 
 int	ft_strlen(char *str)
 {
@@ -182,17 +182,14 @@ char	*ft_substr(char *s, int start, int len)
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	int	i;
-
-	i = 0;
-	while (s1[i] || s2[i])
+	while (*s1 && (*s1 == *s2))
 	{
-		if (s1[i] != s2[i])
-			return (1);
-		i++;
+		s1++;
+		s2++;
 	}
-	return (0);
+    return (*(unsigned char*)s1 - *(unsigned char*)s2);
 }
+
 
 int	check_if_operator(char *str)
 {

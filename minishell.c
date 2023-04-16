@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 22:11:14 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/16 16:05:25 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,19 +132,63 @@ t_env	*get_env(char **env)
 	return (envp);
 }
 
+void	ft_swap(char **s1, char **s2)
+{
+	char	*tmp;
+
+	tmp = *s1;
+	*s1 = *s2;
+	*s2 = tmp;
+}
+
 t_exp	*get_exp(char **env)
 {
 	t_exp	*exp;
+	t_exp	*tmp;
 	int		i;
 
 	exp = NULL;
 	i = 0;
+	tmp = exp;
 	while (env[i])
 	{
 		ft_lstadd_back_exp(&exp, lst_new_exp(env[i]));
 		i++;
 	}
+			// printf("here");
+	// while (exp)
+	// {
+	// 	if (ft_strcmp(exp->s, exp->next->name))
+	// 	{
+	// 		ft_swap(&exp->s, &exp->next->s);
+	// 	}
+	// 	exp = exp->next;
+	// }
+	// exp = tmp;
 	return (exp);
+}
+
+void	sort_env_for_export(t_exp **exp)
+{
+	t_exp	*tmp;
+	t_exp	*tmp2;
+	int		i;
+
+	i = 0;
+	tmp = *exp;
+	tmp2 = *exp;
+	while (tmp)
+	{
+		while (tmp2)
+		{
+			if (tmp2->next)
+				if (ft_strcmp(tmp->s, tmp2->s) < 0)
+					ft_swap(&tmp->s, &tmp2->s);
+			tmp2 = tmp2->next;
+		}
+		tmp2 = *exp;
+		tmp = tmp->next;
+	}
 }
 
 int	main(int c, char **v, char **env)
@@ -156,6 +200,12 @@ int	main(int c, char **v, char **env)
 	(void)v;
 	anv = get_env(env);
 	exp = get_exp(env);
+	sort_env_for_export(&exp);
+	while (exp)
+	{
+		printf("%s\n", exp->s);
+		exp = exp->next;
+	}
 	return (0);
 }
 

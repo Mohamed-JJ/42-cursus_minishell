@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 21:30:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:31:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ enum e_status
 	TO_BE_APPENDED,
 	TO_BE_HEREDOC,
 	TO_BE_READ_INPUT
-}
+};
 
 enum e_exc
 {
 	MANUAL,
 	AUTO,
-}
+};
 
 typedef struct l_data
 {
