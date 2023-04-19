@@ -6,12 +6,28 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/16 15:31:49 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/19 21:54:56 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+enum e_type
+{
+	PIPE,
+	COMMAND,
+	REDIRECT,
+	APPEND,
+	HEREDOC,
+	READ_INPUT,
+	OUT_FILE,
+	IN_FILE,
+	WORD,
+	HEREDOC_DEL,
+	ARGUMENT,
+	SPACE
+};
 
 enum e_status
 {
@@ -20,7 +36,8 @@ enum e_status
 	TO_BE_REDIRECTED,
 	TO_BE_APPENDED,
 	TO_BE_HEREDOC,
-	TO_BE_READ_INPUT
+	TO_BE_READ_INPUT,
+	END_OF_LINE,
 };
 
 enum e_exc
@@ -65,9 +82,7 @@ typedef struct l_cmd
 {
 	char			*cmd;
 	char			**args;
-	int				status;
 	int				type;
-	char			*heredoc;
 	char			*infile;
 	char			*outfile;
 	struct l_cmd	*next;

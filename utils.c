@@ -6,12 +6,21 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/16 16:12:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/18 17:22:09 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./lexer/lexer.h"
+
+void	ft_swap(char **s1, char **s2)
+{
+	char	*tmp;
+
+	tmp = *s1;
+	*s1 = *s2;
+	*s2 = tmp;
+}
 
 int	ft_strlen(char *str)
 {
@@ -262,4 +271,31 @@ char	*ft_strjoin(char *s1, char *s2)
 		str[i++] = s2[c++];
 	str[i] = '\0';
 	return (free(s1), str);
+}
+void	print_list(t_lex *lex)
+{
+	while (lex)
+	{
+		if (lex->type == COMMAND)
+			printf("%s is a command\n", lex->str);
+		else if (lex->type == PIPE)
+			printf("%s is a pipe\n", lex->str);
+		else if (lex->type == REDIRECT)
+			printf("%s is a redirect\n", lex->str);
+		else if (lex->type == HEREDOC)
+			printf("%s is a heredoc\n", lex->str);
+		else if (lex->type == APPEND)
+			printf("%s is a append\n", lex->str);
+		else if (lex->type == IN_FILE)
+			printf("%s is a input file\n", lex->str);
+		else if (lex->type == OUT_FILE)
+			printf("%s is a output file\n", lex->str);
+		else if (lex->type == READ_INPUT)
+			printf("%s is a read input\n", lex->str);
+		else if (lex->type == HEREDOC_DEL)
+			printf("%s is a heredoc delimiter\n", lex->str);
+		else
+			printf("%s is an word\n", lex->str);
+		lex = lex->next;
+	}
 }

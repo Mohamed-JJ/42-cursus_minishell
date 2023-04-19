@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/14 20:49:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/18 15:57:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -423,30 +423,4 @@ t_exp	*store_local_var(char *input)
 	return (p);
 }
 
-void	print_list(t_lex *lex)
-{
-	while (lex)
-	{
-		if (lex->type == COMMAND)
-			printf("%s is a command\n", lex->str);
-		else if (lex->type == PIPE)
-			printf("%s is a pipe\n", lex->str);
-		else if (lex->type == REDIRECT)
-			printf("%s is a redirect\n", lex->str);
-		else if (lex->type == HEREDOC)
-			printf("%s is a heredoc\n", lex->str);
-		else if (lex->type == APPEND)
-			printf("%s is a append\n", lex->str);
-		else if (lex->type == IN_FILE)
-			printf("%s is a input file\n", lex->str);
-		else if (lex->type == OUT_FILE)
-			printf("%s is a output file\n", lex->str);
-		else if (lex->type == READ_INPUT)
-			printf("%s is a read input\n", lex->str);
-		else if (lex->type == HEREDOC_DEL)
-			printf("%s is a heredoc delimiter\n", lex->str);
-		else
-			printf("%s is an argument\n", lex->str);
-		lex = lex->next;
-	}
-}
+

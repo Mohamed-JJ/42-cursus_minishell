@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/15 21:29:46 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:48:01 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,7 @@
 # include <curses.h>
 # include <term.h>
 
-enum e_type
-{
-	PIPE,
-	COMMAND,
-	REDIRECT,
-	APPEND,
-	HEREDOC,
-	READ_INPUT,
-	OUT_FILE,
-	IN_FILE,
-	WORD,
-	HEREDOC_DEL,
-	SPACE
-};
+
 
 t_env	*lst_new_env(char *arr, char *name);
 void	ft_lstadd_back_env(t_env **alst, t_env *new);
@@ -66,7 +53,10 @@ int		check_if_operator(char *str);
 int		skip_special_characters(char *str, int *i, char c);
 void	dqoute_handler(char *str, t_data *data, t_lex **lex);
 void	dqoute_handler_expander(char *str, t_data *data);
-
+void	ft_swap(char **a, char **b);
 int		arr_len(char **arr);
+
+void	print_list(t_lex *lex);
+
 
 #endif

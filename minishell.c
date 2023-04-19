@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/16 16:05:25 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/19 17:38:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,18 @@ void	assign_type(t_lex *p)
 	i = 0;
 	while (p)
 	{
-		if (!ft_strcmp(">", p->str))
+		if (!ft_strcmp("|", p->str))
+			p->type = PIPE;
+		else if (!ft_strcmp(">", p->str))
 			p->type = REDIRECT;
 		else if (!ft_strcmp(">>", p->str))
 			p->type = APPEND;
 		else if (!ft_strcmp("<", p->str))
-		{
-			p->prev->type = IN_FILE;
 			p->type = READ_INPUT;
-		}
 		else if (!ft_strcmp("<<", p->str))
 			p->type = HEREDOC;
 		else
-			check_rest_type(p, &i);
+			p->type = WORD;
 		p = p->next;
 	}
 	p = tmp;
@@ -77,7 +76,13 @@ char	*insert_spaces(char *input)
 	ret = NULL;
 	while (input[++i])
 	{
-		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			character = input[i++];
+			while (input[i] != character && input[i])
+				ret = ft_strjoin_characters(ret, input[i++]);
+		}
+		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			character = input[i];
 			ret = ft_strjoin_characters(ret, ' ');
@@ -96,118 +101,74 @@ char	*insert_spaces(char *input)
 	return (ret);
 }
 
-t_env	*get_env(char **env)
+void	handle_until_pipe(t_lex *p)
 {
-	int		s;
-	t_data	h;
-	t_env	*envp;
-
-	h.i = 0;
-	s = 0;
-	envp = NULL;
-	while (env[h.i])
-	{
-		h.j = 0;
-		s = 0;
-		while (env[h.i][h.j])
-		{
-			while ((env[h.i][h.j] == ' '
-				|| env[h.i][h.j] == '\t') && env[h.i][h.j])
-				h.j++;
-			if (env[h.i][h.j] == '=' && s == 0)
-			{
-				h.arr[0] = ft_substr(env[h.i], s, h.j);
-				s = h.j + 1;
-			}
-			else if (s)
-			{
-				h.arr[1] = ft_strdup(&env[h.i][s]);
-				ft_lstadd_back_env(&envp, lst_new_env(h.arr[0], h.arr[1]));
-				break ;
-			}
-			h.j++;
-		}
-		h.i++;
-	}
-	return (envp);
-}
-
-void	ft_swap(char **s1, char **s2)
-{
-	char	*tmp;
-
-	tmp = *s1;
-	*s1 = *s2;
-	*s2 = tmp;
-}
-
-t_exp	*get_exp(char **env)
-{
-	t_exp	*exp;
-	t_exp	*tmp;
 	int		i;
-
-	exp = NULL;
-	i = 0;
-	tmp = exp;
-	while (env[i])
-	{
-		ft_lstadd_back_exp(&exp, lst_new_exp(env[i]));
-		i++;
-	}
-			// printf("here");
-	// while (exp)
-	// {
-	// 	if (ft_strcmp(exp->s, exp->next->name))
-	// 	{
-	// 		ft_swap(&exp->s, &exp->next->s);
-	// 	}
-	// 	exp = exp->next;
-	// }
-	// exp = tmp;
-	return (exp);
-}
-
-void	sort_env_for_export(t_exp **exp)
-{
-	t_exp	*tmp;
-	t_exp	*tmp2;
-	int		i;
+	t_lex	*tmp;
 
 	i = 0;
-	tmp = *exp;
-	tmp2 = *exp;
-	while (tmp)
+	tmp = p;
+	while (p)
 	{
-		while (tmp2)
+		if (p->type == PIPE)
+			break ;
+		if (p->type == WORD && !i)
 		{
-			if (tmp2->next)
-				if (ft_strcmp(tmp->s, tmp2->s) < 0)
-					ft_swap(&tmp->s, &tmp2->s);
-			tmp2 = tmp2->next;
+			p->type = COMMAND;
+			i = 1;
 		}
-		tmp2 = *exp;
-		tmp = tmp->next;
+		else if (p->type == WORD)
+			p->type = ARGUMENT;
+		else if ((p->type == REDIRECT || p->type == APPEND)
+			&& p->next->type == WORD)
+			p->next->type = OUT_FILE;
+		else if (p->type == READ_INPUT && p->next->type == WORD)
+			p->next->type = IN_FILE;
+		else if (p->type == HEREDOC && p->next->type == WORD)
+			p->next->type = HEREDOC_DEL;
+		p = p->next;
 	}
 }
 
-int	main(int c, char **v, char **env)
+void	manage_type(t_lex *p)
 {
-	t_exp	*exp;
-	t_env	*anv;
+	t_lex	*tmp;
 
-	(void)c;
-	(void)v;
-	anv = get_env(env);
-	exp = get_exp(env);
-	sort_env_for_export(&exp);
-	while (exp)
+	tmp = p;
+	while (p)
 	{
-		printf("%s\n", exp->s);
-		exp = exp->next;
+		handle_until_pipe(p);
+		p = p->next;
+	}
+}
+
+t_cmd	*syntax_analyzer(t_lex *p)
+{
+	t_cmd	*cmd;
+
+	cmd = NULL;
+}
+
+int	main(void)
+{
+	t_lex	*lex;
+	char	*input;
+
+	lex = NULL;
+	while (1)
+	{
+		input = readline("minishell$>:");
+		if (ft_strlen(input) > 0)
+			input[ft_strlen(input)] = '\0';
+		add_history(input);
+		input = insert_spaces(input);
+		lex = lexer(input);
+		assign_type(lex);
+		manage_type(lex);
+		print_list(lex);
+		syntax_analyzer(lex);
+		free(input);
+		input = NULL;
 	}
 	return (0);
 }
-
-
-// whats next is to get the final linked list ready for it is important to organize the input in order to make it easier to execute it
