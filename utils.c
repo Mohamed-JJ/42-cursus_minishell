@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/18 17:22:09 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/21 16:30:13 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,33 +129,33 @@ int  arr_len(char **str)
 	return (i);
 }
 
-t_cmd	*ft_lstnew(char	**content, int status)
-{
-	t_cmd	*new;
-	int		i;
-	int		x;
+// t_cmd	*ft_lstnew(char	**content, int status)
+// {
+// 	t_cmd	*new;
+// 	int		i;
+// 	int		x;
 
-	i = 0;
-	x = 0;
-	new = malloc(sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	if (status == 0)
-		new->cmd = *content;
-	else if (status == 1)
-	{
-		i = arr_len(content);
-		new->args = malloc(sizeof(char *) * i);
-		while (content[x])
-		{
-			new->args[x] = ft_strdup(content[x]);
-			x++;
-		}
-		new->args[x] = NULL;
-	}
-	new->next = NULL;
-	return (new);
-}
+// 	i = 0;
+// 	x = 0;
+// 	new = malloc(sizeof(t_cmd));
+// 	if (!new)
+// 		return (NULL);
+// 	if (status == 0)
+// 		new->cmd = *content;
+// 	else if (status == 1)
+// 	{
+// 		i = arr_len(content);
+// 		new->args = malloc(sizeof(char *) * i);
+// 		while (content[x])
+// 		{
+// 			new->args[x] = ft_strdup(content[x]);
+// 			x++;
+// 		}
+// 		new->args[x] = NULL;
+// 	}
+// 	new->next = NULL;
+// 	return (new);
+// }
 
 int	ft_isprint(int c)
 {

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/19 21:54:56 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/21 16:28:57 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,8 @@ typedef struct l_exp
 
 typedef struct l_cmd
 {
-	char			*cmd;
 	char			**args;
-	int				type;
+	int				status;
 	char			*infile;
 	char			*outfile;
 	struct l_cmd	*next;

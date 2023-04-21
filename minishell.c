@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/19 17:38:24 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/21 22:21:38 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ void	handle_until_pipe(t_lex *p)
 		else if (p->type == WORD)
 			p->type = ARGUMENT;
 		else if ((p->type == REDIRECT || p->type == APPEND)
-			&& p->next->type == WORD)
+			&& p->next != NULL && p->next->type == WORD)
 			p->next->type = OUT_FILE;
-		else if (p->type == READ_INPUT && p->next->type == WORD)
+		else if (p->type == READ_INPUT && p->next && p->next->type == WORD)
 			p->next->type = IN_FILE;
 		else if (p->type == HEREDOC && p->next->type == WORD)
 			p->next->type = HEREDOC_DEL;
@@ -142,19 +142,70 @@ void	manage_type(t_lex *p)
 	}
 }
 
-t_cmd	*syntax_analyzer(t_lex *p)
-{
-	t_cmd	*cmd;
+// t_cmd	*syntax_analyzer(t_lex *p)
+// {
+// 	int		i;
+// 	t_cmd	*cmd;
 
-	cmd = NULL;
+// 	cmd = NULL;
+// 	i = 0;
+// 	while (p)
+// 	{
+// 		if (i == 0 && p->type != COMMAND)
+// 			return (printf("minishell : syntax error\n"), NULL);
+// 		else if (i == 0 && p->type == COMMAND)
+// 			i = 1;
+// 		else if (p->type == PIPE)
+// 			i = 0;
+// 		p = p->next;
+// 	}
+// 	cmd = create_cmd(p);
+// 	return (cmd);
+// }
+
+char	*expand_var(char *s, char **env)
+{
+	char	*holder;
+	char	*ret;
+	int		i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\'')
+		{
+			ft_strjoin_characters(ret, s[i++]);
+			while (s[i] != '\'' && s[i])
+				ft_strjoin_characters(ret, s[i++]);
+		}
+		else if (s[i] == '\"')
+		{
+			i++;
+			while (s[i] != '\"' && s[i])
+			{
+				if (s[i] == '$')
+				{
+					i++;
+					while ()
+				}
+				i++;
+			}
+		}
+		else
+			ret - ft_strjoin_characters(ret, s[i]);
+		if (s[i])
+			i++;
+	}
 }
 
-int	main(void)
+int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
 	char	*input;
 
 	lex = NULL;
+	(void)c;
+	(void)v;
 	while (1)
 	{
 		input = readline("minishell$>:");
@@ -162,11 +213,7 @@ int	main(void)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = insert_spaces(input);
-		lex = lexer(input);
-		assign_type(lex);
-		manage_type(lex);
-		print_list(lex);
-		syntax_analyzer(lex);
+		input = expand_var(input, env);
 		free(input);
 		input = NULL;
 	}
