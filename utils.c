@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/21 16:30:13 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/25 15:07:25 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,20 @@ int	ft_strlen(char *str)
 		while (str[i])
 			i++;
 	return (i);
+}
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t			i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i])
+			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
+		i++;
+	}
+	return (0);
 }
 
 char	*ft_strjoin_characters(char *s1, char character)
