@@ -6,11 +6,121 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/18 15:57:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/27 18:31:13 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*get_env_var(char *var, char **env)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = NULL;
+	if (!var)
+		return (NULL);
+	while (env[i])
+	{
+		tmp = ft_substr(env[i], 0, ft_strlen(var));
+		if (!ft_strncmp(tmp, var, ft_strlen(var)))
+		{
+			free(tmp);
+			return (env[i] + ft_strlen(var) + 1);
+		}
+		free(tmp);
+		tmp = NULL;
+		i++;
+	}
+	return (NULL);
+}
+
+void	handle_single_qoute_case(char *s, int *i, char **ret)
+{
+	(*i)++;
+	while (s[*i] != '\'' && s[*i])
+		*ret = ft_strjoin_characters(*ret, s[(*i)++]);
+	if (!s[*i])
+		printf("minishell : error in quotation\n");
+	(*i)++;
+}
+void	handle_double_quote_case(char *s, int *i, char **ret, char **env)
+{
+	char	*tmp;
+	int		f;
+
+	tmp = NULL;
+	(*ret) = ft_strjoin_characters(*ret, s[*i]);
+	f = 0;
+	(*i)++;
+	while (s[*i] != '\"' && s[*i])
+	{
+		if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\"')
+		{
+			(*i)++;
+			f = *i;
+			while (s[*i] != ' ' && s[*i] != '\t' && s[*i] != '\"' && s[*i])
+				(*i)++;
+			if (!s[*i])
+				printf("minishell : error in quotation [end of line]\n");
+			tmp = ft_substr(s, f, *i - f);
+			*ret = ft_strjoin(*ret, get_env_var(tmp, env));
+			free(tmp);
+			tmp = NULL;
+			(*i)--;
+		}
+		else
+			*ret = ft_strjoin_characters(*ret, s[*i]);
+		(*i)++;
+	}
+	(*ret) = ft_strjoin_characters(*ret, s[*i]);
+	(*i)++;
+	if (s[*i] == '\"')
+		handle_double_quote_case(s, i, ret, env);
+}
+
+void	handle_dollar_case(char *s, int *i, char **ret, char **env)
+{
+	char	*tmp;
+	int		f;
+
+	tmp = NULL;
+	f = 0;
+	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
+	{
+		while ()
+
+	}
+	else
+		*ret = ft_strjoin_characters(*ret, s[*i]);
+	return (*ret);
+}
+
+char	*expand_var(char *s, char **env)
+{
+	int		i;
+	char	*ret;
+
+	ret = NULL;
+	i = 0;
+	(void)env;
+	while (s[i])
+	{
+		if (s[i] == '\'')
+			handle_single_qoute_case(s, &i, &ret);
+		else if (s[i] == '\"')
+			handle_double_quote_case(s, &i, &ret, env);
+		else if (s[i] == '$')
+			ret = handle_dollar_case(s, &i, &ret, env);
+		else
+			ret = ft_strjoin_characters(ret, s[i]);
+		i++;
+	}
+	printf("ret [%s]\n",ret);
+
+	return (ret);
+}
 
 int	is_op(char *str)
 {

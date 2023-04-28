@@ -6,12 +6,21 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/25 15:07:25 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/28 14:16:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./lexer/lexer.h"
+
+int	ft_isalnum(int c)
+{
+	if ((c >= 65 && c <= 90)
+		|| (c >= 97 && c <= 122) || (c >= 48 && c <= 57) || c == '_')
+		return (1);
+	else
+		return (0);
+}
 
 void	ft_swap(char **s1, char **s2)
 {
@@ -272,6 +281,8 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	if (!s1)
 		s1 = ft_strdup("");
+	if (!s2)
+		s2 = ft_strdup("");
 	str = malloc((ft_strlen(s1)
 				+ ft_strlen(s2) + 1) * sizeof(char));
 	if (str == NULL)
@@ -286,6 +297,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	str[i] = '\0';
 	return (free(s1), str);
 }
+
 void	print_list(t_lex *lex)
 {
 	while (lex)
