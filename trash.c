@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/27 18:31:13 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/29 14:57:30 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -521,10 +521,6 @@ t_exp	*store_local_var(char *input)
 			arr[0] = NULL;
 			arr[1] = NULL;
 		}
-		// while ((input[h.i] == '\t' || input[h.i] != ' ') && input[h.i])
-		// 	h.i++;
-		// while (input[h.i] != '\t' && input[h.i] != ' ' && input[h.i])
-			// i++;
 		if (input[h.i])
 			h.i++;
 		else

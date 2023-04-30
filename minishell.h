@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/28 11:47:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/28 21:26:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_exp	*new_exp(char **str);
 
 char	**ft_split(char *s, char c);
 char	*ft_strdup(char *str);
-char	*ft_strchr(char *s, int c);
+int		ft_strchr(char *s, int c);
 int		ft_strlen(char *str);
 int		ft_isdigit(int c);
 int		ft_isalpha(int c);

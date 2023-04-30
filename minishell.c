@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/28 21:21:02 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/29 16:58:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,40 +66,43 @@
 // 	p = tmp;
 // }
 
-// char	*insert_spaces(char *input)
-// {
-// 	int		i;
-// 	char	*ret;
-// 	char	character;
+char	*insert_spaces(char *input)
+{
+	int		i;
+	char	*ret;
+	char	character;
 
-// 	i = -1;
-// 	ret = NULL;
-// 	while (input[++i])
-// 	{
-// 		if (input[i] == '\'' || input[i] == '\"')
-// 		{
-// 			character = input[i++];
-// 			while (input[i] != character && input[i])
-// 				ret = ft_strjoin_characters(ret, input[i++]);
-// 		}
-// 		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
-// 		{
-// 			character = input[i];
-// 			ret = ft_strjoin_characters(ret, ' ');
-// 			while (input[i] == character && input[i])
-// 			{
-// 				if (input[i + 1] != character)
-// 					break ;
-// 				ret = ft_strjoin_characters(ret, input[i++]);
-// 			}
-// 			ret = ft_strjoin_characters(ret, input[i]);
-// 			ret = ft_strjoin_characters(ret, ' ');
-// 		}
-// 		else
-// 			ret = ft_strjoin_characters(ret, input[i]);
-// 	}
-// 	return (ret);
-// }
+	i = -1;
+	ret = NULL;
+	while (input[++i])
+	{
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			character = input[i];
+			ret = ft_strjoin_characters(ret, input[i++]);
+			while (input[i] != character && input[i])
+				ret = ft_strjoin_characters(ret, input[i++]);
+			ret = ft_strjoin_characters(ret, input[i]);
+
+		}
+		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		{
+			character = input[i];
+			ret = ft_strjoin_characters(ret, ' ');
+			while (input[i] == character && input[i])
+			{
+				if (input[i + 1] != character)
+					break ;
+				ret = ft_strjoin_characters(ret, input[i++]);
+			}
+			ret = ft_strjoin_characters(ret, input[i]);
+			ret = ft_strjoin_characters(ret, ' ');
+		}
+		else
+			ret = ft_strjoin_characters(ret, input[i]);
+	}
+	return (ret);
+}
 
 // void	handle_until_pipe(t_lex *p)
 // {
@@ -202,7 +205,6 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 			break ;
 		(*i)++;
 	}
-	printf("the character |%c|\n", s[*i]);
 	holder = get_env(env, tmp);
 	*ret = ft_strjoin(*ret, holder);
 	free(holder);
@@ -227,7 +229,7 @@ void	handle_double_quote(char *s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	if (!s[*i])
-		printf("minishell : single quote not closed\n");
+		printf("minishell : error in quotation\n");
 	else if (s[*i] == '\"')
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -247,7 +249,7 @@ void	handle_single_quote(char *s, int *i, char **ret)
 		(*i)++;
 	}
 	if (!s[*i])
-		printf("minishell : single quote not closed\n");
+		printf("minishell : error in quotation\n");
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -259,9 +261,20 @@ void	handle_single_quote(char *s, int *i, char **ret)
 
 void	handle_heredoc(char *s, int *i, char **ret)
 {
+	while (s[*i] && s[*i] == '<')
+	{
+		*ret = ft_strjoin_characters(*ret, s[*i]);
+		(*i)++;
+	}
+	(*i)--;
+	while (s[*i] && s[*i] == ' ')
+	{
+		*ret = ft_strjoin_characters(*ret, s[*i]);
+		(*i)++;
+	}
 	while (s[*i])
 	{
-		if (ft_strchr("|><", s[*i]))
+		if (ft_strchr("|>< ", s[*i]))
 			break ;
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 		(*i)++;
@@ -273,19 +286,18 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 	char	*tmp;
 
 	tmp = NULL;
-	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t')
+	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
 	{
 		(*i)++;
 		while (s[*i] && ft_isalnum(s[*i]))
 		{
 			tmp = ft_strjoin_characters(tmp, s[*i]);
-			if (!s[*i + 1] || s[*i + 1] == ' ' || s[*i + 1] == '\t' || !ft_isalnum(s[*i + 1]))
+			if (!s[*i + 1] || s[*i + 1] == ' '
+				|| s[*i + 1] == '\t' || !ft_isalnum(s[*i + 1]))
 				break ;
 			(*i)++;
 		}
 		*ret = ft_strjoin(*ret, get_env(env, tmp));
-		// printf("the string |%s|\n", *ret);
-		// exit(0);
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
@@ -332,8 +344,11 @@ int	main(int c, char **v, char **env)
 			input[ft_strlen(input)] = '\0';
 		add_history(input);
 		input = expand_var(input, env);
+		input = insert_spaces(input);
+		printf("%s\n", input);
 		free(input);
 		input = NULL;
 	}
 	return (0);
 }
+// you can leave the wrappers like double quotes and single quotes on the arguments 

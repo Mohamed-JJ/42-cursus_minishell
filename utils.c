@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/28 14:16:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/28 21:26:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*ft_strdup(char *s1)
 	return (s2);
 }
 
-char	*ft_strchr(char *s, int c)
+int ft_strchr(char *s, int c)
 {
 	int	i;
 
@@ -107,10 +107,10 @@ char	*ft_strchr(char *s, int c)
 	while (s[i])
 	{
 		if (s[i] == (char)c)
-			return (s + i);
+			return (1);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
 int	ft_isdigit(int c)
