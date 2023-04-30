@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 14:49:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 20:52:25 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	assign_type(t_lex *p)
 		p = p->next;
 	}
 	p = tmp;
-	// check_rest_type(p, &i);
 }
 
 char	*insert_spaces(char *input)
@@ -304,6 +303,21 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 }
 
+void	generate_error(t_lex *s)
+{
+	int	i;
+
+	i = 0;
+	while (s)
+	{
+		if (i == 0 && check_if_operator(s->str))
+			printf("minishell : syntax error\n",s->str);
+		else if (!s->next && check_if_operator(s->str))
+			printf("minishell : syntax error\n");
+	}
+	printf("minishell : %s : command not found\n", s);
+}
+
 char	*expand_var(char *s, char **env)
 {
 	int		i;
@@ -325,7 +339,6 @@ char	*expand_var(char *s, char **env)
 			ret = ft_strjoin_characters(ret, s[i]);
 		i++;
 	}
-	printf("%s\n", ret);
 	return (ret);
 }
 
@@ -346,11 +359,10 @@ int	main(int c, char **v, char **env)
 		add_history(input);
 		input = expand_var(input, env);
 		input = insert_spaces(input);
-		// printf("%s\n", input);
 		lex = lexer(input);
 		assign_type(lex);
-		// check_rest_type(lex);
 		manage_type(lex);
+		check_error(lex);
 		print_list(lex);
 		free(input);
 		input = NULL;

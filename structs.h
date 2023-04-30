@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 14:19:16 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:07:16 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,14 @@ typedef struct l_cmd
 	char			*outfile;
 	struct l_cmd	*next;
 }			t_cmd;
+
+typedef struct l_col
+{
+	char			**arr;
+	char			*str;
+	t_lex			*lex;
+	t_cmd			*cmd;
+	struct l_col	*next;
+}			t_col;
 
 #endif

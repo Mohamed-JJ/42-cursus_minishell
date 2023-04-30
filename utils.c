@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 14:18:48 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:50:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,3 +325,36 @@ void	print_list(t_lex *lex)
 		lex = lex->next;
 	}
 }
+
+void	free_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+}
+
+// void	garbage_collector(t_col *list)
+// {
+// 	t_col	*tmp;
+
+// 	tmp = list;
+// 	while (tmp)
+// 	{
+// 		if (tmp->str)
+// 			free(tmp->str);
+// 		if (tmp->arr)
+// 			free_arr(tmp->arr);
+// 		if (tmp->lex)
+// 			free_lexer(tmp->lex);
+// 		if (tmp->cmd)
+// 			free_cmd(tmp->cmd);
+// 		tmp = tmp->next;
+// 	}
+// 	free(list);
+// 	list = tmp;
+// }
