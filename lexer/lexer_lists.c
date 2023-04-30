@@ -6,14 +6,14 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/14 16:10:11 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:18:32 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "lexer.h"
 
-t_lex	*new_lex(char *str, int type)
+t_lex	*new_lex(char *str, int type, int flag)
 {
 	t_lex	*new;
 
@@ -22,6 +22,7 @@ t_lex	*new_lex(char *str, int type)
 	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;
+	new->ds_quote = flag;
 	return (new);
 }
 

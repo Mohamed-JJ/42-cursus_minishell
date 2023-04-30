@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/21 16:28:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:19:16 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct l_lex
 {
 	char			*str;
 	int				type;
+	int				ds_quote;
 	struct l_lex	*next;
 	struct l_lex	*prev;
 }		t_lex;

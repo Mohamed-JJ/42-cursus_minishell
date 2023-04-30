@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/28 21:26:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:18:48 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 	if (str[data->i] == '\"')
 		dqoute_handler(str, data, lex);
 	else
-		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD));
+		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
 }
 
 void	dqoute_handler_expander(char *str, t_data *data)

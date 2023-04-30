@@ -6,65 +6,66 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/29 16:58:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:49:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// t_lex	*lexer(char *input)
-// {
-// 	t_data	h;
-// 	t_lex	*lex;
+t_lex	*lexer(char *input)
+{
+	t_data	h;
+	t_lex	*lex;
 
-// 	h.i = -1;
-// 	lex = NULL;
-// 	h.s = NULL;
-// 	while (input[++h.i])
-// 	{
-// 		if (input[(h.i)] == '\'' || input[h.i] == '\"')
-// 			dqoute_handler(input, &h, &lex);
-// 		else
-// 		{
-// 			while (input[h.i] == ' ' || input[h.i] == '\t')
-// 				h.i++;
-// 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
-// 				h.s = ft_strjoin_characters(h.s, input[h.i++]);
-// 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD));
-// 		}
-// 		free(h.s);
-// 		h.s = NULL;
-// 		if (!input[h.i])
-// 			break ;
-// 	}
-// 	return (lex);
-// }
+	h.i = -1;
+	lex = NULL;
+	h.s = NULL;
+	while (input[++h.i])
+	{
+		if (input[(h.i)] == '\'' || input[h.i] == '\"')
+			dqoute_handler(input, &h, &lex);
+		else
+		{
+			while (input[h.i] == ' ' || input[h.i] == '\t')
+				h.i++;
+			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
+				h.s = ft_strjoin_characters(h.s, input[h.i++]);
+			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
+		}
+		free(h.s);
+		h.s = NULL;
+		if (!input[h.i])
+			break ;
+	}
+	return (lex);
+}
 
-// void	assign_type(t_lex *p)
-// {
-// 	int		i;
-// 	t_lex	*tmp;
+void	assign_type(t_lex *p)
+{
+	int		i;
+	t_lex	*tmp;
 
-// 	tmp = p;
-// 	i = 0;
-// 	while (p)
-// 	{
-// 		if (!ft_strcmp("|", p->str))
-// 			p->type = PIPE;
-// 		else if (!ft_strcmp(">", p->str))
-// 			p->type = REDIRECT;
-// 		else if (!ft_strcmp(">>", p->str))
-// 			p->type = APPEND;
-// 		else if (!ft_strcmp("<", p->str))
-// 			p->type = READ_INPUT;
-// 		else if (!ft_strcmp("<<", p->str))
-// 			p->type = HEREDOC;
-// 		else
-// 			p->type = WORD;
-// 		p = p->next;
-// 	}
-// 	p = tmp;
-// }
+	tmp = p;
+	i = 0;
+	while (p)
+	{
+		if (!ft_strcmp("|", p->str))
+			p->type = PIPE;
+		else if (!ft_strcmp(">", p->str) && !p->ds_quote)
+			p->type = REDIRECT;
+		else if (!ft_strcmp(">>", p->str) && !p->ds_quote)
+			p->type = APPEND;
+		else if (!ft_strcmp("<", p->str) && !p->ds_quote)
+			p->type = READ_INPUT;
+		else if (!ft_strcmp("<<", p->str) && !p->ds_quote)
+			p->type = HEREDOC;
+		else
+			p->type = WORD;
+		p = p->next;
+	}
+	p = tmp;
+	// check_rest_type(p, &i);
+}
 
 char	*insert_spaces(char *input)
 {
@@ -104,67 +105,67 @@ char	*insert_spaces(char *input)
 	return (ret);
 }
 
-// void	handle_until_pipe(t_lex *p)
+void	handle_until_pipe(t_lex *p)
+{
+	int		i;
+	t_lex	*tmp;
+
+	i = 0;
+	tmp = p;
+	while (p)
+	{
+		if (p->type == PIPE)
+			break ;
+		if (p->type == WORD && !i)
+		{
+			p->type = COMMAND;
+			i = 1;
+		}
+		else if (p->type == WORD)
+			p->type = ARGUMENT;
+		else if ((p->type == REDIRECT || p->type == APPEND)
+			&& p->next != NULL && p->next->type == WORD)
+			p->next->type = OUT_FILE;
+		else if (p->type == READ_INPUT && p->next && p->next->type == WORD)
+			p->next->type = IN_FILE;
+		else if (p->type == HEREDOC && p->next->type == WORD)
+			p->next->type = HEREDOC_DEL;
+		p = p->next;
+	}
+}
+
+void	manage_type(t_lex *p)
+{
+	t_lex	*tmp;
+
+	tmp = p;
+	while (p)
+	{
+		handle_until_pipe(p);
+		p = p->next;
+	}
+}
+
+// t_cmd	*syntax_analyzer(t_lex *p)
 // {
 // 	int		i;
-// 	t_lex	*tmp;
+// 	t_cmd	*cmd;
 
+// 	cmd = NULL;
 // 	i = 0;
-// 	tmp = p;
 // 	while (p)
 // 	{
-// 		if (p->type == PIPE)
-// 			break ;
-// 		if (p->type == WORD && !i)
-// 		{
-// 			p->type = COMMAND;
+// 		if (i == 0 && p->type != COMMAND)
+// 			return (printf("minishell : syntax error\n"), NULL);
+// 		else if (i == 0 && p->type == COMMAND)
 // 			i = 1;
-// 		}
-// 		else if (p->type == WORD)
-// 			p->type = ARGUMENT;
-// 		else if ((p->type == REDIRECT || p->type == APPEND)
-// 			&& p->next != NULL && p->next->type == WORD)
-// 			p->next->type = OUT_FILE;
-// 		else if (p->type == READ_INPUT && p->next && p->next->type == WORD)
-// 			p->next->type = IN_FILE;
-// 		else if (p->type == HEREDOC && p->next->type == WORD)
-// 			p->next->type = HEREDOC_DEL;
+// 		else if (p->type == PIPE)
+// 			i = 0;
 // 		p = p->next;
 // 	}
+// 	cmd = create_cmd(p);
+// 	return (cmd);
 // }
-
-// void	manage_type(t_lex *p)
-// {
-// 	t_lex	*tmp;
-
-// 	tmp = p;
-// 	while (p)
-// 	{
-// 		handle_until_pipe(p);
-// 		p = p->next;
-// 	}
-// }
-
-// // t_cmd	*syntax_analyzer(t_lex *p)
-// // {
-// // 	int		i;
-// // 	t_cmd	*cmd;
-
-// // 	cmd = NULL;
-// // 	i = 0;
-// // 	while (p)
-// // 	{
-// // 		if (i == 0 && p->type != COMMAND)
-// // 			return (printf("minishell : syntax error\n"), NULL);
-// // 		else if (i == 0 && p->type == COMMAND)
-// // 			i = 1;
-// // 		else if (p->type == PIPE)
-// // 			i = 0;
-// // 		p = p->next;
-// // 	}
-// // 	cmd = create_cmd(p);
-// // 	return (cmd);
-// // }
 
 char	*get_env(char **env, char *s)
 {
@@ -345,7 +346,12 @@ int	main(int c, char **v, char **env)
 		add_history(input);
 		input = expand_var(input, env);
 		input = insert_spaces(input);
-		printf("%s\n", input);
+		// printf("%s\n", input);
+		lex = lexer(input);
+		assign_type(lex);
+		// check_rest_type(lex);
+		manage_type(lex);
+		print_list(lex);
 		free(input);
 		input = NULL;
 	}
