@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/01 14:41:24 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:57:39 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,8 @@ int	skip_special_characters(char *str, int *i, char c)
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 {
+			// printf("what is in quotes %s\n", input + h.i);
+	
 	data->i++;
 	while (str[data->i] && str[data->i] != '\"')
 	{

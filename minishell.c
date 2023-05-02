@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 13:40:14 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 14:36:21 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 
 void	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
+	printf("double quote\n");
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\"')
@@ -283,7 +284,6 @@ void	generate_error(t_lex *s)
 			printf("minishell : syntax error\n");
 		s = s->next;
 	}
-	// printf("minishell : %s : command not found\n", s->str);
 }
 
 char	*expand_var(char *s, char **env)
@@ -292,6 +292,12 @@ char	*expand_var(char *s, char **env)
 	char	*ret;
 
 	ret = NULL;
+	i = 0;
+	while (env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
 	i = 0;
 	while (s[i])
 	{
@@ -323,18 +329,19 @@ int	main(int c, char **v, char **env)
 	{
 		input = readline("minishell$>:");
 		if (ft_strlen(input) > 0)
+		{
 			input[ft_strlen(input)] = '\0';
-		add_history(input);
-		input = expand_var(input, env);
-		input = insert_spaces(input);
-		lex = lexer(input);
-		assign_type(lex);
-		manage_type(lex);
-		generate_error(lex);
-		print_list(lex);
-		free(input);
-		input = NULL;
+			add_history(input);
+			input = expand_var(input, env);
+			input = insert_spaces(input);
+			lex = lexer(input);
+			assign_type(lex);
+			manage_type(lex);
+			generate_error(lex);
+			print_list(lex);
+			free(input);
+			input = NULL;
+		}
 	}
 	return (0);
 }
-// you can leave the wrappers like double quotes and single quotes on the arguments

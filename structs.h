@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 18:07:16 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 14:12:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct l_env
 typedef struct l_exp
 {
 	char			*value;
-	char			*name;
+	// char			*name;
 	char			*s;
 	struct l_exp	*next;
 }			t_exp;
