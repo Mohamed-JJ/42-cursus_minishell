@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 17:48:43 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:24:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,7 @@ char	*expand_var(char *s, char **env)
 	return (ret);
 }
 
-int	main(int c, char **v, char **env)
+int	main(int c, char **v, char **env) // still need to pass the linked list of env variables becuz the user might set up new variables and might not find them in the env since the minishell is a running process
 {
 	t_lex	*lex;
 	char	*input;
