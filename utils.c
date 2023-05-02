@@ -6,12 +6,31 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 18:50:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:41:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./lexer/lexer.h"
+
+char	*get_env(char **env, char *s)
+{
+	int		i;
+	char	*ret;
+
+	i = 0;
+	ret = NULL;
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], s, ft_strlen(s)))
+		{
+			ret = ft_strdup(env[i] + ft_strlen(s) + 1);
+			break ;
+		}
+		i++;
+	}
+	return (ret);
+}
 
 int	ft_isalnum(int c)
 {

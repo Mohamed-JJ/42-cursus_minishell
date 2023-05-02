@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/28 21:26:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:41:38 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,8 @@ void	ft_swap(char **a, char **b);
 int		arr_len(char **arr);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_isalnum(int c);
-
+char	*get_env(char **env, char *s);
 
 void	print_list(t_lex *lex);
-
 
 #endif

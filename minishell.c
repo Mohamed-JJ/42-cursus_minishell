@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/30 20:52:25 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:40:14 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,46 +145,6 @@ void	manage_type(t_lex *p)
 	}
 }
 
-// t_cmd	*syntax_analyzer(t_lex *p)
-// {
-// 	int		i;
-// 	t_cmd	*cmd;
-
-// 	cmd = NULL;
-// 	i = 0;
-// 	while (p)
-// 	{
-// 		if (i == 0 && p->type != COMMAND)
-// 			return (printf("minishell : syntax error\n"), NULL);
-// 		else if (i == 0 && p->type == COMMAND)
-// 			i = 1;
-// 		else if (p->type == PIPE)
-// 			i = 0;
-// 		p = p->next;
-// 	}
-// 	cmd = create_cmd(p);
-// 	return (cmd);
-// }
-
-char	*get_env(char **env, char *s)
-{
-	int		i;
-	char	*ret;
-
-	i = 0;
-	ret = NULL;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], s, ft_strlen(s)))
-		{
-			ret = ft_strdup(env[i] + ft_strlen(s) + 1);
-			break ;
-		}
-		i++;
-	}
-	return (ret);
-}
-
 void	handle_env(char	*s, char **ret, char **env, int *i)
 {
 	char	*tmp;
@@ -310,12 +270,20 @@ void	generate_error(t_lex *s)
 	i = 0;
 	while (s)
 	{
-		if (i == 0 && check_if_operator(s->str))
-			printf("minishell : syntax error\n",s->str);
+		if (s->type == COMMAND)
+			i = 1;
+		if (!s->prev && !ft_strncmp(s->str, "<", ft_strlen("<")))
+			generate_error(s->next);
+		else if (i == 0 && check_if_operator(s->str))
+		{
+			printf("minishell : syntax error\n");
+			printf("here\n");
+		}
 		else if (!s->next && check_if_operator(s->str))
 			printf("minishell : syntax error\n");
+		s = s->next;
 	}
-	printf("minishell : %s : command not found\n", s);
+	// printf("minishell : %s : command not found\n", s->str);
 }
 
 char	*expand_var(char *s, char **env)
@@ -362,11 +330,11 @@ int	main(int c, char **v, char **env)
 		lex = lexer(input);
 		assign_type(lex);
 		manage_type(lex);
-		check_error(lex);
+		generate_error(lex);
 		print_list(lex);
 		free(input);
 		input = NULL;
 	}
 	return (0);
 }
-// you can leave the wrappers like double quotes and single quotes on the arguments 
+// you can leave the wrappers like double quotes and single quotes on the arguments
