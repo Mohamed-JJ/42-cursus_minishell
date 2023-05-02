@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:38:38 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/04/29 14:57:30 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:21:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	handle_single_qoute_case(char *s, int *i, char **ret)
 		printf("minishell : error in quotation\n");
 	(*i)++;
 }
-void	handle_double_quote_case(char *s, int *i, char **ret, char **env)
+void	handle_double_quote_case(char *s, int *i, char **ret, char **env) // still need to pass the linked list of env variables becuz the user might set up new variables and might not find them in the env since the minishell is a running process
 {
 	char	*tmp;
 	int		f;

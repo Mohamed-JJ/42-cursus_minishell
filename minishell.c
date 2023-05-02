@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 17:00:27 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:48:43 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,6 @@ int	main(int c, char **v, char **env)
 			add_history(input);
 			input = expand_var(input, env);
 			input = insert_spaces(input);
-			// printf("input : %s\n", input);
 			lex = lexer(input);
 			assign_type(lex);
 			manage_type(lex);
