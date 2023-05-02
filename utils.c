@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 13:57:39 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:03:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,34 +171,6 @@ int  arr_len(char **str)
 	return (i);
 }
 
-// t_cmd	*ft_lstnew(char	**content, int status)
-// {
-// 	t_cmd	*new;
-// 	int		i;
-// 	int		x;
-
-// 	i = 0;
-// 	x = 0;
-// 	new = malloc(sizeof(t_cmd));
-// 	if (!new)
-// 		return (NULL);
-// 	if (status == 0)
-// 		new->cmd = *content;
-// 	else if (status == 1)
-// 	{
-// 		i = arr_len(content);
-// 		new->args = malloc(sizeof(char *) * i);
-// 		while (content[x])
-// 		{
-// 			new->args[x] = ft_strdup(content[x]);
-// 			x++;
-// 		}
-// 		new->args[x] = NULL;
-// 	}
-// 	new->next = NULL;
-// 	return (new);
-// }
-
 int	ft_isprint(int c)
 {
 	if (!(c >= 32 && c <= 126))
@@ -260,10 +232,9 @@ int	skip_special_characters(char *str, int *i, char c)
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 {
-			// printf("what is in quotes %s\n", input + h.i);
-	
+	data->c = str[data->i];
 	data->i++;
-	while (str[data->i] && str[data->i] != '\"')
+	while (str[data->i] && str[data->i] != data->c)
 	{
 		data->s = ft_strjoin_characters(data->s, str[data->i]);
 		data->i++;
@@ -271,7 +242,7 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex)
 	if (!str[data->i])
 		printf("error in quotation\n");
 	data->i++;
-	if (str[data->i] == '\"')
+	if (str[data->i] == data->c)
 		dqoute_handler(str, data, lex);
 	else
 		ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
@@ -358,24 +329,3 @@ void	free_arr(char **arr)
 		i++;
 	}
 }
-
-// void	garbage_collector(t_col *list)
-// {
-// 	t_col	*tmp;
-
-// 	tmp = list;
-// 	while (tmp)
-// 	{
-// 		if (tmp->str)
-// 			free(tmp->str);
-// 		if (tmp->arr)
-// 			free_arr(tmp->arr);
-// 		if (tmp->lex)
-// 			free_lexer(tmp->lex);
-// 		if (tmp->cmd)
-// 			free_cmd(tmp->cmd);
-// 		tmp = tmp->next;
-// 	}
-// 	free(list);
-// 	list = tmp;
-// }

@@ -21,6 +21,9 @@ all : $(NAME)
 
 $(NAME) : $(OBJ) minishell.h
 	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME) -g
+	@echo █▀▄▀█ ░▀░ █▀▀▄ ░▀░ █▀▀ █░░█ █▀▀ █░░ █░░
+	@echo █░▀░█ ▀█▀ █░░█ ▀█▀ ▀▀█ █▀▀█ █▀▀ █░░ █░░ 
+	@echo ▀░░░▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀
 
 clean : $(OBJ) $(OBJ_B)
 	@$(RM) $(OBJ) $(OBJ_B)

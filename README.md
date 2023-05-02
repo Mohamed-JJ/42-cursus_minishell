@@ -39,7 +39,7 @@
   <p align="center">
     as beautiful as a shell can be. This repo is for an assignment given by 42 network to it's students to recreate their own version of bash in c programming language<br>
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://harm-smits.github.io/42docs/projects/minishell"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     ·
@@ -83,7 +83,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://www.gnu.org/software/bash/)
 
-this project aims to make stuudentss understand file descriptors in depth for it is a very hard concept to get a hold of it : `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+this project aims to make stuudentss understand file descriptors in depth for it is a very hard concept to get a hold of it, and teaches us how the bash interprets the commands and how a close up of how it does all the work by coding a smaller version of it
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

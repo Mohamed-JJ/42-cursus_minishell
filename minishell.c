@@ -6,11 +6,18 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 14:36:21 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:00:27 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	skip_whitespaces(char *str, int *i)
+{
+	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t'))
+		(*i)++;
+	(*i)--;
+}
 
 t_lex	*lexer(char *input)
 {
@@ -24,10 +31,10 @@ t_lex	*lexer(char *input)
 	{
 		if (input[(h.i)] == '\'' || input[h.i] == '\"')
 			dqoute_handler(input, &h, &lex);
+		else if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
+			skip_whitespaces(input, &h.i);
 		else
 		{
-			while (input[h.i] == ' ' || input[h.i] == '\t')
-				h.i++;
 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
 				h.s = ft_strjoin_characters(h.s, input[h.i++]);
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
@@ -175,7 +182,6 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 
 void	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
-	printf("double quote\n");
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\"')
@@ -218,6 +224,7 @@ void	handle_single_quote(char *s, int *i, char **ret)
 		handle_single_quote(s, i, ret);
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
+	printf("ret = |%s|\n", *ret);
 }
 
 void	handle_heredoc(char *s, int *i, char **ret)
@@ -278,7 +285,6 @@ void	generate_error(t_lex *s)
 		else if (i == 0 && check_if_operator(s->str))
 		{
 			printf("minishell : syntax error\n");
-			printf("here\n");
 		}
 		else if (!s->next && check_if_operator(s->str))
 			printf("minishell : syntax error\n");
@@ -292,12 +298,6 @@ char	*expand_var(char *s, char **env)
 	char	*ret;
 
 	ret = NULL;
-	i = 0;
-	while (env[i])
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
 	i = 0;
 	while (s[i])
 	{
@@ -334,6 +334,7 @@ int	main(int c, char **v, char **env)
 			add_history(input);
 			input = expand_var(input, env);
 			input = insert_spaces(input);
+			// printf("input : %s\n", input);
 			lex = lexer(input);
 			assign_type(lex);
 			manage_type(lex);
