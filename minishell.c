@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 18:24:50 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:33:01 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
-	return (ret);
+	return (free(input), ret);
 }
 
 void	handle_until_pipe(t_lex *p)
@@ -282,10 +282,12 @@ void	generate_error(t_lex *s)
 			i = 1;
 		if (!s->prev && !ft_strncmp(s->str, "<", ft_strlen("<")))
 			generate_error(s->next);
+		else if (!s->prev && !ft_strncmp(s->str, ">", 1) && !s->next)
+			printf("error\n");
+		else if (!s->prev && !ft_strncmp(s->str, ">", ft_strlen(">")))
+			generate_error(s->next);
 		else if (i == 0 && check_if_operator(s->str))
-		{
 			printf("minishell : syntax error\n");
-		}
 		else if (!s->next && check_if_operator(s->str))
 			printf("minishell : syntax error\n");
 		s = s->next;

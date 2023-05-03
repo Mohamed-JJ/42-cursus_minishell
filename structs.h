@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 14:12:49 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:39:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct l_exp
 
 typedef struct l_cmd
 {
+	char			*command;
 	char			**args;
 	int				status;
 	char			*infile;
@@ -90,7 +91,7 @@ typedef struct l_cmd
 
 typedef struct l_col
 {
-	char			**arr;
+	char			**args;
 	char			*str;
 	t_lex			*lex;
 	t_cmd			*cmd;
