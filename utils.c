@@ -6,36 +6,49 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/02 17:03:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/05 15:54:02 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./lexer/lexer.h"
 
+void	get_until_equal(char *s, int *i)
+{
+	*i = 0;
+	while (s[*i] && s[*i] != '=')
+		(*i)++;
+}
+
 char	*get_env(char **env, char *s)
 {
+	int		tmp;
 	int		i;
 	char	*ret;
 
 	i = 0;
 	ret = NULL;
+	tmp = 0;
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], s, ft_strlen(s)))
+		get_until_equal(env[i], &tmp);
+		if (tmp == ft_strlen(s))
 		{
-			ret = ft_strdup(env[i] + ft_strlen(s) + 1);
-			break ;
+			if (!ft_strncmp(env[i], s, ft_strlen(s)))
+			{
+				ret = ft_strdup(env[i] + ft_strlen(s) + 1);
+				break ;
+			}
 		}
 		i++;
 	}
-	return (ret);
+	return (free(s), ret);
 }
 
 int	ft_isalnum(int c)
 {
 	if ((c >= 65 && c <= 90)
-		|| (c >= 97 && c <= 122) || (c >= 48 && c <= 57) || c == '_')
+		|| (c >= 97 && c <= 122) || c == '_')
 		return (1);
 	else
 		return (0);
@@ -212,7 +225,6 @@ int	ft_strcmp(char *s1, char *s2)
 	}
     return (*(unsigned char*)s1 - *(unsigned char*)s2);
 }
-
 
 int	check_if_operator(char *str)
 {

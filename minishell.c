@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/03 18:33:01 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/05 18:22:51 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ char	*insert_spaces(char *input)
 			while (input[i] != character && input[i])
 				ret = ft_strjoin_characters(ret, input[i++]);
 			ret = ft_strjoin_characters(ret, input[i]);
-
 		}
 		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
@@ -252,8 +251,13 @@ void	handle_heredoc(char *s, int *i, char **ret)
 void	handle_dollar(char *s, int *i, char **ret, char **env)
 {
 	char	*tmp;
+	char	*holder;
 
+	holder = NULL;
 	tmp = NULL;
+	if (s[*i] == '$' && s[*i] == '?')
+	{
+	}
 	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
 	{
 		(*i)++;
@@ -265,7 +269,9 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 				break ;
 			(*i)++;
 		}
-		*ret = ft_strjoin(*ret, get_env(env, tmp));
+		holder = get_env(env, tmp);
+		*ret = ft_strjoin(*ret, holder);
+		free(holder);
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
@@ -315,10 +321,40 @@ char	*expand_var(char *s, char **env)
 			ret = ft_strjoin_characters(ret, s[i]);
 		i++;
 	}
-	return (ret);
+	return (free(s), ret);
 }
 
-int	main(int c, char **v, char **env) // still need to pass the linked list of env variables becuz the user might set up new variables and might not find them in the env since the minishell is a running process
+char	**create_arrays_of_files(t_lex *s)
+{
+	char	**ret;
+
+	ret = malloc(sizeof(char *) * 3);
+	while (s)
+	{
+		if (s->type == ARGUMENT)
+		{
+			ret[0] = ft_strjoin(ret[0], s->str);
+			ret[0] = ft_strjoin(ret[0], " ");
+		}
+		else if (s->type == OUT_FILE)
+		{
+			ret[1] = ft_strjoin(ret[1], s->str);
+			ret[1] = ft_strjoin(ret[1], " ");
+		}
+		else if (s->type == IN_FILE)
+		{
+			ret[2] = ft_strjoin(ret[2], s->str);
+			ret[2] = ft_strjoin(ret[2], " ");
+		}
+		else if (s->type == HEREDOC_DEL)
+		{
+			ret[3] = ft_strjoin(ret[3], s->str);
+			ret[3] = ft_strjoin(ret[3], " ");
+		}
+	}
+}
+
+int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
 	char	*input;
@@ -335,7 +371,7 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 			input[ft_strlen(input)] = '\0';
 			add_history(input);
 			input = expand_var(input, env);
-			input = insert_spaces(input);
+			input = insert_spaces(input); // until here is leak free
 			lex = lexer(input);
 			assign_type(lex);
 			manage_type(lex);
