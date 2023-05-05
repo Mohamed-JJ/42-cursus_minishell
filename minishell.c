@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/05 18:22:51 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/05 21:07:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,40 +324,63 @@ char	*expand_var(char *s, char **env)
 	return (free(s), ret);
 }
 
+void	check_arr(char **r)
+{
+	if (!r[0])
+		r[0] = ft_strdup("");
+	if (!r[1])
+		r[1] = ft_strdup("");
+	if (!r[2])
+		r[2] = ft_strdup("");
+	if (!r[3])
+		r[3] = ft_strdup("");
+}
+
+void	fill_array(char **ret, int type, char *s)
+{
+	if (type == ARGUMENT)
+	{
+		ret[0] = ft_strjoin(ret[0], s);
+		ret[0] = ft_strjoin(ret[0], " ");
+	}
+	else if (type == OUT_FILE)
+	{
+		ret[1] = ft_strjoin(ret[1], s);
+		ret[1] = ft_strjoin(ret[1], " ");
+	}
+	else if (type == IN_FILE)
+	{
+		ret[2] = ft_strjoin(ret[2], s);
+		ret[2] = ft_strjoin(ret[2], " ");
+	}
+	else if (type == HEREDOC_DEL)
+	{
+		ret[3] = ft_strjoin(ret[3], s);
+		ret[3] = ft_strjoin(ret[3], " ");
+	}
+	check_arr(ret);
+}
+
 char	**create_arrays_of_files(t_lex *s)
 {
 	char	**ret;
 
-	ret = malloc(sizeof(char *) * 3);
+	ret = malloc(sizeof(char *) * 5);
 	while (s)
 	{
-		if (s->type == ARGUMENT)
-		{
-			ret[0] = ft_strjoin(ret[0], s->str);
-			ret[0] = ft_strjoin(ret[0], " ");
-		}
-		else if (s->type == OUT_FILE)
-		{
-			ret[1] = ft_strjoin(ret[1], s->str);
-			ret[1] = ft_strjoin(ret[1], " ");
-		}
-		else if (s->type == IN_FILE)
-		{
-			ret[2] = ft_strjoin(ret[2], s->str);
-			ret[2] = ft_strjoin(ret[2], " ");
-		}
-		else if (s->type == HEREDOC_DEL)
-		{
-			ret[3] = ft_strjoin(ret[3], s->str);
-			ret[3] = ft_strjoin(ret[3], " ");
-		}
+		fill_array(ret, s->type, s->str);
+		s = s->next;
 	}
+	ret[4] = NULL;
+	return (ret);
 }
 
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
+	int i;
 	char	*input;
+	char	**files;
 
 	lex = NULL;
 	(void)c;
@@ -365,6 +388,7 @@ int	main(int c, char **v, char **env)
 	(void)env;
 	while (1)
 	{
+		i = 0;
 		input = readline("minishell$>:");
 		if (ft_strlen(input) > 0)
 		{
@@ -376,7 +400,12 @@ int	main(int c, char **v, char **env)
 			assign_type(lex);
 			manage_type(lex);
 			generate_error(lex);
-			print_list(lex);
+			files = create_arrays_of_files(lex);
+			while(files[i])
+			{
+				printf("%s\n", files[i]);
+				i++;
+			}
 			free(input);
 			input = NULL;
 		}
