@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/05 21:07:50 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/05 21:19:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,8 +364,17 @@ void	fill_array(char **ret, int type, char *s)
 char	**create_arrays_of_files(t_lex *s)
 {
 	char	**ret;
+	int		i;
 
+	i = 0;
+	if (!s)
+		return (NULL);
 	ret = malloc(sizeof(char *) * 5);
+	while (i < 4)
+	{
+		ret[i] = NULL;
+		i++;
+	}
 	while (s)
 	{
 		fill_array(ret, s->type, s->str);
@@ -378,7 +387,7 @@ char	**create_arrays_of_files(t_lex *s)
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
-	int i;
+	int 	i;
 	char	*input;
 	char	**files;
 
@@ -401,13 +410,20 @@ int	main(int c, char **v, char **env)
 			manage_type(lex);
 			generate_error(lex);
 			files = create_arrays_of_files(lex);
-			while(files[i])
+			while (files[i])
 			{
 				printf("%s\n", files[i]);
 				i++;
 			}
 			free(input);
 			input = NULL;
+			i = 0;
+			while (files[i])
+			{
+				free(files[i]);
+				files[i] = NULL;
+				i++;
+			}
 		}
 	}
 	return (0);
