@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/01 14:41:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/06 18:09:58 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_isalnum(int c);
 char	*get_env(char **env, char *s);
 
+char	**ft_split(char *s, char c);
+
 void	print_list(t_lex *lex);
+
+void ft_lstadd_back_cmd(t_cmd **c, t_cmd *new);
+
 
 #endif

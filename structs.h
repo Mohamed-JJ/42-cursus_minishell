@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/05 15:15:30 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/06 17:50:25 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ typedef struct l_cmd
 {
 	char			*command;
 	char			**args;
-	int				status;
 	int 			in_out;
 	char			**infile;
 	char			**outfile;
+	char			**heredoc_del;
 	struct l_cmd	*next;
 }			t_cmd;
 

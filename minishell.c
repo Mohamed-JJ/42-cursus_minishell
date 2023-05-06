@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/05 21:19:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:58:20 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_lex	*lexer(char *input)
 		if (!input[h.i])
 			break ;
 	}
-	return (lex);
+	return (free(input), input = NULL, lex);
 }
 
 void	assign_type(t_lex *p)
@@ -375,7 +375,7 @@ char	**create_arrays_of_files(t_lex *s)
 		ret[i] = NULL;
 		i++;
 	}
-	while (s)
+	while (s && s->type != PIPE)
 	{
 		fill_array(ret, s->type, s->str);
 		s = s->next;
@@ -384,17 +384,127 @@ char	**create_arrays_of_files(t_lex *s)
 	return (ret);
 }
 
+char	**empty_array()
+{
+	int		i;
+	char	**files;
+
+	files = malloc(sizeof(char *) * 5);
+	i = 0;
+	while (i <= 4)
+	{
+		files[i] = NULL;
+		i++;
+	}
+	return (files);
+}
+
+void	fill_arrays(char *ar, char ***cpy)
+{
+	int		i;
+
+	i = 0;
+	if (!ar || ft_strlen(ar) == 0)
+	{
+		puts("empty");
+		*cpy = NULL;
+	}
+	else
+		*cpy = ft_split(ar, ' ');
+}
+
+t_cmd	*new_command(t_data *p)
+{
+	t_cmd	*ret;
+
+	ret = malloc(sizeof(t_cmd ));
+	if (!ret)
+		return (NULL);
+	ret->command = ft_strdup(p->s);
+	fill_arrays(p->arr[0], &ret->args);
+	int i = 0;
+	while (ret->args[i])
+	{
+		printf("args[%d] = %s\n", i, ret->args[i]);
+		i++;
+	}
+	fill_arrays(p->arr[1], &ret->outfile);
+	fill_arrays(p->arr[2], &ret->infile);
+	puts("no error");
+	fill_arrays(p->arr[3], &ret->heredoc_del);
+	ret->in_out = p->i;
+	return (ret);
+}
+
+void ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
+{
+	t_cmd *tmp;
+
+	if (!c)
+		return ;
+	if (!*c)
+	{
+		*c = new;
+		return ;
+	}
+	tmp = *c;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	redirection_type(int type, t_data *d)
+{
+	if (type == REDIRECT)
+		d->i = TO_BE_REDIRECTED;
+	else if (type == APPEND)
+		d->i = TO_BE_APPENDED;
+}
+
+void	join_string(char *str, char **string)
+{
+	*string = ft_strjoin(*string, str);
+	*string = ft_strjoin(*string, " ");
+}
+
+t_cmd	*create_cmd(t_lex *s)
+{
+	t_cmd	*ret;
+	t_data	d;
+
+	d.arr = empty_array();
+	d.i = 0;
+	ret = NULL;
+	while (s && s->type != PIPE)
+	{
+		redirection_type(s->type, &d);
+		if (s->type == COMMAND)
+			d.s = ft_strdup(s->str);
+		if (s->type == ARGUMENT)
+			join_string(s->str, &d.arr[0]);
+		else if (s->type == OUT_FILE)
+			join_string(s->str, &d.arr[1]);
+		else if (s->type == IN_FILE)
+			join_string(s->str, &d.arr[2]);
+		else if (s->type == HEREDOC_DEL)
+			join_string(s->str, &d.arr[3]);
+		s = s->next;
+	}
+	ret = new_command(&d);
+	return (ret);
+}
+
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
-	int 	i;
+	t_cmd	*cmd;
+	int		i;
 	char	*input;
-	char	**files;
 
 	lex = NULL;
+	cmd = NULL;
 	(void)c;
 	(void)v;
-	(void)env;
 	while (1)
 	{
 		i = 0;
@@ -408,22 +518,9 @@ int	main(int c, char **v, char **env)
 			lex = lexer(input);
 			assign_type(lex);
 			manage_type(lex);
+			print_list(lex);
 			generate_error(lex);
-			files = create_arrays_of_files(lex);
-			while (files[i])
-			{
-				printf("%s\n", files[i]);
-				i++;
-			}
-			free(input);
-			input = NULL;
-			i = 0;
-			while (files[i])
-			{
-				free(files[i]);
-				files[i] = NULL;
-				i++;
-			}
+			cmd = create_cmd(lex);
 		}
 	}
 	return (0);
