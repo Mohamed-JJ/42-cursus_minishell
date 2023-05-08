@@ -4,6 +4,7 @@ SRC = minishell.c \
 		utils.c \
 		lexer/lexer_lists.c \
 		lexer/lexer_main.c \
+		ft_split.c \
 		# export_env.c \
 
 OBJ = $(SRC:.c=.o)

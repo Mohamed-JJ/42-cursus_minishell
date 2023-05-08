@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/03 18:33:01 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/08 22:49:32 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,9 +318,183 @@ char	*expand_var(char *s, char **env)
 	return (ret);
 }
 
+void	check_arr(char **r)
+{
+	if (!r[0])
+		r[0] = ft_strdup("");
+	if (!r[1])
+		r[1] = ft_strdup("");
+	if (!r[2])
+		r[2] = ft_strdup("");
+	if (!r[3])
+		r[3] = ft_strdup("");
+}
+
+void	fill_array(char **ret, int type, char *s)
+{
+	if (type == ARGUMENT)
+	{
+		ret[0] = ft_strjoin(ret[0], s);
+		ret[0] = ft_strjoin(ret[0], " ");
+	}
+	else if (type == OUT_FILE)
+	{
+		ret[1] = ft_strjoin(ret[1], s);
+		ret[1] = ft_strjoin(ret[1], " ");
+	}
+	else if (type == IN_FILE)
+	{
+		ret[2] = ft_strjoin(ret[2], s);
+		ret[2] = ft_strjoin(ret[2], " ");
+	}
+	else if (type == HEREDOC_DEL)
+	{
+		ret[3] = ft_strjoin(ret[3], s);
+		ret[3] = ft_strjoin(ret[3], " ");
+	}
+	check_arr(ret);
+}
+
+char	**create_arrays_of_files(t_lex *s)
+{
+	char	**ret;
+	int		i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	ret = malloc(sizeof(char *) * 5);
+	while (i < 4)
+	{
+		ret[i] = NULL;
+		i++;
+	}
+	while (s && s->type != PIPE)
+	{
+		fill_array(ret, s->type, s->str);
+		s = s->next;
+	}
+	ret[4] = NULL;
+	return (ret);
+}
+
+char	**empty_array()
+{
+	int		i;
+	char	**files;
+
+	files = malloc(sizeof(char *) * 5);
+	i = 0;
+	while (i <= 4)
+	{
+		files[i] = NULL;
+		i++;
+	}
+	return (files);
+}
+
+void	fill_arrays(char *ar, char ***cpy)
+{
+	int		i;
+
+	i = 0;
+	if (!ar || ft_strlen(ar) == 0)
+		*cpy = NULL;
+	else
+		*cpy = ft_split(ar, ' ');
+}
+
+t_cmd	*new_command(t_data *p)
+{
+	t_cmd	*ret;
+
+	ret = malloc(sizeof(t_cmd ));
+	if (!ret)
+		return (NULL);
+	ret->command = ft_strdup(p->s);
+	fill_arrays(p->arr[0], &ret->args);
+	fill_arrays(p->arr[1], &ret->outfile);
+	fill_arrays(p->arr[2], &ret->infile);
+	fill_arrays(p->arr[3], &ret->heredoc_del);
+	ret->in_out = p->i;
+	return (ret);
+}
+
+void ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
+{
+	t_cmd	*tmp;
+
+	if (!c)
+		return ;
+	if (!*c)
+	{
+		*c = new;
+		return ;
+	}
+	tmp = *c;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	redirection_type(int type, t_data *d)
+{
+	if (type == REDIRECT)
+		d->i = TO_BE_REDIRECTED;
+	else if (type == APPEND)
+		d->i = TO_BE_APPENDED;
+}
+
+void	join_string(char *str, char **string)
+{
+	*string = ft_strjoin(*string, str);
+	*string = ft_strjoin(*string, " ");
+}
+
+t_cmd	*create_cmd(t_lex *s)
+{
+	t_cmd	*ret;
+	t_data	d;
+
+	d.i = 0;
+	ret = NULL;
+	while (s)
+	{
+		d.arr = empty_array();
+		redirection_type(s->type, &d);
+		if (s->type == COMMAND)
+			d.s = ft_strdup(s->str);
+		if (s->type == ARGUMENT)
+			join_string(s->str, &d.arr[0]);
+		else if (s->type == OUT_FILE)
+			join_string(s->str, &d.arr[1]);
+		else if (s->type == IN_FILE)
+			join_string(s->str, &d.arr[2]);
+		else if (s->type == HEREDOC_DEL)
+			join_string(s->str, &d.arr[3]);
+		else if (s->type == PIPE)
+		{
+			t_cmd *tmp = new_command(&d);
+			ft_lstadd_back_cmd(&ret, tmp);
+			int i  = 0;
+			while (d.arr[i])
+			{
+				free(d.arr[i]);
+				d.arr[i] = NULL;
+				i++;
+			}
+			d.arr = NULL;
+		}
+		s = s->next;
+	}
+	ft_lstadd_back(&ret, new_command(&d));
+	return (ret);
+}
+
 int	main(int c, char **v, char **env) // still need to pass the linked list of env variables becuz the user might set up new variables and might not find them in the env since the minishell is a running process
 {
 	t_lex	*lex;
+	t_cmd	*cmd;
 	char	*input;
 
 	lex = NULL;
@@ -341,6 +515,12 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 			manage_type(lex);
 			generate_error(lex);
 			print_list(lex);
+			free(input);
+			input = NULL;
+			cmd = create_cmd(lex);
+		}
+		else
+		{
 			free(input);
 			input = NULL;
 		}
