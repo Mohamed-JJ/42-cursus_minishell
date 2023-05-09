@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 15:48:59 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/09 21:26:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,7 @@ void	dqoute_handler_expander(char *str, t_data *data)
 		dqoute_handler_expander(str, data);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int _free)
 {
 	size_t	i;
 	size_t	c;
@@ -290,6 +290,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[c] != '\0')
 		str[i++] = s2[c++];
 	str[i] = '\0';
+	if (_free)
+		free(s2);
 	return (free(s1), str);
 }
 

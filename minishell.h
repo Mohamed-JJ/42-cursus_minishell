@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/01 14:41:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/09 21:26:08 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 char	*ft_strjoin_characters(char *s1, char c);
 int		ft_isprint(int c);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *s1, char *s2, int _free);
 char	*ft_substr(char *s, int start, int len);
 int		ft_strcmp(char *s1, char *s2);
 int		check_if_operator(char *str);

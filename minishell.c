@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 16:06:56 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/09 21:30:32 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,16 +88,14 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
-	return (free(input),input = NULL, ret);
+	return (free(input), input = NULL, ret);
 }
 
 void	handle_env(char	*s, char **ret, char **env, int *i)
 {
 	char	*tmp;
 	char	*holder;
-	int		j;
 
-	j = 0;
 	tmp = NULL;
 	holder = NULL;
 	while (s[*i] && s[*i] == '$')
@@ -110,8 +108,7 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	holder = get_env(env, tmp);
-	*ret = ft_strjoin(*ret, holder);
-	free(holder);
+	*ret = ft_strjoin(*ret, holder, 1);
 	free(tmp);
 	tmp = NULL;
 	holder = NULL;
@@ -119,6 +116,7 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 
 void	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
+	printf("%p\t%p\n", s, *ret);
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\"')
@@ -204,14 +202,13 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 			(*i)++;
 		}
 		holder = get_env(env, tmp);
-		*ret = ft_strjoin(*ret, holder);
+		*ret = ft_strjoin(*ret, holder, 1);
+		free(tmp);
+		tmp = NULL;
+		holder = NULL;
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
-	free(tmp);
-	free(holder);
-	tmp = NULL;
-	holder = NULL;
 }
 
 void	generate_error(t_lex *s)
@@ -277,23 +274,23 @@ void	fill_array(char **ret, int type, char *s)
 {
 	if (type == ARGUMENT)
 	{
-		ret[0] = ft_strjoin(ret[0], s);
-		ret[0] = ft_strjoin(ret[0], " ");
+		ret[0] = ft_strjoin(ret[0], s, 0);
+		ret[0] = ft_strjoin(ret[0], " ", 0);
 	}
 	else if (type == OUT_FILE)
 	{
-		ret[1] = ft_strjoin(ret[1], s);
-		ret[1] = ft_strjoin(ret[1], " ");
+		ret[1] = ft_strjoin(ret[1], s, 0);
+		ret[1] = ft_strjoin(ret[1], " ", 0);
 	}
 	else if (type == IN_FILE)
 	{
-		ret[2] = ft_strjoin(ret[2], s);
-		ret[2] = ft_strjoin(ret[2], " ");
+		ret[2] = ft_strjoin(ret[2], s, 0);
+		ret[2] = ft_strjoin(ret[2], " ", 0);
 	}
 	else if (type == HEREDOC_DEL)
 	{
-		ret[3] = ft_strjoin(ret[3], s);
-		ret[3] = ft_strjoin(ret[3], " ");
+		ret[3] = ft_strjoin(ret[3], s, 0);
+		ret[3] = ft_strjoin(ret[3], " ", 0);
 	}
 	check_arr(ret);
 }
@@ -390,8 +387,8 @@ void	redirection_type(int type, t_data *d)
 
 void	join_string(char *str, char **string)
 {
-	*string = ft_strjoin(*string, str);
-	*string = ft_strjoin(*string, " ");
+	*string = ft_strjoin(*string, str, 0);
+	*string = ft_strjoin(*string, " ", 0);
 }
 
 t_cmd	*create_cmd(t_lex *s)
@@ -438,6 +435,7 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 {
 	t_lex	*lex;
 	char	*input;
+	// t_cmd	*cmd;
 
 	lex = NULL;
 	(void)c;
@@ -464,7 +462,8 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 				free(lex);
 				lex = lex->next;
 			}
-			
+			free(input);
+			input = NULL;
 		}
 		free(input);
 		input = NULL;
