@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/08 22:49:32 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:06:56 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,39 +39,19 @@ t_lex	*lexer(char *input)
 				h.s = ft_strjoin_characters(h.s, input[h.i++]);
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
 		}
-		free(h.s);
-		h.s = NULL;
+		printf("h.s = %p\n", h.s);
+		if (h.s)
+		{
+			free(h.s);
+			h.s = NULL;
+		}
 		if (!input[h.i])
 			break ;
 	}
 	return (lex);
 }
 
-void	assign_type(t_lex *p)
-{
-	int		i;
-	t_lex	*tmp;
 
-	tmp = p;
-	i = 0;
-	while (p)
-	{
-		if (!ft_strcmp("|", p->str))
-			p->type = PIPE;
-		else if (!ft_strcmp(">", p->str) && !p->ds_quote)
-			p->type = REDIRECT;
-		else if (!ft_strcmp(">>", p->str) && !p->ds_quote)
-			p->type = APPEND;
-		else if (!ft_strcmp("<", p->str) && !p->ds_quote)
-			p->type = READ_INPUT;
-		else if (!ft_strcmp("<<", p->str) && !p->ds_quote)
-			p->type = HEREDOC;
-		else
-			p->type = WORD;
-		p = p->next;
-	}
-	p = tmp;
-}
 
 char	*insert_spaces(char *input)
 {
@@ -108,48 +88,7 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
-	return (free(input), ret);
-}
-
-void	handle_until_pipe(t_lex *p)
-{
-	int		i;
-	t_lex	*tmp;
-
-	i = 0;
-	tmp = p;
-	while (p)
-	{
-		if (p->type == PIPE)
-			break ;
-		if (p->type == WORD && !i)
-		{
-			p->type = COMMAND;
-			i = 1;
-		}
-		else if (p->type == WORD)
-			p->type = ARGUMENT;
-		else if ((p->type == REDIRECT || p->type == APPEND)
-			&& p->next != NULL && p->next->type == WORD)
-			p->next->type = OUT_FILE;
-		else if (p->type == READ_INPUT && p->next && p->next->type == WORD)
-			p->next->type = IN_FILE;
-		else if (p->type == HEREDOC && p->next->type == WORD)
-			p->next->type = HEREDOC_DEL;
-		p = p->next;
-	}
-}
-
-void	manage_type(t_lex *p)
-{
-	t_lex	*tmp;
-
-	tmp = p;
-	while (p)
-	{
-		handle_until_pipe(p);
-		p = p->next;
-	}
+	return (free(input),input = NULL, ret);
 }
 
 void	handle_env(char	*s, char **ret, char **env, int *i)
@@ -161,8 +100,6 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 	j = 0;
 	tmp = NULL;
 	holder = NULL;
-	(void)ret;
-	(void)env;
 	while (s[*i] && s[*i] == '$')
 		(*i)++;
 	while (s[*i] && ft_isalnum(s[*i]))
@@ -224,7 +161,6 @@ void	handle_single_quote(char *s, int *i, char **ret)
 		handle_single_quote(s, i, ret);
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
-	printf("ret = |%s|\n", *ret);
 }
 
 void	handle_heredoc(char *s, int *i, char **ret)
@@ -252,8 +188,10 @@ void	handle_heredoc(char *s, int *i, char **ret)
 void	handle_dollar(char *s, int *i, char **ret, char **env)
 {
 	char	*tmp;
+	char	*holder;
 
 	tmp = NULL;
+	holder = NULL;
 	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
 	{
 		(*i)++;
@@ -265,10 +203,15 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 				break ;
 			(*i)++;
 		}
-		*ret = ft_strjoin(*ret, get_env(env, tmp));
+		holder = get_env(env, tmp);
+		*ret = ft_strjoin(*ret, holder);
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
+	free(tmp);
+	free(holder);
+	tmp = NULL;
+	holder = NULL;
 }
 
 void	generate_error(t_lex *s)
@@ -315,7 +258,7 @@ char	*expand_var(char *s, char **env)
 			ret = ft_strjoin_characters(ret, s[i]);
 		i++;
 	}
-	return (ret);
+	return (free(s), s = NULL, ret);
 }
 
 void	check_arr(char **r)
@@ -494,7 +437,6 @@ t_cmd	*create_cmd(t_lex *s)
 int	main(int c, char **v, char **env) // still need to pass the linked list of env variables becuz the user might set up new variables and might not find them in the env since the minishell is a running process
 {
 	t_lex	*lex;
-	t_cmd	*cmd;
 	char	*input;
 
 	lex = NULL;
@@ -515,15 +457,17 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 			manage_type(lex);
 			generate_error(lex);
 			print_list(lex);
-			free(input);
-			input = NULL;
-			cmd = create_cmd(lex);
+			// cmd = create_cmd(lex);
+			while (lex)
+			{
+				free(lex->str);
+				free(lex);
+				lex = lex->next;
+			}
+			
 		}
-		else
-		{
-			free(input);
-			input = NULL;
-		}
+		free(input);
+		input = NULL;
 	}
 	return (0);
 }
