@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 12:16:28 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:58:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,32 @@ void	check_rest_type(t_lex *p, int *i)
 		p->type = OUT_FILE;
 	else if (p->prev->type == HEREDOC)
 		p->type = HEREDOC_DEL;
+}
+
+t_lex	*lexer(char *input)
+{
+	t_data	h;
+	t_lex	*lex;
+
+	h.i = -1;
+	lex = NULL;
+	h.s = NULL;
+	while (input[++h.i])
+	{
+		if (input[(h.i)] == '\'' || input[h.i] == '\"')
+			dqoute_handler(input, &h, &lex);
+		else if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
+			skip_whitespaces(input, &h.i);
+		else
+		{
+			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
+				h.s = ft_strjoin_characters(h.s, input[h.i++]);
+			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
+		}
+		if (h.s)
+			free_string(&h.s);
+		if (!input[h.i])
+			break ;
+	}
+	return (lex);
 }

@@ -2,11 +2,16 @@ NAME = minishell
 
 SRC = minishell.c \
 		utils.c \
+		utils_2.c \
+		utils_3.c \
+		utils_4.c \
+		utils_5.c \
+		utils_6.c \
 		lexer/lexer_lists.c \
 		lexer/lexer_main.c \
 		ft_split.c \
 		ft_free.c \
-		# export_env.c \
+		handler.c \
 
 OBJ = $(SRC:.c=.o)
 
