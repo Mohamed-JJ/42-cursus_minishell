@@ -6,12 +6,12 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:51:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:20:38 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-#include "../lexer/lexer.h"
+#include "../includes/utils.h"
+#include "../includes/lexer.h"
 
 char	*get_env(char **env, char *s)
 {

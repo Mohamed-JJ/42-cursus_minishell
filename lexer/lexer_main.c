@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 20:58:11 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:21:38 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../includes/lexer.h"
 
 void	manage_type(t_lex *p)
 {

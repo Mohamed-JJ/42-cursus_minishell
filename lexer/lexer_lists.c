@@ -6,12 +6,12 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 14:49:25 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:19:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "lexer.h"
+#include "../includes/minishell.h"
+#include "../includes/lexer.h"
 
 t_lex	*new_lex(char *str, int type, int flag)
 {

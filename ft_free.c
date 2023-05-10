@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:11:27 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 20:39:02 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:22:08 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "includes/minishell.h"
 
 void	free_string(char **str)
 {

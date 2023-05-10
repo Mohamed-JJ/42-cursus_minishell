@@ -6,14 +6,14 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:49:16 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:52:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:17:29 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-# include "../minishell.h"
+# include "minishell.h"
 
 // utils functions
 

@@ -15,6 +15,11 @@ SRC = minishell.c \
 
 OBJ = $(SRC:.c=.o)
 
+INC = includes/minishell.h \
+		includes/structs.h \
+		includes/lexer.h \
+		includes/utils.h \
+
 RM = rm -rf
 
 CC = cc
@@ -26,8 +31,8 @@ all : $(NAME)
 %.o : %.c minishell.h
 	@$(CC) $(FLAGS) $< -c -o $@ -g
 
-$(NAME) : $(OBJ) minishell.h
-	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME) -g
+$(NAME) : $(OBJ) $(INC)
+	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME)
 	@echo █▀▄▀█ ░▀░ █▀▀▄ ░▀░ █▀▀ █░░█ █▀▀ █░░ █░░
 	@echo █░▀░█ ▀█▀ █░░█ ▀█▀ ▀▀█ █▀▀█ █▀▀ █░░ █░░
 	@echo ▀░░░▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀

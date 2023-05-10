@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:50:22 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:25:13 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "lexer/lexer.h"
+# include "lexer.h"
 # include "structs.h"
-# include "utils/utils.h"
+# include "utils.h"
 # include <curses.h>
 # include <term.h>
 

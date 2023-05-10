@@ -6,15 +6,15 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 00:25:04 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 20:58:24 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:18:18 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "./../minishell.h"
-# include "../structs.h"
+# include "minishell.h"
+# include "structs.h"
 
 t_lex	*new_lex(char *str, int type, int flag);
 void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);

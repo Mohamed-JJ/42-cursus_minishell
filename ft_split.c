@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 18:05:10 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/06 18:06:27 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 22:21:56 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "includes/minishell.h"
 
 static size_t	w_counter(char *s, char c)
 {
