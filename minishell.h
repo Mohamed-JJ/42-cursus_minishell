@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:46:51 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:50:22 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include "lexer/lexer.h"
 # include "structs.h"
+# include "utils/utils.h"
 # include <curses.h>
 # include <term.h>
 
@@ -58,20 +59,6 @@ char	*get_env(char **env, char *s);
 void	print_list(t_lex *lex);
 
 // utils functions
-void	free_string(char **lex);
-void	free_array(char ***lex);
-int		arr_len(char **arr);
-char	*expand_var(char *s, char **env);
-void	skip_whitespaces(char *str, int *i);
-int		skip_special_characters(char *str, int *i, char c);
-char	**empty_array(void);
-void	fill_arrays(char *ar, char ***cpy);
-void	fill_array(char **ret, int type, char *s);
-void	join_string(char *str, char **string);
-char	**create_arrays_of_files(t_lex *s);
-void	check_arr(char **r);
-int		generate_error2(t_lex *s, int *i);
-int		generate_error(t_lex *s);
-void	redirection_type(int type, t_data *d);
+
 
 #endif

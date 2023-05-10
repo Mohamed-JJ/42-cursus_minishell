@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:46:40 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:54:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
 int	generate_error(t_lex *s)
 {
@@ -88,6 +88,8 @@ int	generate_error2(t_lex *s, int *i)
 {
 	if (s->type == COMMAND)
 		*i = 1;
+	else if (s->type == PIPE && s->next && s->next->type == PIPE)
+		return (printf("minishell : syntax error\n"), 1);
 	else if (s->prev && s->type == PIPE && s->next)
 		*i = 0;
 	if (s->next && check_if_operator(s->str) && check_if_operator(s->next->str))

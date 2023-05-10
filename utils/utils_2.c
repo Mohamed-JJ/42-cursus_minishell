@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 20:47:15 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:51:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
 char	*expand_var(char *s, char **env)
 {

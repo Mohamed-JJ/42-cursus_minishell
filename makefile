@@ -1,12 +1,12 @@
 NAME = minishell
 
 SRC = minishell.c \
-		utils.c \
-		utils_2.c \
-		utils_3.c \
-		utils_4.c \
-		utils_5.c \
-		utils_6.c \
+		utils/utils.c \
+		utils/utils_2.c \
+		utils/utils_3.c \
+		utils/utils_4.c \
+		utils/utils_5.c \
+		utils/utils_6.c \
 		lexer/lexer_lists.c \
 		lexer/lexer_main.c \
 		ft_split.c \

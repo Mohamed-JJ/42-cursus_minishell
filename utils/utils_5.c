@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:39:59 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:41:39 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:50:50 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
 void	join_string(char *str, char **string)
 {

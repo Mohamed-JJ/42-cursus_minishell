@@ -6,11 +6,11 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:50:28 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 21:38:08 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:50:44 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
 void	free_arr(char **arr)
 {
