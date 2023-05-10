@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 21:30:32 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 17:06:21 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,13 @@ t_lex	*lexer(char *input)
 				h.s = ft_strjoin_characters(h.s, input[h.i++]);
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
 		}
-		printf("h.s = %p\n", h.s);
 		if (h.s)
-		{
-			free(h.s);
-			h.s = NULL;
-		}
+			free_string(&h.s);
 		if (!input[h.i])
 			break ;
 	}
 	return (lex);
 }
-
-
 
 char	*insert_spaces(char *input)
 {
@@ -70,7 +64,6 @@ char	*insert_spaces(char *input)
 			while (input[i] != character && input[i])
 				ret = ft_strjoin_characters(ret, input[i++]);
 			ret = ft_strjoin_characters(ret, input[i]);
-
 		}
 		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
@@ -211,27 +204,50 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 }
 
-void	generate_error(t_lex *s)
+int generate_error2(t_lex *s, int *i)
+{
+	if (s->type == COMMAND)
+		*i = 1;
+	else if (s->prev && s->type == PIPE && s->next)
+		*i = 0;
+	if (s->next && check_if_operator(s->str) && check_if_operator(s->next->str))
+		return (printf("minishell : syntax error\n"), 1);
+	else if (!s->prev && !ft_strncmp(s->str, "<", 1) && !s->next)
+		return (printf("minishell : syntax error\n"), 1);
+	else if (!s->prev && !ft_strncmp(s->str, ">", 1) && !s->next)
+		return (printf("minishell : syntax error\n"), 1);
+	else if (!s->next && check_if_operator(s->str))
+		return (printf("minishell : syntax error\n"), 1);
+	return (0);
+}
+
+int	generate_error(t_lex *s)
 {
 	int	i;
 
 	i = 0;
 	while (s)
 	{
-		if (s->type == COMMAND)
-			i = 1;
-		if (!s->prev && !ft_strncmp(s->str, "<", ft_strlen("<")))
-			generate_error(s->next);
-		else if (!s->prev && !ft_strncmp(s->str, ">", 1) && !s->next)
-			printf("error\n");
-		else if (!s->prev && !ft_strncmp(s->str, ">", ft_strlen(">")))
-			generate_error(s->next);
-		else if (i == 0 && check_if_operator(s->str))
-			printf("minishell : syntax error\n");
-		else if (!s->next && check_if_operator(s->str))
-			printf("minishell : syntax error\n");
+		if (generate_error2(s, &i))
+			return (1);
+		else if (!s->prev && !ft_strncmp(s->str, ">", 1) && s->next)
+		{
+			s = s->next;
+			continue ;
+		}
+		else if (i == 0 && check_if_operator(s->str) && s->next)
+		{
+			s = s->next;
+			continue ;
+		}
+		else if (!s->prev && !ft_strncmp(s->str, "<", 1) && s->next)
+		{
+			s = s->next;
+			continue ;
+		}
 		s = s->next;
 	}
+	return (0);
 }
 
 char	*expand_var(char *s, char **env)
@@ -453,17 +469,23 @@ int	main(int c, char **v, char **env) // still need to pass the linked list of e
 			lex = lexer(input);
 			assign_type(lex);
 			manage_type(lex);
-			generate_error(lex);
-			print_list(lex);
-			// cmd = create_cmd(lex);
+			if (generate_error(lex))
+			{
+				while (lex)
+				{
+					free(lex->str);
+					free(lex);
+					lex = lex->next;
+				}
+			}
+			else
+				print_list(lex);
 			while (lex)
 			{
 				free(lex->str);
 				free(lex);
 				lex = lex->next;
 			}
-			free(input);
-			input = NULL;
 		}
 		free(input);
 		input = NULL;

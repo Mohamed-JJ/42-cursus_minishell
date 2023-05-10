@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/09 21:26:08 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:12:08 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ int		ft_isalnum(int c);
 char	*get_env(char **env, char *s);
 
 void	print_list(t_lex *lex);
+void	free_string(char **lex);
 
 #endif
