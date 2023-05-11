@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:20:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:55:57 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 
 void	print_list(t_lex *lex)
 {
+	t_lex *tmp;
+
+	tmp = lex;
 	while (lex)
 	{
 		if (lex->type == COMMAND)
@@ -101,6 +104,7 @@ void	print_list(t_lex *lex)
 			printf("%s is an word\n", lex->str);
 		lex = lex->next;
 	}
+	lex = tmp;
 }
 
 

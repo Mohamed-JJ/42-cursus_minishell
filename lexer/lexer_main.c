@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:21:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:37:33 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,16 @@ void	manage_type(t_lex *p)
 		handle_until_pipe(p);
 		p = p->next;
 	}
+	tmp = p;
 }
 
 void	handle_until_pipe(t_lex *p)
 {
 	int		i;
-	t_lex	*tmp;
 
 	i = 0;
-	tmp = p;
-	while (p)
+	while (p && p->type != PIPE)
 	{
-		if (p->type == PIPE)
-			break ;
 		if (p->type == WORD && !i)
 		{
 			p->type = COMMAND;
@@ -124,6 +121,11 @@ t_lex	*lexer(char *input)
 		}
 		if (h.s)
 			free_string(&h.s);
+		// if (h.s)
+		// {
+		// 	free(h.s);
+		// 	h.s = NULL;
+		// }
 		if (!input[h.i])
 			break ;
 	}

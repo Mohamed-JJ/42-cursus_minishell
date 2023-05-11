@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:50:28 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 14:10:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:53:22 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ char	**empty_array(void)
 	int		i;
 	char	**files;
 
-	files = malloc(sizeof(char *) * 5);
 	i = 0;
+	files = malloc(sizeof(char *) * 5);
+	if (!files)
+		return (NULL);
 	while (i <= 4)
 	{
 		files[i] = NULL;

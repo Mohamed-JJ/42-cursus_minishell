@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 12:50:02 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:57:20 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
-	printf("%p\t%p\n", s, *ret);
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\"')

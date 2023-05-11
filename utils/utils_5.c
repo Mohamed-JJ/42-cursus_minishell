@@ -6,16 +6,20 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:39:59 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:21:08 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:36:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
-void	join_string(char *str, char **string)
+char	*join_string(char *str, char **string)
 {
-	*string = ft_strjoin(*string, str, 0);
-	*string = ft_strjoin(*string, " ", 0);
+	char	*tmp;
+
+	tmp = NULL;
+	tmp = ft_strjoin(*string, str, 0);
+	tmp = ft_strjoin(tmp, " ", 0);
+	return (tmp);
 }
 
 char	*ft_strdup(char *s1)

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:25:13 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:19:33 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,8 @@ void	handle_env(char	*s, char **ret, char **env, int *i);
 
 // variable expansion functions
 char	*get_env(char **env, char *s);
-
-
 void	print_list(t_lex *lex);
 
-// utils functions
 
 
 #endif

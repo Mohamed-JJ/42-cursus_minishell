@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:11:27 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:22:08 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:37:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_string(char **str)
 	*str = NULL;
 }
 
-void	free_array(char ***arr)
+void	free_array(char **arr)
 {
 	int	i;
 
@@ -29,4 +29,5 @@ void	free_array(char ***arr)
 		arr[i] = NULL;
 		i++;
 	}
+	arr = NULL;
 }
