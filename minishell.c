@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 18:11:48 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/12 00:36:16 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_cmd	*new_command(t_data *p)
 	return (ret);
 }
 
-void ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
+void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 {
 	t_cmd	*tmp;
 
@@ -87,47 +87,44 @@ t_cmd	*create_cmd(t_lex *s)
 	t_cmd	*ret;
 	t_data	d;
 
-	d.i = 0;
 	ret = NULL;
 	d.arr = NULL;
-	print_list(s);
 	while (s)
 	{
 		if (!d.arr)
 			d.arr = empty_array();
-		redirection_type(s->type, &d);
 		if (s->type == COMMAND)
 			d.s = ft_strdup(s->str);
-		if (s->type == ARGUMENT)
-		{
+		else if (s->type == ARGUMENT)
 			d.arr[0] = join_string(s->str, &d.arr[0]);
-			printf("arg = |%s|\n", d.arr[0]);
-		}
 		else if (s->type == OUT_FILE)
-		{
 			d.arr[1] = join_string(s->str, &d.arr[1]);
-			printf("outfile = |%s|\n", d.arr[1]);	
-		}
 		else if (s->type == IN_FILE)
-		{
 			d.arr[2] = join_string(s->str, &d.arr[2]);
-			printf("in = |%s|\n", d.arr[2]);
-		}
 		else if (s->type == HEREDOC_DEL)
-			join_string(s->str, &d.arr[3]);
-		else if (s->type == PIPE || s->next == NULL)
+			d.arr[3] = join_string(s->str, &d.arr[3]);
+		if (s->type == PIPE || !s->next)
 		{
 			ft_lstadd_back_cmd(&ret, new_command(&d));
 			if (d.s)
-				free_string(&d.s);
-			free_array(d.arr);
-			exit(0);
+			{
+				printf("d.s = %s\n", d.s);
+				free(d.s);
+				d.s = NULL;
+			}
+			if (d.arr)
+			{
+				for (int i = 0; d.arr[i]; i++)
+				{
+					printf("d.arr[%d] = %s\n", i, d.arr[i]);
+					free(d.arr[i]);
+					d.arr[i] = NULL;
+				}
+				d.arr = NULL;
+			}
 		}
 		s = s->next;
 	}
-	// printf("d.arr[0] = %s\n", d.arr[1]);
-	// if (d.arr && d.s)
-	// ft_lstadd_back_cmd(&ret, new_command(&d));
 	return (ret);
 }
 
@@ -168,7 +165,6 @@ int	main(int c, char **v, char **env)
 				else
 				{
 					lex = tmp;
-					// print_list(lex);
 					cmd = create_cmd(lex);
 					while (lex)
 					{
