@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:49:16 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:17:29 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:10:12 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand_var(char *s, char **env);
 void	skip_whitespaces(char *str, int *i);
 int		skip_special_characters(char *str, int *i, char c);
 char	**empty_array(void);
-void	fill_arrays(char *ar, char ***cpy);
+char	**fill_arrays(char *ar);
 void	fill_array(char **ret, int type, char *s);
 void	join_string(char *str, char **string);
 char	**create_arrays_of_files(t_lex *s);

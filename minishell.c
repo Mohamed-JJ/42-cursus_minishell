@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:19:53 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:58:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ t_cmd	*new_command(t_data *p)
 {
 	t_cmd	*ret;
 
-	ret = malloc(sizeof(t_cmd ));
+	ret = malloc(sizeof(t_cmd));
 	if (!ret)
 		return (NULL);
 	ret->command = ft_strdup(p->s);
-	fill_arrays(p->arr[0], &ret->args);
-	fill_arrays(p->arr[1], &ret->outfile);
-	fill_arrays(p->arr[2], &ret->infile);
-	fill_arrays(p->arr[3], &ret->heredoc_del);
+	ret->args = fill_arrays(p->arr[0]);
+	ret->outfile = fill_arrays(p->arr[1]);
+	ret->infile = fill_arrays(p->arr[2]);
+	ret->heredoc_del = fill_arrays(p->arr[3]);
 	ret->in_out = p->i;
 	return (ret);
 }
@@ -81,8 +81,6 @@ void ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 		tmp = tmp->next;
 	tmp->next = new;
 }
-
-
 
 t_cmd	*create_cmd(t_lex *s)
 {
@@ -105,13 +103,16 @@ t_cmd	*create_cmd(t_lex *s)
 			join_string(s->str, &d.arr[2]);
 		else if (s->type == HEREDOC_DEL)
 			join_string(s->str, &d.arr[3]);
-		else if (s->type == PIPE)
+		else if (s->type == PIPE || s->next == NULL)
 		{
-			t_cmd *tmp = new_command(&d);
-			ft_lstadd_back_cmd(&ret, tmp);
-			int i  = 0;
+			// t_cmd *tmp = new_command(&d);
+			ft_lstadd_back_cmd(&ret, new_command(&d));
+			int i = 0;
+			free(d.s);
+			d.s = NULL;
 			while (d.arr[i])
 			{
+				printf("d.arr[%d] = %s\n", i, d.arr[i]);
 				free(d.arr[i]);
 				d.arr[i] = NULL;
 				i++;
@@ -120,7 +121,10 @@ t_cmd	*create_cmd(t_lex *s)
 		}
 		s = s->next;
 	}
-	ft_lstadd_back_cmd(&ret, new_command(&d));
+	puts("fin");
+	// printf("d.arr[0] = %s\n", d.arr[1]);
+	// if (d.arr && d.s)
+	// ft_lstadd_back_cmd(&ret, new_command(&d));
 	return (ret);
 }
 
@@ -128,7 +132,7 @@ int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
 	char	*input;
-	// t_cmd	*cmd;
+	t_cmd	*cmd;
 
 	lex = NULL;
 	(void)c;
@@ -144,25 +148,49 @@ int	main(int c, char **v, char **env)
 			input = expand_var(input, env);
 			input = insert_spaces(input);
 			lex = lexer(input);
-			assign_type(lex);
-			manage_type(lex);
-			if (generate_error(lex))
+			if (lex)
 			{
-				while (lex)
+				assign_type(lex);
+				manage_type(lex);
+				if (generate_error(lex))
 				{
-					free(lex->str);
-					free(lex);
-					lex = lex->next;
+					while (lex)
+					{
+						free(lex->str);
+						free(lex);
+						lex = lex->next;
+					}
 				}
-			}
-			else
-				print_list(lex);
-			while (lex)
-			{
-				free(lex->str);
-				free(lex);
-				lex = lex->next;
-			}
+				else
+				{
+					print_list(lex);
+					while (lex)
+					{
+						free(lex->str);
+						free(lex);
+						lex = lex->next;
+					}
+					cmd = create_cmd(lex);
+					if (cmd)
+					{
+						while (cmd)
+						{
+							free(cmd->command);
+							if (cmd->args)
+								free_array(&cmd->args);
+							if (cmd->infile)
+								free_array(&cmd->infile);
+							if (cmd->outfile)
+								free_array(&cmd->outfile);
+							if (cmd->heredoc_del)
+								free_array(&cmd->heredoc_del);
+							cmd = cmd->next;
+						}
+					}
+					else
+						puts("cmd is null");
+				}
+				}
 		}
 		free(input);
 		input = NULL;

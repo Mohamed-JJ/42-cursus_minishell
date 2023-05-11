@@ -28,8 +28,8 @@ FLAGS = -Wall -Werror -Wextra
 
 all : $(NAME)
 
-%.o : %.c minishell.h
-	@$(CC) $(FLAGS) $< -c -o $@ -g
+%.o : %.c $(INC)
+	@$(CC) $(FLAGS) $< -c -o $@
 
 $(NAME) : $(OBJ) $(INC)
 	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME)

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/10 22:22:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:50:02 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,3 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 	tmp = NULL;
 	holder = NULL;
 }
-
