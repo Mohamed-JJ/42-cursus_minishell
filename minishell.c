@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 14:58:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:07:21 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_cmd	*create_cmd(t_lex *s)
 			join_string(s->str, &d.arr[2]);
 		else if (s->type == HEREDOC_DEL)
 			join_string(s->str, &d.arr[3]);
-		else if (s->type == PIPE || s->next == NULL)
+		else if (s->type == PIPE)
 		{
 			// t_cmd *tmp = new_command(&d);
 			ft_lstadd_back_cmd(&ret, new_command(&d));
@@ -121,10 +121,7 @@ t_cmd	*create_cmd(t_lex *s)
 		}
 		s = s->next;
 	}
-	puts("fin");
-	// printf("d.arr[0] = %s\n", d.arr[1]);
-	// if (d.arr && d.s)
-	// ft_lstadd_back_cmd(&ret, new_command(&d));
+	ft_lstadd_back_cmd(&ret, new_command(&d));
 	return (ret);
 }
 
@@ -190,7 +187,7 @@ int	main(int c, char **v, char **env)
 					else
 						puts("cmd is null");
 				}
-				}
+			}
 		}
 		free(input);
 		input = NULL;
