@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 17:37:33 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:12:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,6 @@ t_lex	*lexer(char *input)
 		}
 		if (h.s)
 			free_string(&h.s);
-		// if (h.s)
-		// {
-		// 	free(h.s);
-		// 	h.s = NULL;
-		// }
 		if (!input[h.i])
 			break ;
 	}

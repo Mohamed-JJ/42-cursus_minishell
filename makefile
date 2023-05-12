@@ -29,10 +29,10 @@ FLAGS = -Wall -Werror -Wextra
 all : $(NAME)
 
 %.o : %.c $(INC)
-	@$(CC) $(FLAGS) $< -c -o $@
+	@$(CC) $(FLAGS) $<  -c -o $@ -g
 
 $(NAME) : $(OBJ) $(INC)
-	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME) -g
 	@echo █▀▄▀█ ░▀░ █▀▀▄ ░▀░ █▀▀ █░░█ █▀▀ █░░ █░░
 	@echo █░▀░█ ▀█▀ █░░█ ▀█▀ ▀▀█ █▀▀█ █▀▀ █░░ █░░
 	@echo ▀░░░▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀

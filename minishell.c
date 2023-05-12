@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 00:36:16 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/12 17:34:51 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,24 +107,18 @@ t_cmd	*create_cmd(t_lex *s)
 		{
 			ft_lstadd_back_cmd(&ret, new_command(&d));
 			if (d.s)
-			{
-				printf("d.s = %s\n", d.s);
-				free(d.s);
-				d.s = NULL;
-			}
+				free_string(&d.s);
 			if (d.arr)
 			{
 				for (int i = 0; d.arr[i]; i++)
-				{
-					printf("d.arr[%d] = %s\n", i, d.arr[i]);
-					free(d.arr[i]);
-					d.arr[i] = NULL;
-				}
+					free_string(&d.arr[i]);
+				free(d.arr);
 				d.arr = NULL;
 			}
+				
 		}
 		s = s->next;
-	}
+		}
 	return (ret);
 }
 
@@ -140,7 +134,8 @@ int	main(int c, char **v, char **env)
 	(void)env;
 	while (1)
 	{
-		input = readline("minishell$>:");
+		cmd = NULL;
+		input = readline("minishell$>");
 		if (ft_strlen(input) > 0)
 		{
 			input[ft_strlen(input)] = '\0';
@@ -171,6 +166,19 @@ int	main(int c, char **v, char **env)
 						free(lex->str);
 						free(lex);
 						lex = lex->next;
+					}
+					while (cmd)
+					{
+						if (cmd->command)
+							free_string(&cmd->command);
+						if (cmd->args)
+						{
+							for (int i = 0; cmd->args[i]; i++)
+								free_string(&cmd->args[i]);
+							free(cmd->args);
+						}
+						free(cmd);
+						cmd = cmd->next;
 					}
 				}
 			}
