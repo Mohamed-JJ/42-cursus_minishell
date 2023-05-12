@@ -24,7 +24,7 @@ RM = rm -rf
 
 CC = cc
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra #-fsanitize=address
 
 all : $(NAME)
 

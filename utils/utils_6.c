@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 16:22:55 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/12 22:12:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	generate_error(t_lex *s)
 	return (0);
 }
 
-void	redirection_type(int type, t_data *d)
+void	redirection_type(int type, int *d)
 {
 	if (type == REDIRECT)
-		d->i = TO_BE_REDIRECTED;
+		*d = TO_BE_REDIRECTED;
 	else if (type == APPEND)
-		d->i = TO_BE_APPENDED;
+		*d = TO_BE_APPENDED;
 }
 
 char	**create_arrays_of_files(t_lex *s)
