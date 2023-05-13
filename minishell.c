@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 12:53:26 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 14:42:59 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_cmd	*new_command(char *str, char **arr, int i)
 	ret->infile = fill_arrays(arr[2]);
 	ret->heredoc_del = fill_arrays(arr[3]);
 	ret->in_out = i;
+	ret->next = NULL;
 	return (ret);
 }
 // {
@@ -79,10 +80,6 @@ t_cmd	*new_command(char *str, char **arr, int i)
 // 	return (ret);
 // }
 
-void	f(void)
-{
-	system("leaks minishell");
-}
 
 void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 {
@@ -100,45 +97,6 @@ void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 		tmp = tmp->next;
 	tmp->next = new;
 }
-
-// t_cmd	*create_cmd(t_lex *s)
-// {
-// 	t_cmd	*ret;
-// 	t_data	d;
-
-// 	ret = NULL;
-// 	d.arr = NULL;
-// 	while (s)
-// 	{
-// 		if (!d.arr)
-// 			d.arr = empty_array();
-// 		if (s->type == COMMAND)
-// 			d.s = ft_strdup(s->str);
-// 		else if (s->type == ARGUMENT)
-// 			d.arr[0] = join_string(s->str, &d.arr[0]);
-// 		else if (s->type == OUT_FILE)
-// 			d.arr[1] = join_string(s->str, &d.arr[1]);
-// 		else if (s->type == IN_FILE)
-// 			d.arr[2] = join_string(s->str, &d.arr[2]);
-// 		else if (s->type == HEREDOC_DEL)
-// 			d.arr[3] = join_string(s->str, &d.arr[3]);
-// 		if (s->type == PIPE || !s->next)
-// 		{
-// 			ft_lstadd_back_cmd(&ret, new_command(&d));
-// 			if (d.s)
-// 				free_string(&d.s);
-// 			if (d.arr)
-// 			{
-// 				for (int i = 0; i < 4; i++)
-// 					free_string(&d.arr[i]);
-// 				free(d.arr);
-// 				d.arr = NULL;
-// 			}
-// 		}
-// 		s = s->next;
-// 		}
-// 	return (ret);
-// }
 
 t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 {
@@ -177,15 +135,9 @@ t_cmd	*create_cmd(t_lex *s)
 		arr = empty_array();
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
 		if (s && s->type == PIPE)
-			puts("pipe");
-		puts("here");
-		printf("the command %s\n", str);
-		printf("the args %s\n", arr[0]);
-		printf("the outfile %s\n", arr[1]);
-		
+			s = s->next;
 		if (str)
 			free_string(&str);
-		puts("before freeing arrary");
 		if (arr)
 		{
 			for (int i = 0; i < 4; i++)
@@ -223,41 +175,49 @@ void	free_array(char **arr)
 	free(arr);
 }
 
-void	free_list(void	**list, int flag)
+void	free_list(t_lex	**list)
 {
-	t_lex	*tmp;
-	t_cmd	*tmp2;
+	if (list && *list)
+	{
+		while (*list)
+		{
+			free((*list)->str);
+			free(*list);
+			if ((*list)->next == NULL)
+				break ;
+			*list = (*list)->next;
+		}
+		*list = NULL;
+	}
+}
 
-	tmp = NULL;
-	tmp2 = NULL;
-	if (flag)
+void free_cmd_list(t_cmd *cmd)
+{
+	int i;
+
+	i = 0;
+	if (!cmd)
+		return ;
+	if (cmd->next)
+		free_cmd_list(cmd->next);
+	if (cmd->command)
 	{
-		tmp = (t_lex *)*list;
-		while (tmp)
-		{
-			free(tmp->str);
-			free(tmp);
-			tmp = tmp->next;
-		}
-		free(tmp);
-		tmp = NULL;
+		free(cmd->command);
+		cmd->command = NULL;
 	}
-	else
+	if (cmd->args)
 	{
-		tmp2 = (t_cmd *)*list;
-		while (tmp2)
+		while (cmd->args[i])
 		{
-			if (tmp2->command)
-				free_string(&tmp2->command);
-			free_array(tmp2->args);
-			free_array(tmp2->outfile);
-			free_array(tmp2->infile);
-			free_array(tmp2->heredoc_del);
-			tmp2 = tmp2->next;
+			free(cmd->args[i]);
+			cmd->args[i] = NULL;
+			i++;
 		}
-		free(tmp2);
-		tmp2 = NULL;
+		free(cmd->args);
+		cmd->args = NULL;
 	}
+	free(cmd);
+	cmd = NULL;
 }
 
 
@@ -274,7 +234,7 @@ int	main(int c, char **v, char **env)
 	(void)env;
 	while (1)
 	{
-		cmd = NULL;
+		cmd = malloc(sizeof(t_cmd));
 		input = readline("minishell$>");
 		if (ft_strlen(input) > 0)
 		{
@@ -288,51 +248,15 @@ int	main(int c, char **v, char **env)
 				assign_type(lex);
 				manage_type(lex);
 				if (generate_error(lex))
-					free_list((void **)&lex, 1);
+					free_list(&lex);
 				else
 				{
 					cmd = create_cmd(lex);
-					free_list((void **)&lex, 1);
+					free_list(&lex);
 					puts("before command");
 					if (cmd)
 					{
-					while (cmd)
-					{
-						if (cmd->command)
-						{
-							free(cmd->command);
-							cmd->command = NULL;
-						}
-						
-						int i = 0;
-						if (cmd->args)
-						{
-						while (cmd->args[i])
-						{
-							free(cmd->args[i]);
-							cmd->args[i] = NULL;
-							i++;
-						}
-						free(cmd->args);
-						cmd->args = NULL;
-						}
-						if (cmd->outfile)
-						{
-						while (cmd->outfile[i])
-						{
-							free(cmd->outfile[i]);
-							cmd->outfile[i] = NULL;
-							i++;
-						}
-						free(cmd->outfile);
-						cmd->outfile = NULL;
-						}
-						i = 0;
-						t_cmd *next_cmd = cmd->next;
-						free(cmd);
-						cmd = next_cmd;
-					}
-					cmd = NULL;
+						free_cmd_list(cmd);
 					}
 					puts("after command");
 				}

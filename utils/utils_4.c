@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:50:28 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 12:36:12 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 13:27:44 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ char	**empty_array(void)
 	char	**files;
 
 	i = 0;
-	puts("in allocation");
 	files = malloc(sizeof(char *) * 5);
 	if (!files)
 		return (NULL);
@@ -64,7 +63,6 @@ char	**empty_array(void)
 		files[i] = NULL;
 		i++;
 	}
-	puts("after allocation");
 	return (files);
 }
 
