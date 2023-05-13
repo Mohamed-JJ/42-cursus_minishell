@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 22:59:49 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 12:53:26 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,21 +174,25 @@ t_cmd	*create_cmd(t_lex *s)
 	str = ft_strdup("");
 	while (s)
 	{
-		if (!arr)
-			arr = empty_array();
+		arr = empty_array();
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
 		if (s && s->type == PIPE)
 			puts("pipe");
 		puts("here");
 		printf("the command %s\n", str);
 		printf("the args %s\n", arr[0]);
+		printf("the outfile %s\n", arr[1]);
 		
 		if (str)
 			free_string(&str);
+		puts("before freeing arrary");
 		if (arr)
 		{
 			for (int i = 0; i < 4; i++)
-				free_string(&arr[i]);
+			{
+				free(arr[i]);
+				arr[i] = NULL;
+			}
 			free(arr);
 			arr = NULL;
 		}
@@ -290,7 +294,46 @@ int	main(int c, char **v, char **env)
 					cmd = create_cmd(lex);
 					free_list((void **)&lex, 1);
 					puts("before command");
-					free_list((void **)&cmd, 0);
+					if (cmd)
+					{
+					while (cmd)
+					{
+						if (cmd->command)
+						{
+							free(cmd->command);
+							cmd->command = NULL;
+						}
+						
+						int i = 0;
+						if (cmd->args)
+						{
+						while (cmd->args[i])
+						{
+							free(cmd->args[i]);
+							cmd->args[i] = NULL;
+							i++;
+						}
+						free(cmd->args);
+						cmd->args = NULL;
+						}
+						if (cmd->outfile)
+						{
+						while (cmd->outfile[i])
+						{
+							free(cmd->outfile[i]);
+							cmd->outfile[i] = NULL;
+							i++;
+						}
+						free(cmd->outfile);
+						cmd->outfile = NULL;
+						}
+						i = 0;
+						t_cmd *next_cmd = cmd->next;
+						free(cmd);
+						cmd = next_cmd;
+					}
+					cmd = NULL;
+					}
 					puts("after command");
 				}
 			}
