@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 14:42:59 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 15:38:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 			arr[3] = join_string((*s)->str, &arr[3]);
 		*s = (*s)->next;
 	}
+	if (*s && (*s)->type == PIPE)
+		puts("current is pipes");
 	return (new_command(*str, arr, i));
 }
 
@@ -129,19 +131,19 @@ t_cmd	*create_cmd(t_lex *s)
 
 	ret = NULL;
 	arr = NULL;
-	str = ft_strdup("");
 	while (s)
 	{
+		str = NULL;
 		arr = empty_array();
+		puts("loop");
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
-		if (s && s->type == PIPE)
-			s = s->next;
 		if (str)
 			free_string(&str);
 		if (arr)
 		{
 			for (int i = 0; i < 4; i++)
 			{
+				printf("arr[%d] = %s\n", i, arr[i]);
 				free(arr[i]);
 				arr[i] = NULL;
 			}
@@ -149,11 +151,7 @@ t_cmd	*create_cmd(t_lex *s)
 			arr = NULL;
 		}
 		if (s == NULL)
-		{
-			puts("next is NULL");
 			break ;
-		}
-		exit(0);
 		s = s->next;
 	}
 	return (ret);
@@ -234,7 +232,6 @@ int	main(int c, char **v, char **env)
 	(void)env;
 	while (1)
 	{
-		cmd = malloc(sizeof(t_cmd));
 		input = readline("minishell$>");
 		if (ft_strlen(input) > 0)
 		{
