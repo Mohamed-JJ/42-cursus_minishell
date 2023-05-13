@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 20:00:33 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 21:23:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,6 @@ t_cmd	*new_command(char *str, char **arr, int i)
 	ret->next = NULL;
 	return (ret);
 }
-// {
-// 	t_cmd	*ret;
-
-// 	ret = malloc(sizeof(t_cmd));
-// 	if (!ret)
-// 		return (NULL);
-// 	ret->command = ft_strdup(p->s);
-// 	ret->args = fill_arrays(p->arr[0]);
-// 	ret->outfile = fill_arrays(p->arr[1]);
-// 	ret->infile = fill_arrays(p->arr[2]);
-// 	ret->heredoc_del = fill_arrays(p->arr[3]);
-// 	ret->in_out = p->i;
-// 	return (ret);
-// }
-
 
 void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 {
@@ -140,16 +125,7 @@ t_cmd	*create_cmd(t_lex *s)
 		if (str)
 			free_string(&str);
 		if (arr)
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				printf("arr[%d] = %s\n", i, arr[i]);
-				free(arr[i]);
-				arr[i] = NULL;
-			}
-			free(arr);
-			arr = NULL;
-		}
+			free_array(arr);
 		if (s == NULL)
 			break ;
 		s = s->next;
@@ -190,22 +166,6 @@ void	free_list(t_lex	**list)
 	}
 }
 
-// void	free_array(char **arr)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!arr)
-// 		return ;
-// 	while (arr[i])
-// 	{
-// 		free(arr[i]);
-// 		arr[i] = NULL;
-// 		i++;
-// 	}
-// 	free(arr);
-// 	arr = NULL;
-// }
 
 void free_cmd_list(t_cmd *cmd)
 {
@@ -264,40 +224,11 @@ int	main(int c, char **v, char **env)
 				else
 				{
 					cmd = create_cmd(lex);
-					t_cmd *tmp = cmd;
-					while (cmd)
-					{
-						if (cmd->command)
-							printf("command = %s\n", cmd->command);
-						if (cmd->args)
-						{
-							for (int i = 0; cmd->args[i]; i++)
-								printf("args[%d] = %s\n", i, cmd->args[i]);
-						}
-						if (cmd->outfile)
-						{
-							for (int i = 0; cmd->outfile[i]; i++)
-								printf("outfile[%d] = %s\n", i, cmd->outfile[i]);
-						}
-						if (cmd->infile)
-						{
-							for (int i = 0; cmd->infile[i]; i++)
-								printf("infile[%d] = %s\n", i, cmd->infile[i]);
-						}
-						if (cmd->heredoc_del)
-						{
-							for (int i = 0; cmd->heredoc_del[i]; i++)
-								printf("heredoc_del[%d] = %s\n", i, cmd->heredoc_del[i]);
-						}
-						cmd = cmd->next;
-					}
-					cmd = tmp;
 					if (lex)
 						free_list(&lex);
 					if (cmd)
 						free_cmd_list(cmd);
 				}
-				
 			}
 		}
 		free(input);
