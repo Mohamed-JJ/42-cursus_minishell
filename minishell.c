@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 15:38:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:00:33 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void	free_array(char **arr)
 		i++;
 	}
 	free(arr);
+	arr = NULL;
 }
 
 void	free_list(t_lex	**list)
@@ -189,6 +190,23 @@ void	free_list(t_lex	**list)
 	}
 }
 
+// void	free_array(char **arr)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (!arr)
+// 		return ;
+// 	while (arr[i])
+// 	{
+// 		free(arr[i]);
+// 		arr[i] = NULL;
+// 		i++;
+// 	}
+// 	free(arr);
+// 	arr = NULL;
+// }
+
 void free_cmd_list(t_cmd *cmd)
 {
 	int i;
@@ -204,16 +222,13 @@ void free_cmd_list(t_cmd *cmd)
 		cmd->command = NULL;
 	}
 	if (cmd->args)
-	{
-		while (cmd->args[i])
-		{
-			free(cmd->args[i]);
-			cmd->args[i] = NULL;
-			i++;
-		}
-		free(cmd->args);
-		cmd->args = NULL;
-	}
+		free_array(cmd->args);
+	if (cmd->outfile)
+		free_array(cmd->outfile);
+	if (cmd->infile)
+		free_array(cmd->infile);
+	if (cmd->heredoc_del)
+		free_array(cmd->heredoc_del);
 	free(cmd);
 	cmd = NULL;
 }
@@ -249,14 +264,40 @@ int	main(int c, char **v, char **env)
 				else
 				{
 					cmd = create_cmd(lex);
-					free_list(&lex);
-					puts("before command");
-					if (cmd)
+					t_cmd *tmp = cmd;
+					while (cmd)
 					{
-						free_cmd_list(cmd);
+						if (cmd->command)
+							printf("command = %s\n", cmd->command);
+						if (cmd->args)
+						{
+							for (int i = 0; cmd->args[i]; i++)
+								printf("args[%d] = %s\n", i, cmd->args[i]);
+						}
+						if (cmd->outfile)
+						{
+							for (int i = 0; cmd->outfile[i]; i++)
+								printf("outfile[%d] = %s\n", i, cmd->outfile[i]);
+						}
+						if (cmd->infile)
+						{
+							for (int i = 0; cmd->infile[i]; i++)
+								printf("infile[%d] = %s\n", i, cmd->infile[i]);
+						}
+						if (cmd->heredoc_del)
+						{
+							for (int i = 0; cmd->heredoc_del[i]; i++)
+								printf("heredoc_del[%d] = %s\n", i, cmd->heredoc_del[i]);
+						}
+						cmd = cmd->next;
 					}
-					puts("after command");
+					cmd = tmp;
+					if (lex)
+						free_list(&lex);
+					if (cmd)
+						free_cmd_list(cmd);
 				}
+				
 			}
 		}
 		free(input);
