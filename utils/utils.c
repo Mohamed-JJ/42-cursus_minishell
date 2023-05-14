@@ -6,24 +6,38 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 15:55:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 13:40:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 #include "../includes/lexer.h"
 
+void	get_until_equal(char *s, int *len)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	*len = i;
+}
+
 char	*get_env(char **env, char *s)
 {
 	int		i;
+	int		len;
 	char	*ret;
 
 	i = 0;
 	ret = NULL;
+	len = 0;
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], s, ft_strlen(s)))
+		get_until_equal(env[i], &len);
+		if (ft_strncmp(s, env[i], len) == 0 && ft_strlen(s) == len)
 		{
+			printf("env : %s\n", env[i] + ft_strlen(s) + 1);
 			ret = ft_strdup(env[i] + ft_strlen(s) + 1);
 			break ;
 		}

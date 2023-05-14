@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 15:57:20 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 13:45:20 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,10 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	holder = get_env(env, tmp);
-	*ret = ft_strjoin(*ret, holder, 1);
+	if (holder)
+		*ret = ft_strjoin(*ret, holder, 1);
+	else
+		*ret = ft_strjoin(*ret, NULL, 0);
 	free(tmp);
 	tmp = NULL;
 	holder = NULL;

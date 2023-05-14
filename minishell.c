@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/13 21:23:24 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:36:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,6 @@ void	free_list(t_lex	**list)
 	}
 }
 
-
 void free_cmd_list(t_cmd *cmd)
 {
 	int i;
@@ -194,7 +193,6 @@ void free_cmd_list(t_cmd *cmd)
 }
 
 
-
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
@@ -214,6 +212,7 @@ int	main(int c, char **v, char **env)
 			add_history(input);
 			input = expand_var(input, env);
 			input = insert_spaces(input);
+			printf("{%s}\n", input);
 			lex = lexer(input);
 			if (lex)
 			{
