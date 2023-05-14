@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/14 12:36:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 21:51:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 			arr[3] = join_string((*s)->str, &arr[3]);
 		*s = (*s)->next;
 	}
-	if (*s && (*s)->type == PIPE)
-		puts("current is pipes");
 	return (new_command(*str, arr, i));
 }
 
@@ -120,10 +118,10 @@ t_cmd	*create_cmd(t_lex *s)
 	{
 		str = NULL;
 		arr = empty_array();
-		puts("loop");
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
 		if (str)
 			free_string(&str);
+		check_arr(arr);
 		if (arr)
 			free_array(arr);
 		if (s == NULL)
@@ -166,9 +164,9 @@ void	free_list(t_lex	**list)
 	}
 }
 
-void free_cmd_list(t_cmd *cmd)
+void	free_cmd_list(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!cmd)
@@ -192,6 +190,11 @@ void free_cmd_list(t_cmd *cmd)
 	cmd = NULL;
 }
 
+void	f(void)
+{
+	system("leaks minishell");
+}
+
 
 int	main(int c, char **v, char **env)
 {
@@ -199,6 +202,7 @@ int	main(int c, char **v, char **env)
 	char	*input;
 	t_cmd	*cmd;
 
+	atexit(f);
 	lex = NULL;
 	(void)c;
 	(void)v;

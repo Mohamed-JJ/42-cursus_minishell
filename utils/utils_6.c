@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 22:12:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 21:46:22 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	generate_error2(t_lex *s, int *i)
 		return (printf("minishell : syntax error\n"), 1);
 	else if (s->prev && s->type == PIPE && s->next)
 		*i = 0;
-	if (s->next && check_if_operator(s->str) && check_if_operator(s->next->str))
+	else if (s->next && check_if_operator(s->str) && check_if_operator(s->next->str))
 		return (printf("minishell : syntax error\n"), 1);
 	else if (!s->prev && !ft_strncmp(s->str, "<", 1) && !s->next)
 		return (printf("minishell : syntax error\n"), 1);

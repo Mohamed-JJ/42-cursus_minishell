@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/14 18:58:47 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 22:20:09 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ char	*get_env(char **env, char *s)
 	char	*ret;
 
 	i = 0;
-	ret = NULL;
 	len = 0;
+	ret = NULL;
 	while (env[i])
 	{
 		get_until_equal(env[i], &len);
-		if (ft_strncmp(s, env[i], len) == 0 && ft_strlen(s) == len)
+		if (!ft_strncmp(env[i], s, ft_strlen(s)) && len == ft_strlen(s))
 		{
-			printf("env : %s\n", env[i] + ft_strlen(s) + 1);
 			ret = ft_strdup(env[i] + ft_strlen(s) + 1);
 			break ;
 		}

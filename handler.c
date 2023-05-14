@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/14 19:05:20 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/14 22:21:42 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 
 	tmp = NULL;
 	holder = NULL;
-	// (void)env;
 	while (s[*i] && s[*i] == '$')
 		(*i)++;
 	while (s[*i] && ft_isalnum(s[*i]))
@@ -126,10 +125,8 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	holder = get_env(env, tmp);
-	if (holder)
-		*ret = ft_strjoin(*ret, holder, 0);
-	else
-		*ret = ft_strjoin(*ret, NULL, 0);
-	free_string(&tmp);
-	free_string(&holder);
+	*ret = ft_strjoin(*ret, holder, 1);
+	free(tmp);
+	tmp = NULL;
+	holder = NULL;
 }
