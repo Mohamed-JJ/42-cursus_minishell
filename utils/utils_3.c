@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 17:27:36 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/15 21:50:28 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 		data->i++;
 	}
 	if (!str[data->i])
-		printf("error in quotation\n");
+		printf("error in quotation |%c|\n", str[data->i]);
 	data->i++;
-	if (str[data->i] == data->c)
+	if (str[data->i] == '\'' || str[data->i] == '\"')
+	{
 		dqoute_handler(str, data, lex, 1);
+	}
 	else
 	{
 		if (data->s && flag == 1)

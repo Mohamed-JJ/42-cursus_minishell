@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:39:59 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 16:36:24 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:32:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*join_string(char *str, char **string)
 
 	tmp = NULL;
 	tmp = ft_strjoin(*string, str, 0);
-	tmp = ft_strjoin(tmp, " ", 0);
+	tmp = ft_strjoin(tmp, "\n", 0);
 	return (tmp);
 }
 
