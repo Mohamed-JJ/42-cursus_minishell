@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/11 17:19:33 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:27:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 // lexer functions
 int		check_if_operator(char *str);
-void	dqoute_handler(char *str, t_data *data, t_lex **lex);
+void	dqoute_handler(char *str, t_data *data, t_lex **lex, int i);
 
 // string functions
 char	**ft_split(char *s, char c);

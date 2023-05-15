@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/14 21:51:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:26:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ int	main(int c, char **v, char **env)
 			input = insert_spaces(input);
 			printf("{%s}\n", input);
 			lex = lexer(input);
+			print_list(lex);
 			if (lex)
 			{
 				assign_type(lex);

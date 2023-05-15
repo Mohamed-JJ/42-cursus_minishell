@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 15:12:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:29:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,26 @@ t_lex	*lexer(char *input)
 	while (input[++h.i])
 	{
 		if (input[(h.i)] == '\'' || input[h.i] == '\"')
-			dqoute_handler(input, &h, &lex);
+			dqoute_handler(input, &h, &lex, 1);
 		else if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
 			skip_whitespaces(input, &h.i);
 		else
 		{
 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
+			{
+				if (input[h.i] == '\'' || input[h.i] == '\"')
+					dqoute_handler(input, &h, &lex, 0);
+				else if (input[h.i] == '=' && (input[h.i + 1] == '\'' || input[h.i + 1] == '\"'))
+				{
+					h.s = ft_strjoin_characters(h.s, input[h.i++]);
+					dqoute_handler(input, &h, &lex, 0);
+				}
+				else
 				h.s = ft_strjoin_characters(h.s, input[h.i++]);
+			}
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
 		}
-		if (h.s)
-			free_string(&h.s);
+		free_string(&h.s);
 		if (!input[h.i])
 			break ;
 	}
