@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 16:09:11 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:47:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,29 @@
 char	*expand_var(char *s, char **env)
 {
 	int		i;
+	int		r;
 	char	*ret;
 
 	ret = NULL;
 	i = -1;
+	r = 0;
 	while (s[++i])
 	{
 		if (s[i] == '\'')
-			handle_single_quote(s, &i, &ret);
+			r = handle_single_quote(s, &i, &ret);
 		else if (s[i] == '\"')
-			handle_double_quote(s, &ret, env, &i);
+			r = handle_double_quote(s, &ret, env, &i);
 		else if (s[i] == '$')
 			handle_dollar(s, &i, &ret, env);
 		else if (s[i] == '<')
 			handle_heredoc(s, &i, &ret);
 		else
 			ret = ft_strjoin_characters(ret, s[i]);
+		if (r == 1)
+			return (free_string(&ret), free_string(&s), NULL);
 		if (!s[i])
 			break ;
 	}
-	// puts(ret);
 	return (free(s), s = NULL, ret);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 21:03:14 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:47:19 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,6 @@ void	free_cmd_list(t_cmd *cmd)
 		free_cmd_list(cmd->next);
 	if (cmd->command)
 	{
-		printf("command: %s\n", cmd->command);
 		free(cmd->command);
 		cmd->command = NULL;
 	}
@@ -222,7 +221,6 @@ int	main(int c, char **v, char **env)
 			{
 				input = insert_spaces(input);
 				lex = lexer(input);
-				// print_list(lex);
 				if (lex)
 				{
 					assign_type(lex);

@@ -6,13 +6,13 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 16:11:31 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:22:09 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-void	handle_double_quote(char *s, char **ret, char **env, int *i)
+int	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -26,7 +26,7 @@ void	handle_double_quote(char *s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	if (!s[*i])
-		printf("minishell : error in quotation here |%c|\n", s[*i - 1]);
+		return (printf("minishell : error in quotation\n"), 1);
 	else if (s[*i] == '\"')
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -36,9 +36,10 @@ void	handle_double_quote(char *s, char **ret, char **env, int *i)
 		handle_single_quote(s, i, ret);
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
+	return (0);
 }
 
-void	handle_single_quote(char *s, int *i, char **ret)
+int	handle_single_quote(char *s, int *i, char **ret)
 {
 	*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -48,7 +49,7 @@ void	handle_single_quote(char *s, int *i, char **ret)
 		(*i)++;
 	}
 	if (!s[*i])
-		printf("minishell : error in quotation\n");
+		return (printf("minishell : error in quotation\n"), 1);
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -56,6 +57,7 @@ void	handle_single_quote(char *s, int *i, char **ret)
 		handle_single_quote(s, i, ret);
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
+	return (0);
 }
 
 void	handle_dollar(char *s, int *i, char **ret, char **env)
@@ -84,7 +86,6 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
-	puts("here");
 }
 
 void	handle_heredoc(char *s, int *i, char **ret)
