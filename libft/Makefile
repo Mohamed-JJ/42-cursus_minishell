@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+         #
+#    By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/19 22:38:08 by imaaitat          #+#    #+#              #
-#    Updated: 2022/12/24 14:07:30 by imaaitat         ###   ########.fr        #
+#    Updated: 2023/05/17 19:25:27 by mjarboua         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,6 @@ $(NAME): $(OBJ)
 	@$(AR) $(NAME) $(OBJ)
 
 %.o: %.c libft.h
-	@echo "--------->$(GREEN)" $< "$(RESET)<----------"
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:

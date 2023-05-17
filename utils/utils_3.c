@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:08:38 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:35:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 	while (str[data->i] && str[data->i] != data->c)
 	{
 		data->s = ft_strjoin_parsing_characters(data->s, str[data->i]);
-		printf("of the ittereation %d character %c is del and str is  %s\n", f, data->c, data->s);
 		data->i++;
 	}
 	if (!str[data->i])

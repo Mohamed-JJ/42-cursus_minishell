@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:48:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:37:54 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ int	generate_error2(t_lex *s, int *i)
 	if (s->str[0] == '|' || s->str[0] == '<' || s->str[0] == '>')
 		while (s->str[x])
 			x++;
-	if (!s->ds_quote && ((s->str[0] == '|' && x > 1)
+	if (s->ds_quote && ((s->str[0] == '|' && x > 1)
 			|| (s->str[0] == '<' && x > 2) || (s->str[0] == '>' && x > 2)))
-		return (printf("minishell : syntax error\n"), 1);
+		return (printf("minishell : syntax errors\n"), 1);
 	if (s->type == COMMAND)
 		*i = 1;
 	else if (s->type == PIPE && s->next && s->next->type == PIPE)
