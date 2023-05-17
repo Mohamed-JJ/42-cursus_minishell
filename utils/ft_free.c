@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:11:27 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:46:28 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:16:00 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	free_array(char **arr)
 		return ;
 	while (arr[i])
 	{
-		printf("arg[%d]: %s\n", i, arr[i]);
 		free(arr[i]);
 		arr[i] = NULL;
 		i++;

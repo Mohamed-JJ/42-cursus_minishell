@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:50:47 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:14:04 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 # include "lexer.h"
 # include "structs.h"
 # include "utils.h"
+# include "../libft/libft.h"
 # include <curses.h>
 # include <term.h>
-
+int status;
 // lexer functions
 int		check_if_operator(char *str);
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int i);
@@ -42,7 +43,7 @@ int		ft_isprint_parsing(int c);
 char	*ft_strjoin_parsing(char *s1, char *s2, int _free);
 char	*ft_substr_parsing(char *s, int start, int len);
 int		ft_isalnum_parsing(int c);
-int		ft_strcmp(char *s1, char *s2);
+// int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp_parsing(const char *s1, const char *s2, size_t n);
 
 // case managment functions
@@ -65,5 +66,31 @@ void	free_array(char **arr);
 void	insert_space_inside_quotes(char *input, int *i, char **ret);
 void	insert_space_between_op(char *input, int *i, char **ret);
 char	*insert_spaces(char *input);
+
+// -----------------------execution functions------------------
+void execution(char *command,char **args);
+int check_heredoc(char **del);
+void    ft_cd(char *argv);
+int ft_pwd(int fd);
+void signal_handler(int signum);
+int create_out_files(t_cmd *p_cmd);
+int builtin_cmd(char *command, char **args,t_env *head);
+int create_in_files(t_cmd *p_cmd);
+void ft_pipe(char *command1,char **args1, char *command2,char **args2,t_cmd *p_cmd);
+int ft_echo(char **argv);
+int ft_redirection(char **command, char *name_file);
+char *ft_export(char *argv);
+void print_env(t_env *env,int i);
+void free_env(t_env *env);
+t_env *sort_env(t_env **head);
+t_env *set_env(char **env, t_env *head);
+t_env *copy_env(t_env *head);
+int chek_plus(char *str);
+void serch_replace(t_env *head,char *name,char *value);
+char *get_name(char *str);
+char *get_value(char *str);
+void delete_env(t_env *head, char *name);
+void unset_env(char **args, t_env *head) ;
+void execution1(t_env *headd,t_cmd *p_cmd, char **env);
 
 #endif

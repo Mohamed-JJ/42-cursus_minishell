@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_generator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:48:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:11:20 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ t_cmd	*new_command(char *str, char **arr, int i, int j)
 	ret->outfile = fill_arrays(arr[1]);
 	ret->infile = fill_arrays(arr[2]);
 	ret->heredoc_del = fill_arrays(arr[3]);
-	ret->in_out = i;
+	ret->is_red_or_app = i;
 	ret->h_i = j;
+	ret->fd_in = 0;
 	ret->next = NULL;
 	return (ret);
 }

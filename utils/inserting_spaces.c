@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inserting_spaces.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:36:23 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 15:12:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:22:21 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,5 @@ char	*insert_spaces(char *input)
 		else
 			ret = ft_strjoin_parsing_characters(ret, input[i]);
 	}
-	printf("ret = |%s|\n", ret);
 	return (free(input), input = NULL, ret);
 }

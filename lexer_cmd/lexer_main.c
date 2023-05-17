@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 15:12:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:20:51 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ t_lex	*lexer(char *input)
 	h.i = -1;
 	lex = NULL;
 	h.s = NULL;
-	printf("|%s|\n", input);
 	while (input[++h.i])
 	{
 		if (input[(h.i)] == '\'' || input[h.i] == '\"')

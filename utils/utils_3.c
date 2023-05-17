@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:54:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:08:38 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/utils.h"
+#include "../includes/minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-    return (*(unsigned char*)s1 - *(unsigned char*)s2);
-}
+// int	ft_strcmp(char *s1, char *s2)
+// {
+// 	while (*s1 && (*s1 == *s2))
+// 	{
+// 		s1++;
+// 		s2++;
+// 	}
+//     return (*(unsigned char*)s1 - *(unsigned char*)s2);
+// }
 
 int	check_if_operator(char *str)
 {

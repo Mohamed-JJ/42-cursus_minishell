@@ -1,28 +1,27 @@
 NAME = minishell
 
-SRC = minishell.c \
-		utils/utils.c \
-		utils/utils_2.c \
-		utils/utils_3.c \
-		utils/utils_4.c \
-		utils/utils_5.c \
-		utils/utils_6.c \
-		lexer_cmd/lexer_lists.c \
-		lexer_cmd/lexer_main.c \
-		lexer_cmd/cmd_generator.c \
-		utils/inserting_spaces.c \
-		utils/ft_split.c \
-		utils/ft_free.c \
-		utils/handler.c \
+OBJ = minishell.o \
+		utils/utils.o \
+		utils/utils_2.o \
+		utils/utils_3.o \
+		utils/utils_4.o \
+		utils/utils_5.o \
+		utils/utils_6.o \
+		lexer_cmd/lexer_lists.o \
+		lexer_cmd/lexer_main.o \
+		lexer_cmd/cmd_generator.o \
+		utils/inserting_spaces.o \
+		utils/ft_split.o \
+		utils/ft_free.o \
+		utils/handler.o ./execution/execution_utils.o  ./execution/execution_utils_1.o\
 
-OBJ = $(SRC:.c=.o)
 
 INC = includes/minishell.h \
 		includes/structs.h \
 		includes/lexer.h \
 		includes/utils.h \
 
-RM = rm -rf
+RM = rm -f
 
 CC = cc
 
@@ -30,20 +29,23 @@ FLAGS = -Wall -Werror -Wextra
 
 all : $(NAME)
 
-%.o : %.c $(INC)
-	@$(CC) $(FLAGS) $<  -c -o $@ -g
 
 $(NAME) : $(OBJ) $(INC)
-	@$(CC) $(FLAGS) $(OBJ) -lreadline -o $(NAME) -g
+	@cd libft && make 
+	@$(CC) $(FLAGS) $(OBJ) ./libft/libft.a -lreadline -o $(NAME) -g
 	@echo █▀▄▀█ ░▀░ █▀▀▄ ░▀░ █▀▀ █░░█ █▀▀ █░░ █░░
 	@echo █░▀░█ ▀█▀ █░░█ ▀█▀ ▀▀█ █▀▀█ █▀▀ █░░ █░░
 	@echo ▀░░░▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀
 
-clean : $(OBJ) $(OBJ_B)
-	@$(RM) $(OBJ) $(OBJ_B)
+$(OBJ) : $(INC)
+
+clean : $(OBJ)
+	@cd libft && make clean
+	@$(RM) $(OBJ) 
 
 fclean :
-	@$(RM) $(NAME) $(OBJ_B) $(OBJ)
+	@cd libft && make fclean
+	@$(RM) $(NAME) $(OBJ)
 
 re : fclean all
 
