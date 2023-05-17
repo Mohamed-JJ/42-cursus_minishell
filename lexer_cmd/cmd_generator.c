@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_generator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:11:20 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/17 21:30:24 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 	int	j;
 
 	i = 0;
-	j = 0;
+	j = -1;
 	while (*s && (*s)->type != PIPE)
 	{
 		redirection_type((*s)->type, &i);

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 20:31:33 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:42:13 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int c, char **v, char **env)
 						cmd = create_cmd(lex);
 						if (lex)
 							free_list(&lex);
-						// execution1(headd,cmd, env);
+						execution1(headd,cmd, env);
 						t_cmd *tmp = cmd;
 						
 						while (tmp)
