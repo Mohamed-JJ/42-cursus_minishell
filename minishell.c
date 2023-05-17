@@ -6,46 +6,56 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 12:47:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:33:05 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
+void	insert_space_inside_quotes(char *input, int *i, char **ret)
+{
+	char	character;
+
+	character = input[*i];
+	*ret = ft_strjoin_characters(*ret, input[(*i)++]);
+	while (input[*i] != character && input[*i])
+		*ret = ft_strjoin_characters(*ret, input[(*i)++]);
+	*ret = ft_strjoin_characters(*ret, input[*i]);
+}
+
+void	insert_space_between_op(char *input, int *i, char **ret)
+{
+	char	character;
+
+	character = input[*i];
+	*ret = ft_strjoin_characters(*ret, ' ');
+	while (input[*i] == character && input[*i])
+	{
+		if (input[*i + 1] != character)
+			break ;
+		*ret = ft_strjoin_characters(*ret, input[(*i)++]);
+	}
+	*ret = ft_strjoin_characters(*ret, input[*i]);
+	*ret = ft_strjoin_characters(*ret, ' ');
+}
+
 char	*insert_spaces(char *input)
 {
 	int		i;
 	char	*ret;
-	char	character;
 
 	i = -1;
 	ret = NULL;
 	while (input[++i])
 	{
 		if (input[i] == '\'' || input[i] == '\"')
-		{
-			character = input[i];
-			ret = ft_strjoin_characters(ret, input[i++]);
-			while (input[i] != character && input[i])
-				ret = ft_strjoin_characters(ret, input[i++]);
-			ret = ft_strjoin_characters(ret, input[i]);
-		}
+			insert_space_inside_quotes(input, &i, &ret);
 		else if (input[i] == '|' || input[i] == '>' || input[i] == '<')
-		{
-			character = input[i];
-			ret = ft_strjoin_characters(ret, ' ');
-			while (input[i] == character && input[i])
-			{
-				if (input[i + 1] != character)
-					break ;
-				ret = ft_strjoin_characters(ret, input[i++]);
-			}
-			ret = ft_strjoin_characters(ret, input[i]);
-			ret = ft_strjoin_characters(ret, ' ');
-		}
+			insert_space_between_op(input, &i, &ret);
 		else
 			ret = ft_strjoin_characters(ret, input[i]);
 	}
+	printf("ret = |%s|\n", ret);
 	return (free(input), input = NULL, ret);
 }
 
@@ -131,82 +141,15 @@ t_cmd	*create_cmd(t_lex *s)
 	return (ret);
 }
 
-void	free_array(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-	{
-		printf("arg[%d]: %s\n", i, arr[i]);
-		free(arr[i]);
-		arr[i] = NULL;
-		i++;
-	}
-	free(arr);
-	arr = NULL;
-}
-
-void	free_list(t_lex	**list)
-{
-	if (list && *list)
-	{
-		while (*list)
-		{
-			free((*list)->str);
-			free(*list);
-			if ((*list)->next == NULL)
-				break ;
-			*list = (*list)->next;
-		}
-		*list = NULL;
-	}
-}
-
-void	free_cmd_list(t_cmd *cmd)
-{
-	int	i;
-
-	i = 0;
-	if (!cmd)
-		return ;
-	if (cmd->next)
-		free_cmd_list(cmd->next);
-	if (cmd->command)
-	{
-		free(cmd->command);
-		cmd->command = NULL;
-	}
-	if (cmd->args)
-		free_array(cmd->args);
-	if (cmd->outfile)
-		free_array(cmd->outfile);
-	if (cmd->infile)
-		free_array(cmd->infile);
-	if (cmd->heredoc_del)
-		free_array(cmd->heredoc_del);
-	free(cmd);
-	cmd = NULL;
-}
-
-void	f(void)
-{
-	system("leaks minishell");
-}
-
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
 	char	*input;
 	t_cmd	*cmd;
 
-	atexit(f);
 	lex = NULL;
 	(void)c;
 	(void)v;
-	(void)env;
 	while (1)
 	{
 		input = readline("minishell$>");

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 12:22:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:54:57 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@ void	handle_env(char	*s, char **ret, char **env, int *i);
 char	*get_env(char **env, char *s);
 void	print_list(t_lex *lex);
 
+// free functions
+void	free_cmd_list(t_cmd *cmd);
+void	free_list(t_lex	**list);
+void	free_array(char **arr);
 
 
 #endif
