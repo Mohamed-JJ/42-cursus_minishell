@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 12:54:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:48:15 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,9 @@ void	free_cmd_list(t_cmd *cmd);
 void	free_list(t_lex	**list);
 void	free_array(char **arr);
 
+// inserting space functions
+void	insert_space_inside_quotes(char *input, int *i, char **ret);
+void	insert_space_between_op(char *input, int *i, char **ret);
+char	*insert_spaces(char *input);
 
 #endif

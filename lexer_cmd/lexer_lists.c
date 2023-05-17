@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 21:08:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:41:18 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 t_lex	*new_lex(char *str, int type, int flag)
 {
 	t_lex	*new;
-	static int	i = 0;
-
-	printf("the itteration is %d\n", i++);
 
 	new = malloc(sizeof(t_lex));
 	new->str = ft_strdup(str);
@@ -26,7 +23,6 @@ t_lex	*new_lex(char *str, int type, int flag)
 	new->next = NULL;
 	new->prev = NULL;
 	new->ds_quote = flag;
-	// free_string(&str);
 	return (new);
 }
 
@@ -44,7 +40,6 @@ void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new)
 		tmp = tmp->next;
 	tmp->next = new;
 	new->prev = tmp;
-	// free_string(tmp->str);
 }
 
 t_lex	*ft_lstlast_lexer(t_lex *lst)

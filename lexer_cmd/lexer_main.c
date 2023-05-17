@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 21:13:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:40:37 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	check_rest_type(t_lex *p, int *i)
 	else if (p->prev->type == HEREDOC)
 		p->type = HEREDOC_DEL;
 }
+
+
 
 t_lex	*lexer(char *input)
 {

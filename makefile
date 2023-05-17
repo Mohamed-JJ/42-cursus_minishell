@@ -7,11 +7,12 @@ SRC = minishell.c \
 		utils/utils_4.c \
 		utils/utils_5.c \
 		utils/utils_6.c \
-		lexer/lexer_lists.c \
-		lexer/lexer_main.c \
-		ft_split.c \
-		ft_free.c \
-		handler.c \
+		lexer_cmd/lexer_lists.c \
+		lexer_cmd/lexer_main.c \
+		utils/inserting_spaces.c \
+		utils/ft_split.c \
+		utils/ft_free.c \
+		utils/handler.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -24,7 +25,7 @@ RM = rm -rf
 
 CC = cc
 
-FLAGS = -Wall -Werror -Wextra #-fsanitize=address
+FLAGS = -Wall -Werror -Wextra
 
 all : $(NAME)
 
