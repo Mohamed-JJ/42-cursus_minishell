@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 21:55:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 16:11:31 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	handle_double_quote(char *s, char **ret, char **env, int *i)
 			handle_env(s, ret, env, i);
 		else
 			*ret = ft_strjoin_characters(*ret, s[*i]);
-		if (s[*i] == '\"' || !s[*i])
-			break ;
 		(*i)++;
 	}
 	if (!s[*i])
-		printf("minishell : error in quotation\n");
+		printf("minishell : error in quotation here |%c|\n", s[*i - 1]);
 	else if (s[*i] == '\"')
 		*ret = ft_strjoin_characters(*ret, s[*i]);
 	(*i)++;
@@ -86,6 +84,7 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 	}
 	else
 		*ret = ft_strjoin_characters(*ret, s[*i]);
+	puts("here");
 }
 
 void	handle_heredoc(char *s, int *i, char **ret)

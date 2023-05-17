@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 15:09:08 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 16:09:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ char	*expand_var(char *s, char **env)
 	char	*ret;
 
 	ret = NULL;
-	i = 0;
-	while (s[i])
+	i = -1;
+	while (s[++i])
 	{
 		if (s[i] == '\'')
 			handle_single_quote(s, &i, &ret);
@@ -31,8 +31,10 @@ char	*expand_var(char *s, char **env)
 			handle_heredoc(s, &i, &ret);
 		else
 			ret = ft_strjoin_characters(ret, s[i]);
-		i++;
+		if (!s[i])
+			break ;
 	}
+	// puts(ret);
 	return (free(s), s = NULL, ret);
 }
 

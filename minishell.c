@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 21:42:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:03:14 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ void	f(void)
 	system("leaks minishell");
 }
 
-
 int	main(int c, char **v, char **env)
 {
 	t_lex	*lex;
@@ -219,23 +218,25 @@ int	main(int c, char **v, char **env)
 			input[ft_strlen(input)] = '\0';
 			add_history(input);
 			input = expand_var(input, env);
-			input = insert_spaces(input);
-			// printf("{%s}\n", input);
-			lex = lexer(input);
-			print_list(lex);
-			if (lex)
+			if (input)
 			{
-				assign_type(lex);
-				manage_type(lex);
-				if (generate_error(lex))
-					free_list(&lex);
-				else
+				input = insert_spaces(input);
+				lex = lexer(input);
+				// print_list(lex);
+				if (lex)
 				{
-					cmd = create_cmd(lex);
-					if (lex)
+					assign_type(lex);
+					manage_type(lex);
+					if (generate_error(lex))
 						free_list(&lex);
-					if (cmd)
-						free_cmd_list(cmd);
+					else
+					{
+						cmd = create_cmd(lex);
+						if (lex)
+							free_list(&lex);
+						if (cmd)
+							free_cmd_list(cmd);
+					}
 				}
 			}
 		}

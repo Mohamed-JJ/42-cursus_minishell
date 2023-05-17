@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/14 21:46:22 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:15:52 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ int	generate_error2(t_lex *s, int *i)
 	if (s->str[0] == '|' || s->str[0] == '<' || s->str[0] == '>')
 		while (s->str[x])
 			x++;
-	if ((s->str[0] == '|' && x > 1) || (s->str[0] == '<' && x > 2)
-		|| (s->str[0] == '>' && x > 2))
+	if (!s->ds_quote && ((s->str[0] == '|' && x > 1) || (s->str[0] == '<' && x > 2) || (s->str[0] == '>' && x > 2)))
 		return (printf("minishell : syntax error\n"), 1);
 	if (s->type == COMMAND)
 		*i = 1;
@@ -102,12 +101,12 @@ int	generate_error2(t_lex *s, int *i)
 	else if (s->prev && s->type == PIPE && s->next)
 		*i = 0;
 	else if (s->next && check_if_operator(s->str) && check_if_operator(s->next->str))
-		return (printf("minishell : syntax error\n"), 1);
+		return (printf("minishell : syntax errors\n"), 1);
 	else if (!s->prev && !ft_strncmp(s->str, "<", 1) && !s->next)
 		return (printf("minishell : syntax error\n"), 1);
 	else if (!s->prev && !ft_strncmp(s->str, ">", 1) && !s->next)
 		return (printf("minishell : syntax error\n"), 1);
-	else if (!s->next && check_if_operator(s->str))
-		return (printf("minishell : syntax error\n"), 1);
+	else if (!s->ds_quote && !s->next && check_if_operator(s->str))
+		return (printf("minishell : syntax errors\n"), 1);
 	return (0);
 }

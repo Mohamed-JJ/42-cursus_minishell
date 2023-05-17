@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 17:29:49 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:13:05 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,14 @@ t_lex	*lexer(char *input)
 	h.i = -1;
 	lex = NULL;
 	h.s = NULL;
+	printf("|%s|\n", input);
 	while (input[++h.i])
 	{
 		if (input[(h.i)] == '\'' || input[h.i] == '\"')
 			dqoute_handler(input, &h, &lex, 1);
-		else if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
+		if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
 			skip_whitespaces(input, &h.i);
-		else
+		else if (input[h.i] && input[h.i] != ' ' && input[h.i] != '\t')
 		{
 			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
 			{

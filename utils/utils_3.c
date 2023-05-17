@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 21:50:28 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:05:40 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,23 +69,49 @@ int	skip_special_characters(char *str, int *i, char c)
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 {
+	static int	f;
 	data->c = str[data->i];
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
 	{
 		data->s = ft_strjoin_characters(data->s, str[data->i]);
+		printf("of the ittereation %d character %c is del and str is  %s\n", f, data->c, data->s);
 		data->i++;
 	}
 	if (!str[data->i])
 		printf("error in quotation |%c|\n", str[data->i]);
 	data->i++;
-	if (str[data->i] == '\'' || str[data->i] == '\"')
-	{
+	f++;
+	if ((str[data->i] == '\'' || str[data->i] == '\"'))
 		dqoute_handler(str, data, lex, 1);
-	}
-	else
+	else if (str[data->i] == ' ' || str[data->i] == '\t' || !str[data->i])
 	{
 		if (data->s && flag == 1)
 			ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
+		// free(data->s);
 	}
 }
+
+// void	dquote_handler(char *s, t_data *h, t_lex **lex, int fla
+// }
+
+// void	dqoute_handler(char *s, t_data *h, t_lex **lex, int flag)
+// {
+// 	h->c = s[h->i];
+// 	h->i++;
+// 	while (s[h->i] && s[h->i] != h->c)
+// 	{
+// 		h->s = ft_strjoin_characters(h->s, s[h->i]);
+// 		h->i++;
+// 	}
+// 	if (!s[h->i])
+// 		printf("error in quotation |%c|\n", s[h->i]);
+// 	else if ((s[h->i] == h->c && !s[h->i + 1]) || (! s[h->i] || s[h->i] == ' ' || s[h->i] == '\t'))
+// 	{
+// 		if (h->s && flag == 1)
+// 			ft_lstadd_back_lexer(lex, new_lex(h->s, WORD, 1));
+// 	}
+// 	h->i++;
+// 	if ((s[h->i] == '\'' || s[h->i] == '\"') && (s[h->i + 1] == '\'' || s[h->i + 1] == '\"'))
+// 		dqoute_handler(s, h, lex, 1);
+// }
