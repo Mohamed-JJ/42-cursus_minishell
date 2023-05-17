@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 18:05:10 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:47:02 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:44:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	**allocate(char **str, char *s, char c)
 		end = start;
 		while (s[end] != c && s[end] != '\0')
 			end++;
-		str[i] = ft_substr((char *)s, start, end - start);
+		str[i] = ft_substr_parsing((char *)s, start, end - start);
 		if (!str[i])
 			return (free_all(str, i));
 		i++;
@@ -72,7 +72,7 @@ static char	**allocate(char **str, char *s, char c)
 	return (str);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split_parsing(char *s, char c)
 {
 	char	**str;
 

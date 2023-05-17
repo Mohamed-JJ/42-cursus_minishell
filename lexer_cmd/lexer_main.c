@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:40:37 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:12:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,11 @@ t_lex	*lexer(char *input)
 					dqoute_handler(input, &h, &lex, 0);
 				else if (input[h.i] == '=' && (input[h.i + 1] == '\'' || input[h.i + 1] == '\"'))
 				{
-					h.s = ft_strjoin_characters(h.s, input[h.i++]);
+					h.s = ft_strjoin_parsing_characters(h.s, input[h.i++]);
 					dqoute_handler(input, &h, &lex, 0);
 				}
 				else
-				h.s = ft_strjoin_characters(h.s, input[h.i++]);
+				h.s = ft_strjoin_parsing_characters(h.s, input[h.i++]);
 			}
 			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
 		}

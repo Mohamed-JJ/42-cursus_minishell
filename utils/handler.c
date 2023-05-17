@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:46:06 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:50:37 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	handle_double_quote(char *s, char **ret, char **env, int *i)
 {
-	*ret = ft_strjoin_characters(*ret, s[*i]);
+	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\"')
 	{
@@ -22,41 +22,41 @@ int	handle_double_quote(char *s, char **ret, char **env, int *i)
 			&& s[*i + 1] != ' ' && s[*i + 1] != '\t')
 			handle_env(s, ret, env, i);
 		else
-			*ret = ft_strjoin_characters(*ret, s[*i]);
+			*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
 	if (!s[*i])
 		return (printf("minishell : error in quotation\n"), 1);
 	else if (s[*i] == '\"')
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	if (s[*i] == '\"')
 		handle_double_quote(s, ret, env, i);
 	else if (s[*i] == '\'')
 		handle_single_quote(s, i, ret);
 	else
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	return (0);
 }
 
 int	handle_single_quote(char *s, int *i, char **ret)
 {
-	*ret = ft_strjoin_characters(*ret, s[*i]);
+	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	while (s[*i] && s[*i] != '\'')
 	{
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
 	if (!s[*i])
 		return (printf("minishell : error in quotation\n"), 1);
 	else
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	if (s[*i] == '\'')
 		handle_single_quote(s, i, ret);
 	else
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	return (0);
 }
 
@@ -70,42 +70,42 @@ void	handle_dollar(char *s, int *i, char **ret, char **env)
 	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
 	{
 		(*i)++;
-		while (s[*i] && ft_isalnum(s[*i]))
+		while (s[*i] && ft_isalnum_parsing(s[*i]))
 		{
-			tmp = ft_strjoin_characters(tmp, s[*i]);
+			tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
 			if (!s[*i + 1] || s[*i + 1] == ' '
-				|| s[*i + 1] == '\t' || !ft_isalnum(s[*i + 1]))
+				|| s[*i + 1] == '\t' || !ft_isalnum_parsing(s[*i + 1]))
 				break ;
 			(*i)++;
 		}
 		holder = get_env(env, tmp);
-		*ret = ft_strjoin(*ret, holder, 1);
+		*ret = ft_strjoin_parsing(*ret, holder, 1);
 		free(tmp);
 		tmp = NULL;
 		holder = NULL;
 	}
 	else
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 }
 
 void	handle_heredoc(char *s, int *i, char **ret)
 {
 	while (s[*i] && s[*i] == '<')
 	{
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
 	(*i)--;
 	while (s[*i] && s[*i] == ' ')
 	{
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
 	while (s[*i])
 	{
-		if (ft_strchr("|>< ", s[*i]))
+		if (ft_strchr_parsing("|>< ", s[*i]))
 			break ;
-		*ret = ft_strjoin_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
 }
@@ -119,15 +119,15 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 	holder = NULL;
 	while (s[*i] && s[*i] == '$')
 		(*i)++;
-	while (s[*i] && ft_isalnum(s[*i]))
+	while (s[*i] && ft_isalnum_parsing(s[*i]))
 	{
-		tmp = ft_strjoin_characters(tmp, s[*i]);
-		if (!ft_isalnum(s[*i + 1]) || !s[*i + 1])
+		tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
+		if (!ft_isalnum_parsing(s[*i + 1]) || !s[*i + 1])
 			break ;
 		(*i)++;
 	}
 	holder = get_env(env, tmp);
-	*ret = ft_strjoin(*ret, holder, 1);
+	*ret = ft_strjoin_parsing(*ret, holder, 1);
 	free(tmp);
 	tmp = NULL;
 	holder = NULL;

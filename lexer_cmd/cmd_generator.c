@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 14:36:42 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:48:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd	*new_command(char *str, char **arr, int i, int j)
 	ret = malloc(sizeof(t_cmd));
 	if (!ret)
 		return (NULL);
-	ret->command = ft_strdup(str);
+	ret->command = ft_strdup_parsing(str);
 	ret->args = fill_arrays(arr[0]);
 	ret->outfile = fill_arrays(arr[1]);
 	ret->infile = fill_arrays(arr[2]);
@@ -67,7 +67,7 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 		redirection_type((*s)->type, &i);
 		here_doc_in_file_priority(&j, (*s)->type);
 		if ((*s)->type == COMMAND)
-			*str = ft_strjoin(*str, (*s)->str, 0);
+			*str = ft_strjoin_parsing(*str, (*s)->str, 0);
 		else if ((*s)->type == ARGUMENT)
 			arr[0] = join_string((*s)->str, &arr[0]);
 		else if ((*s)->type == OUT_FILE)

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:39:59 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/15 17:32:19 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:50:37 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@ char	*join_string(char *str, char **string)
 	char	*tmp;
 
 	tmp = NULL;
-	tmp = ft_strjoin(*string, str, 0);
-	tmp = ft_strjoin(tmp, "\n", 0);
+	tmp = ft_strjoin_parsing(*string, str, 0);
+	tmp = ft_strjoin_parsing(tmp, "\n", 0);
 	return (tmp);
 }
 
-char	*ft_strdup(char *s1)
+char	*ft_strdup_parsing(char *s1)
 {
 	char	*s2;
 	int		size;
 	int		i;
 
 	i = 0;
-	size = ft_strlen(s1);
+	size = ft_strlen_parsing(s1);
 	s2 = malloc((size + 1) * sizeof(char));
 	if (!s2)
 		return (NULL);
@@ -42,7 +42,7 @@ char	*ft_strdup(char *s1)
 	return (s2);
 }
 
-int	ft_strchr(char *s, int c)
+int	ft_strchr_parsing(char *s, int c)
 {
 	int	i;
 

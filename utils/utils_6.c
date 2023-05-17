@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:34:38 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:48:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	generate_error(t_lex *s)
 	{
 		if (generate_error2(s, &i))
 			return (1);
-		else if (!s->prev && !ft_strncmp(s->str, ">", 1) && s->next)
+		else if (!s->prev && !ft_strncmp_parsing(s->str, ">", 1) && s->next)
 		{
 			s = s->next;
 			continue ;
@@ -31,7 +31,7 @@ int	generate_error(t_lex *s)
 			s = s->next;
 			continue ;
 		}
-		else if (!s->prev && !ft_strncmp(s->str, "<", 1) && s->next)
+		else if (!s->prev && !ft_strncmp_parsing(s->str, "<", 1) && s->next)
 		{
 			s = s->next;
 			continue ;
@@ -75,13 +75,13 @@ char	**create_arrays_of_files(t_lex *s)
 void	check_arr(char **r)
 {
 	if (!r[0])
-		r[0] = ft_strdup("");
+		r[0] = ft_strdup_parsing("");
 	if (!r[1])
-		r[1] = ft_strdup("");
+		r[1] = ft_strdup_parsing("");
 	if (!r[2])
-		r[2] = ft_strdup("");
+		r[2] = ft_strdup_parsing("");
 	if (!r[3])
-		r[3] = ft_strdup("");
+		r[3] = ft_strdup_parsing("");
 }
 
 int	generate_error2(t_lex *s, int *i)
@@ -104,9 +104,9 @@ int	generate_error2(t_lex *s, int *i)
 	else if (s->next && check_if_operator(s->str)
 		&& check_if_operator(s->next->str))
 		return (printf("minishell : syntax errors\n"), 1);
-	else if (!s->prev && !ft_strncmp(s->str, "<", 1) && !s->next)
+	else if (!s->prev && !ft_strncmp_parsing(s->str, "<", 1) && !s->next)
 		return (printf("minishell : syntax error\n"), 1);
-	else if (!s->prev && !ft_strncmp(s->str, ">", 1) && !s->next)
+	else if (!s->prev && !ft_strncmp_parsing(s->str, ">", 1) && !s->next)
 		return (printf("minishell : syntax error\n"), 1);
 	else if (!s->ds_quote && !s->next && check_if_operator(s->str))
 		return (printf("minishell : syntax errors\n"), 1);

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:48:15 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:50:47 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ int		check_if_operator(char *str);
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int i);
 
 // string functions
-char	**ft_split(char *s, char c);
-char	*ft_strdup(char *str);
-int		ft_strchr(char *s, int c);
-int		ft_strlen(char *str);
-int		ft_isdigit(int c);
-int		ft_isalpha(int c);
-char	*ft_strjoin_characters(char *s1, char c);
-int		ft_isprint(int c);
-char	*ft_strjoin(char *s1, char *s2, int _free);
-char	*ft_substr(char *s, int start, int len);
-int		ft_isalnum(int c);
+char	**ft_split_parsing(char *s, char c);
+char	*ft_strdup_parsing(char *str);
+int		ft_strchr_parsing(char *s, int c);
+int		ft_strlen_parsing(char *str);
+int		ft_isdigit_parsing(int c);
+int		ft_isalpha_parsing(int c);
+char	*ft_strjoin_parsing_characters(char *s1, char c);
+int		ft_isprint_parsing(int c);
+char	*ft_strjoin_parsing(char *s1, char *s2, int _free);
+char	*ft_substr_parsing(char *s, int start, int len);
+int		ft_isalnum_parsing(int c);
 int		ft_strcmp(char *s1, char *s2);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp_parsing(const char *s1, const char *s2, size_t n);
 
 // case managment functions
 void	handle_heredoc(char *s, int *i, char **ret);

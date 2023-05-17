@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:15:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:41:18 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:48:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_lex	*new_lex(char *str, int type, int flag)
 	t_lex	*new;
 
 	new = malloc(sizeof(t_lex));
-	new->str = ft_strdup(str);
+	new->str = ft_strdup_parsing(str);
 	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;

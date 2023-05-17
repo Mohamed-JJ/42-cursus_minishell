@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 12:47:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:49:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*expand_var(char *s, char **env)
 		else if (s[i] == '<')
 			handle_heredoc(s, &i, &ret);
 		else
-			ret = ft_strjoin_characters(ret, s[i]);
+			ret = ft_strjoin_parsing_characters(ret, s[i]);
 		if (r == 1)
 			return (free_string(&ret), free_string(&s), NULL);
 		if (!s[i])
@@ -41,19 +41,19 @@ char	*expand_var(char *s, char **env)
 	return (free(s), s = NULL, ret);
 }
 
-char	*ft_substr(char *s, int start, int len)
+char	*ft_substr_parsing(char *s, int start, int len)
 {
 	int		j;
 	char	*str;
 
 	if (!s)
 		return (NULL);
-	if (ft_strlen(s) == 0 || len <= 0)
-		return (ft_strdup(""));
-	if (start > ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s + start);
+	if (ft_strlen_parsing(s) == 0 || len <= 0)
+		return (ft_strdup_parsing(""));
+	if (start > ft_strlen_parsing(s))
+		return (ft_strdup_parsing(""));
+	if (len > ft_strlen_parsing(s + start))
+		len = ft_strlen_parsing(s + start);
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/16 21:05:40 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:54:45 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_if_operator(char *str)
 	return (0);
 }
 
-char	*ft_strjoin(char *s1, char *s2, int _free)
+char	*ft_strjoin_parsing(char *s1, char *s2, int _free)
 {
 	size_t	i;
 	size_t	c;
@@ -40,11 +40,11 @@ char	*ft_strjoin(char *s1, char *s2, int _free)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		s1 = ft_strdup("");
+		s1 = ft_strdup_parsing("");
 	if (!s2)
-		s2 = ft_strdup("");
-	str = malloc((ft_strlen(s1)
-				+ ft_strlen(s2) + 1) * sizeof(char));
+		s2 = ft_strdup_parsing("");
+	str = malloc((ft_strlen_parsing(s1)
+				+ ft_strlen_parsing(s2) + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -74,7 +74,7 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
 	{
-		data->s = ft_strjoin_characters(data->s, str[data->i]);
+		data->s = ft_strjoin_parsing_characters(data->s, str[data->i]);
 		printf("of the ittereation %d character %c is del and str is  %s\n", f, data->c, data->s);
 		data->i++;
 	}
@@ -91,27 +91,3 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 		// free(data->s);
 	}
 }
-
-// void	dquote_handler(char *s, t_data *h, t_lex **lex, int fla
-// }
-
-// void	dqoute_handler(char *s, t_data *h, t_lex **lex, int flag)
-// {
-// 	h->c = s[h->i];
-// 	h->i++;
-// 	while (s[h->i] && s[h->i] != h->c)
-// 	{
-// 		h->s = ft_strjoin_characters(h->s, s[h->i]);
-// 		h->i++;
-// 	}
-// 	if (!s[h->i])
-// 		printf("error in quotation |%c|\n", s[h->i]);
-// 	else if ((s[h->i] == h->c && !s[h->i + 1]) || (! s[h->i] || s[h->i] == ' ' || s[h->i] == '\t'))
-// 	{
-// 		if (h->s && flag == 1)
-// 			ft_lstadd_back_lexer(lex, new_lex(h->s, WORD, 1));
-// 	}
-// 	h->i++;
-// 	if ((s[h->i] == '\'' || s[h->i] == '\"') && (s[h->i + 1] == '\'' || s[h->i + 1] == '\"'))
-// 		dqoute_handler(s, h, lex, 1);
-// }
