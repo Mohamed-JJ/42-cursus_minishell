@@ -6,13 +6,13 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:47:57 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:36:42 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_cmd	*new_command(char *str, char **arr, int i)
+t_cmd	*new_command(char *str, char **arr, int i, int j)
 {
 	t_cmd	*ret;
 
@@ -25,6 +25,7 @@ t_cmd	*new_command(char *str, char **arr, int i)
 	ret->infile = fill_arrays(arr[2]);
 	ret->heredoc_del = fill_arrays(arr[3]);
 	ret->in_out = i;
+	ret->h_i = j;
 	ret->next = NULL;
 	return (ret);
 }
@@ -46,14 +47,25 @@ void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 	tmp->next = new;
 }
 
+void	here_doc_in_file_priority(int *j, int type)
+{
+	if (type == HEREDOC)
+		*j = 0;
+	else if (type == IN_FILE)
+		*j = 1;
+}
+
 t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (*s && (*s)->type != PIPE)
 	{
 		redirection_type((*s)->type, &i);
+		here_doc_in_file_priority(&j, (*s)->type);
 		if ((*s)->type == COMMAND)
 			*str = ft_strjoin(*str, (*s)->str, 0);
 		else if ((*s)->type == ARGUMENT)
@@ -66,7 +78,7 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 			arr[3] = join_string((*s)->str, &arr[3]);
 		*s = (*s)->next;
 	}
-	return (new_command(*str, arr, i));
+	return (new_command(*str, arr, i, j));
 }
 
 t_cmd	*create_cmd(t_lex *s)

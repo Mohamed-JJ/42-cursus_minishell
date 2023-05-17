@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 00:25:04 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 13:49:05 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:37:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 t_lex	*new_lex(char *str, int type, int flag);
 void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);
 t_lex	*ft_lstlast_lexer(t_lex *lst);
-
 t_lex	*lexer(char *input);
-
 
 // t_lex	*new_lex(char *str, int type);
 void	ft_lstadd_back_lexer(t_lex	**lst, t_lex *new);
@@ -34,7 +32,7 @@ void	manage_type(t_lex *p);
 
 // cmd functions
 
-t_cmd	*new_command(char *str, char **arr, int i);
+t_cmd	*new_command(char *str, char **arr, int i, int j);
 void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new);
 t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s);
 t_cmd	*create_cmd(t_lex *s);

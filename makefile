@@ -9,6 +9,7 @@ SRC = minishell.c \
 		utils/utils_6.c \
 		lexer_cmd/lexer_lists.c \
 		lexer_cmd/lexer_main.c \
+		lexer_cmd/cmd_generator.c \
 		utils/inserting_spaces.c \
 		utils/ft_split.c \
 		utils/ft_free.c \
