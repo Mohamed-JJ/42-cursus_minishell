@@ -6,11 +6,12 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 12:36:42 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/18 17:03:57 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+#include <stdio.h>
 
 int	main(int c, char **v, char **env)
 {

@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 23:03:31 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/18 12:52:19 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void signal_handler(int signum);
 int create_out_files(t_cmd *p_cmd);
 int builtin_cmd(char *command, char **args,t_env *head);
 int create_in_files(t_cmd *p_cmd);
-void ft_pipe(char *command1,char **args1, char *command2,char **args2,t_cmd *p_cmd);
 int ft_echo(char **argv);
 int ft_redirection(char **command, char *name_file);
 char *ft_export(char *argv);

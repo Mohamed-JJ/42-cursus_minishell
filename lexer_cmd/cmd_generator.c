@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:11:20 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/18 12:51:22 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void	ft_lstadd_back_cmd(t_cmd **c, t_cmd *new)
 void	here_doc_in_file_priority(int *j, int type)
 {
 	if (type == HEREDOC)
-		*j = 0;
-	else if (type == IN_FILE)
 		*j = 1;
+	else if (type == IN_FILE)
+		*j = 0;
 }
 
 t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
@@ -62,7 +62,7 @@ t_cmd	*fill_till_eol_pipe(char **str, char **arr, t_lex **s)
 	int	j;
 
 	i = 0;
-	j = 0;
+	j = -1;
 	while (*s && (*s)->type != PIPE)
 	{
 		redirection_type((*s)->type, &i);
