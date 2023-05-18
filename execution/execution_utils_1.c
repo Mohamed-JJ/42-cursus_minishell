@@ -3,6 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void cp_arr(char **arr, char **arr1) {
+  int i;
+  int j;
+
+  j = 1;
+  i = 0;
+  while (arr[i]) {
+    arr1[j] = ft_strdup(arr[i]);
+    i++;
+    j++;
+  }
+  arr1[j] = NULL;
+}
 void execution(char *command, char **args) {
   char *path;
   char **dir;
@@ -20,11 +33,11 @@ void execution(char *command, char **args) {
       i++;
     }
   }
-
   if (execve(path, args, NULL) == -1) {
     perror("execve");
     exit(EXIT_FAILURE);
   }
+  exit(0);
 }
 
 
@@ -62,9 +75,9 @@ int builtin_cmd(char *command, char **args, t_env *head) {
       print_env(tmp, 1);
       free_env(tmp);
       return 1;
-    } else {
+    } else
+    {
       set_env(args, head);
-      print_env(head, 1);
       return 1;
     }
     return 1;
@@ -202,14 +215,11 @@ int create_out_files(t_cmd *p_cmd) {
       perror("open");
       return 0;
     }
+
     if (p_cmd->outfile[i + 1] != NULL)
       close(fd);
     i++;
   }
-  dup2(fd, 1);
-  // bach cat tkhrj 3la l terminal
-  dup2(fd, 0);
-  close(fd);
   return (fd);
 }
 

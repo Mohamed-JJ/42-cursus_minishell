@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:14:04 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/17 23:03:31 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ char *get_value(char *str);
 void delete_env(t_env *head, char *name);
 void unset_env(char **args, t_env *head) ;
 void execution1(t_env *headd,t_cmd *p_cmd, char **env);
+void cp_arr(char **arr, char **arr1);
 
 #endif
