@@ -6,37 +6,54 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 20:37:54 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:26:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
+static int	check_operator(t_lex *s)
+{
+	if (s->next == NULL)
+		return (printf("minishell : syntax error\n"), 1);
+	else if (s->next && ((s->type == APPEND && s->next->type == APPEND)
+			|| (s->type == REDIRECT && s->next->type == REDIRECT)))
+		return (printf("minishell : syntax error\n"), 1);
+	else if (s->next && s->next->type != OUT_FILE
+		&& (s->type == REDIRECT || s->type == APPEND))
+		return (printf("minishell : syntax error\n"), 1);
+	else if (s->next && s->type == HEREDOC && s->next->type != HEREDOC_DEL)
+		return (printf("minishell : syntax error\n"), 1);
+	else if (s->next && s->type == READ_INPUT && s->next->type != IN_FILE)
+		return (printf("minishell : syntax error\n"), 1);
+	else if (s->next && (s->type == PIPE && s->next->type == PIPE))
+		return (printf("minishell : syntax error\n"), 1);
+	return (0);
+}
+
 int	generate_error(t_lex *s)
 {
-	int	i;
+	int		x;
+	t_lex	*tmp;
 
-	i = 0;
-	while (s)
+	tmp = s;
+	while (tmp)
 	{
-		if (generate_error2(s, &i))
-			return (1);
-		else if (!s->prev && !ft_strncmp_parsing(s->str, ">", 1) && s->next)
+		x = 0;
+		if (tmp->str[0] == '|' || tmp->str[0] == '<' || tmp->str[0] == '>')
+			while (tmp->str[x])
+				x++;
+		if (!tmp->ds_quote && ((tmp->str[0] == '|' && x > 1)
+				|| (tmp->str[0] == '<' && x > 2)
+				|| (tmp->str[0] == '>' && x > 2)))
+			return (printf("minishell : syntax error\n"), 1);
+		if (tmp->type == APPEND || tmp->type == REDIRECT
+			|| tmp->type == PIPE || tmp->type == READ_INPUT)
 		{
-			s = s->next;
-			continue ;
+			if (check_operator(tmp))
+				return (1);
 		}
-		else if (i == 0 && check_if_operator(s->str) && s->next)
-		{
-			s = s->next;
-			continue ;
-		}
-		else if (!s->prev && !ft_strncmp_parsing(s->str, "<", 1) && s->next)
-		{
-			s = s->next;
-			continue ;
-		}
-		s = s->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -82,33 +99,4 @@ void	check_arr(char **r)
 		r[2] = ft_strdup_parsing("");
 	if (!r[3])
 		r[3] = ft_strdup_parsing("");
-}
-
-int	generate_error2(t_lex *s, int *i)
-{
-	int	x;
-
-	x = 0;
-	if (s->str[0] == '|' || s->str[0] == '<' || s->str[0] == '>')
-		while (s->str[x])
-			x++;
-	if (s->ds_quote && ((s->str[0] == '|' && x > 1)
-			|| (s->str[0] == '<' && x > 2) || (s->str[0] == '>' && x > 2)))
-		return (printf("minishell : syntax errors\n"), 1);
-	if (s->type == COMMAND)
-		*i = 1;
-	else if (s->type == PIPE && s->next && s->next->type == PIPE)
-		return (printf("minishell : syntax error\n"), 1);
-	else if (s->prev && s->type == PIPE && s->next)
-		*i = 0;
-	else if (s->next && check_if_operator(s->str)
-		&& check_if_operator(s->next->str))
-		return (printf("minishell : syntax errors\n"), 1);
-	else if (!s->prev && !ft_strncmp_parsing(s->str, "<", 1) && !s->next)
-		return (printf("minishell : syntax error\n"), 1);
-	else if (!s->prev && !ft_strncmp_parsing(s->str, ">", 1) && !s->next)
-		return (printf("minishell : syntax error\n"), 1);
-	else if (!s->ds_quote && !s->next && check_if_operator(s->str))
-		return (printf("minishell : syntax errors\n"), 1);
-	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 18:32:05 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/18 20:17:39 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/18 20:45:27 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void execution1(t_env *headd, t_cmd *p_cmd, char **env) {
   while (p_cmd) {
     dup2(out, 1);
     dup2(in, 0);
-    
     if (p_cmd->outfile) {
       fd_out = create_out_files(p_cmd);
       dup2(fd_out, 1);
@@ -83,6 +82,5 @@ void execution1(t_env *headd, t_cmd *p_cmd, char **env) {
     p_cmd = p_cmd->next;
     free_array(args1);
   }
-  
   free_env(headd);
 }

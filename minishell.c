@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 17:03:57 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:46:17 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-#include <stdio.h>
 
 int	main(int c, char **v, char **env)
 {
@@ -25,12 +24,14 @@ int	main(int c, char **v, char **env)
 	t_env *headd;
 	t_env *head;
   	head = NULL;
-  	headd = set_env(env, head);
 	while (1)
 	{
 		input = readline("minishell$>");
 		if (!input)
+		{
+			printf("exit");
 			exit(0);
+		}
 		if (ft_strlen(input) > 0)
 		{
 			input[ft_strlen(input)] = '\0';
@@ -51,7 +52,6 @@ int	main(int c, char **v, char **env)
 						cmd = create_cmd(lex);
 						if (lex)
 							free_list(&lex);
-						execution1(headd,cmd, env);
 						if (cmd)
 							free_cmd_list(cmd);
 					}

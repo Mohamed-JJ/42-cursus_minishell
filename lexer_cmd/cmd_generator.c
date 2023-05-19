@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_generator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 12:51:22 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:55:35 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_cmd	*new_command(char *str, char **arr, int i, int j)
 	ret = malloc(sizeof(t_cmd));
 	if (!ret)
 		return (NULL);
-	ret->command = ft_strdup_parsing(str);
+	if (str)
+		ret->command = ft_strdup_parsing(str);
 	ret->args = fill_arrays(arr[0]);
 	ret->outfile = fill_arrays(arr[1]);
 	ret->infile = fill_arrays(arr[2]);
@@ -92,9 +93,11 @@ t_cmd	*create_cmd(t_lex *s)
 	arr = NULL;
 	while (s)
 	{
-		str = NULL;
+		str = ft_strdup_parsing("");
 		arr = empty_array();
+		
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
+	// puts("here");
 		if (str)
 			free_string(&str);
 		check_arr(arr);
@@ -104,5 +107,7 @@ t_cmd	*create_cmd(t_lex *s)
 			break ;
 		s = s->next;
 	}
+	// puts("here");
+
 	return (ret);
 }
