@@ -6,7 +6,11 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/05/19 20:57:18 by imaaitat         ###   ########.fr       */
+=======
+/*   Updated: 2023/05/19 18:26:17 by mjarboua         ###   ########.fr       */
+>>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +104,7 @@ void	check_arr(char **r)
 	if (!r[3])
 		r[3] = ft_strdup_parsing("");
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3

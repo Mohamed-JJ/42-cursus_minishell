@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 18:32:05 by imaaitat          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/05/19 21:02:07 by imaaitat         ###   ########.fr       */
+=======
+/*   Updated: 2023/05/18 20:45:27 by mjarboua         ###   ########.fr       */
+>>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +42,7 @@ void execution1(t_env *headd, t_cmd *p_cmd, char **env) {
   while (p_cmd) {
     dup2(out, 1);
     dup2(in, 0);
+<<<<<<< HEAD
 
     if (p_cmd->next && p_cmd->outfile == NULL && p_cmd->heredoc_del == NULL) {
       if (p_cmd->fd_in == 2) {
@@ -47,6 +52,19 @@ void execution1(t_env *headd, t_cmd *p_cmd, char **env) {
         create_pip(fd2);
         p_cmd->next->fd_in = 2;
       }
+=======
+    if (p_cmd->outfile) {
+      fd_out = create_out_files(p_cmd);
+      dup2(fd_out, 1);
+     close(fd_out);
+    }
+    else if(p_cmd->next)
+    {
+      pipe(fd);
+      dup2(fd[1], 1);
+      close(fd[1]);
+      p_cmd->next->fd_in = 1;
+>>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3
     }
     int pid = fork();
     if (pid == 0) {
@@ -78,4 +96,8 @@ void execution1(t_env *headd, t_cmd *p_cmd, char **env) {
     status = WEXITSTATUS(status);
     p_cmd = p_cmd->next;
   }
+<<<<<<< HEAD
+=======
+  free_env(headd);
+>>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3
 }

@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 20:35:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:01:49 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,5 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 	{
 		if (data->s && flag == 1)
 			ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
-		// free(data->s);
 	}
 }
