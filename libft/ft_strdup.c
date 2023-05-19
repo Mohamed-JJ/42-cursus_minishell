@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 16:36:27 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/17 23:16:07 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/18 20:36:50 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ char	*ft_strdup(const char *s1)
 	if (!rtn)
 		return (0);
 	ft_lcpystr(rtn, s1, size);
-	//free((char *)s1);
 	return (rtn);
 }

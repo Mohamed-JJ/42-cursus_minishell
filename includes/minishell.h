@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 12:52:19 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:25:20 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	handle_env(char	*s, char **ret, char **env, int *i);
 
 // variable expansion functions
 char	*get_env(char **env, char *s);
-void	print_list(t_lex *lex);
+//void	print_list(t_lex *lex);
 
 // free functions
 void	free_cmd_list(t_cmd *cmd);
@@ -74,7 +74,7 @@ void    ft_cd(char *argv);
 int ft_pwd(int fd);
 void signal_handler(int signum);
 int create_out_files(t_cmd *p_cmd);
-int builtin_cmd(char *command, char **args,t_env *head);
+int builtin_cmd(char *command, char **args, t_env **head);
 int create_in_files(t_cmd *p_cmd);
 int ft_echo(char **argv);
 int ft_redirection(char **command, char *name_file);

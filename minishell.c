@@ -6,12 +6,13 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 17:03:57 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:01:47 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 #include <stdio.h>
+
 
 int	main(int c, char **v, char **env)
 {
@@ -22,10 +23,9 @@ int	main(int c, char **v, char **env)
 	lex = NULL;
 	(void)c;
 	(void)v;
-	t_env *headd;
 	t_env *head;
-  	head = NULL;
-  	headd = set_env(env, head);
+  	head = set_env(env, head);
+
 	while (1)
 	{
 		input = readline("minishell$>");
@@ -51,15 +51,17 @@ int	main(int c, char **v, char **env)
 						cmd = create_cmd(lex);
 						if (lex)
 							free_list(&lex);
-						execution1(headd,cmd, env);
+						execution1(head,cmd, env);
 						if (cmd)
 							free_cmd_list(cmd);
 					}
 				}
 			}
 		}
+		
 		free(input);
 		input = NULL;
 	}
+	free_env(head);
 	return (0);
 }

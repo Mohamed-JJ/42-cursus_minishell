@@ -16,9 +16,11 @@ void cp_arr(char **arr, char **arr1) {
   }
   arr1[j] = NULL;
 }
-void execution(char *command, char **args) {
+void execution(char *command, char **args)
+{
   char *path;
   char **dir;
+  char **args1;
   int i;
   i = 0;
   if (ft_strchr(command, '/'))
@@ -33,15 +35,26 @@ void execution(char *command, char **args) {
       i++;
     }
   }
-  if (execve(path, args, NULL) == -1) {
+    if (args != NULL) {
+      args1 = malloc(sizeof(char *) * arr_len(args) + 2);
+      args1[0] = ft_strdup(path);
+      cp_arr(args, args1);
+    } else {
+      args1 = malloc(sizeof(char *) * 2);
+      args1[0] = ft_strdup(path);
+      args1[1] = NULL;
+    }
+  if (execve(path, args1, NULL) == -1) {
+    // printf("here\n");
     perror("execve");
     exit(EXIT_FAILURE);
   }
-  exit(0);
+free_array(args1);
+
 }
 
 
-int builtin_cmd(char *command, char **args, t_env *head) {
+int builtin_cmd(char *command, char **args, t_env **head) {
   if (ft_strcmp(command, "cd") == 0) {
     ft_cd(args[1]);
     return 1;
@@ -59,25 +72,25 @@ int builtin_cmd(char *command, char **args, t_env *head) {
     return 1;
   }
   if (ft_strcmp(command, "env") == 0) {
-    print_env(head, 0);
+    print_env(*head, 0);
     return 1;
   }
   if (ft_strcmp(command, "unset") == 0) {
-        unset_env(args, head);
+        unset_env(args, *head);
     return 1;
   }
   if (ft_strcmp(command, "export") == 0) {
 
     if (args == NULL) {
       t_env *tmp;
-      tmp = copy_env(head);
+      tmp = copy_env(*head);
       sort_env(&tmp);
       print_env(tmp, 1);
       free_env(tmp);
       return 1;
     } else
     {
-      set_env(args, head);
+     set_env(args, *head);
       return 1;
     }
     return 1;
@@ -220,6 +233,8 @@ int create_out_files(t_cmd *p_cmd) {
       close(fd);
     i++;
   }
+  dup2(fd, 1);
+      close(fd);
   return (fd);
 }
 
@@ -281,28 +296,27 @@ void ft_lstback(t_env **head, char *key, char *value) {
   t_env *new = (t_env *)malloc(sizeof(t_env));
   if (!new)
     return;
-  new->name = ft_strdup(key);
-  new->value = ft_strdup(value);
+  new->name = key;
+  new->value = value;
   new->next = NULL;
-
   if (*head == NULL) {
     *head = new;
     return;
   }
-
   t_env *current = *head;
   while (current->next != NULL) {
     current = current->next;
   }
-
   current->next = new;
+
 }
 
 void free_arr(char **arr) {
   int i;
 
   i = 0;
-  while (arr[i]) {
+  while (arr[i])
+  {
     free(arr[i]);
     i++;
   }
@@ -357,15 +371,15 @@ t_env *set_env(char **env, t_env *head) {
   int i;
 
   i = 0;
-  while (env[i]) {
-
+  while (env[i]) { 
     if (chek_plus(env[i]))
       serch_replace(head, get_name(env[i]), get_value(env[i]));
     else if (ft_strchr(env[i], '=')) {
       ft_lstback(&head, get_name(env[i]), get_value(env[i]));
     } else
-      ft_lstback(&head, get_name(env[i]), get_value(env[i]));
-
+    {
+      ft_lstback(&head, get_name(env[i]),get_value(""));
+    }
     i++;
   }
   return head;
@@ -407,6 +421,7 @@ t_env *sort_env(t_env **head) {
   }
   return *head;
 }
+
 void print_env(t_env *env, int i) {
   if (!env)
     return;

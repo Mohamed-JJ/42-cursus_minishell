@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/18 12:51:22 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:00:14 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_cmd	*create_cmd(t_lex *s)
 	arr = NULL;
 	while (s)
 	{
-		str = NULL;
+		str = ft_strdup_parsing("");
 		arr = empty_array();
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
 		if (str)
