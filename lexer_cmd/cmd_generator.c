@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 17:55:35 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:54:55 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,7 @@ t_cmd	*create_cmd(t_lex *s)
 	{
 		str = ft_strdup_parsing("");
 		arr = empty_array();
-		
 		ft_lstadd_back_cmd(&ret, fill_till_eol_pipe(&str, arr, &s));
-	// puts("here");
 		if (str)
 			free_string(&str);
 		check_arr(arr);
