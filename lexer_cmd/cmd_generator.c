@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_generator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2023/05/19 21:00:14 by imaaitat         ###   ########.fr       */
-=======
-/*   Updated: 2023/05/19 19:54:55 by mjarboua         ###   ########.fr       */
->>>>>>> a0f23b160a558bd3f2551ca6f5ed61a07e0de8b3
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +19,7 @@ t_cmd	*new_command(char *str, char **arr, int i, int j)
 	ret = malloc(sizeof(t_cmd));
 	if (!ret)
 		return (NULL);
-	if (str)
-		ret->command = ft_strdup_parsing(str);
+	ret->command = ft_strdup_parsing(str);
 	ret->args = fill_arrays(arr[0]);
 	ret->outfile = fill_arrays(arr[1]);
 	ret->infile = fill_arrays(arr[2]);
@@ -109,7 +104,5 @@ t_cmd	*create_cmd(t_lex *s)
 			break ;
 		s = s->next;
 	}
-	// puts("here");
-
 	return (ret);
 }
