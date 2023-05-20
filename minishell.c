@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 21:01:47 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/20 11:54:47 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	main(int c, char **v, char **env)
 	(void)v;
 	t_env *head;
   	head = set_env(env, head);
-
 	while (1)
 	{
 		input = readline("minishell$>");
