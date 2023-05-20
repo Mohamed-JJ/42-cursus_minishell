@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 19:25:20 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/20 13:06:10 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		ft_strncmp_parsing(const char *s1, const char *s2, size_t n);
 // case managment functions
 void	handle_heredoc(char *s, int *i, char **ret);
 void	handle_dollar(char *s, int *i, char **ret, char **env);
-int		handle_single_quote(char *s, int *i, char **ret);
+int		handle_single_quote(char *s, int *i, char **ret, char **env);
 int		handle_double_quote(char *s, char **ret, char **env, int *i);
 void	handle_env(char	*s, char **ret, char **env, int *i);
 

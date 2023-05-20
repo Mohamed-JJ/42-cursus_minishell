@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:50:37 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/20 13:05:44 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ int	handle_double_quote(char *s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	if (!s[*i])
-		return (printf("minishell : error in quotation\n"), 1);
+		return (printf("minishell : error in quotations\n"), 1);
 	else if (s[*i] == '\"')
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	if (s[*i] == '\"')
 		handle_double_quote(s, ret, env, i);
 	else if (s[*i] == '\'')
-		handle_single_quote(s, i, ret);
+		handle_single_quote(s, i, ret, env);
 	else
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	return (0);
 }
 
-int	handle_single_quote(char *s, int *i, char **ret)
+int	handle_single_quote(char *s, int *i, char **ret, char **env)
 {
 	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
@@ -54,7 +54,9 @@ int	handle_single_quote(char *s, int *i, char **ret)
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
 	if (s[*i] == '\'')
-		handle_single_quote(s, i, ret);
+		handle_single_quote(s, i, ret, env);
+	else if (s[*i] == '\"')
+		handle_double_quote(s, ret, env, i);
 	else
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	return (0);

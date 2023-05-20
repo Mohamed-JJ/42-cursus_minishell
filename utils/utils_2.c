@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:49:45 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/20 13:07:23 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand_var(char *s, char **env)
 	while (s[++i])
 	{
 		if (s[i] == '\'')
-			r = handle_single_quote(s, &i, &ret);
+			r = handle_single_quote(s, &i, &ret, env);
 		else if (s[i] == '\"')
 			r = handle_double_quote(s, &ret, env, &i);
 		else if (s[i] == '$')

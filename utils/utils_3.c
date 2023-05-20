@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 20:35:52 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/20 12:57:00 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	skip_special_characters(char *str, int *i, char c)
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 {
-	static int	f;
 	data->c = str[data->i];
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
@@ -80,13 +79,11 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 	if (!str[data->i])
 		printf("error in quotation |%c|\n", str[data->i]);
 	data->i++;
-	f++;
 	if ((str[data->i] == '\'' || str[data->i] == '\"'))
 		dqoute_handler(str, data, lex, 1);
 	else if (str[data->i] == ' ' || str[data->i] == '\t' || !str[data->i])
 	{
 		if (data->s && flag == 1)
 			ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
-		// free(data->s);
 	}
 }
