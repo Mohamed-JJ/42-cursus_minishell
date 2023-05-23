@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 13:07:23 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/21 16:41:46 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.h"
 
-char	*expand_var(char *s, char **env)
+char	*expand_var(char *s, t_env *env)
 {
 	int		i;
 	int		r;

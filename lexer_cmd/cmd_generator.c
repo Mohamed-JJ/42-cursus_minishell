@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 21:00:14 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:52:59 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_cmd	*new_command(char *str, char **arr, int i, int j)
 	ret = malloc(sizeof(t_cmd));
 	if (!ret)
 		return (NULL);
-	ret->command = ft_strdup_parsing(str);
+	if (str)
+		ret->command = ft_strdup_parsing(str);
 	ret->args = fill_arrays(arr[0]);
 	ret->outfile = fill_arrays(arr[1]);
 	ret->infile = fill_arrays(arr[2]);
@@ -104,5 +105,7 @@ t_cmd	*create_cmd(t_lex *s)
 			break ;
 		s = s->next;
 	}
+	// puts("here");
+
 	return (ret);
 }

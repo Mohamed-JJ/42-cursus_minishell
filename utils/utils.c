@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 17:50:42 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 18:58:40 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:40:08 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,24 @@ void	get_until_equal(char *s, int *len)
 	*len = i;
 }
 
-char	*get_env(char **env, char *s)
+char	*get_env(t_env **env, char *s)
 {
+	t_env	*tmp;
 	int		i;
-	int		len;
 	char	*ret;
 
 	i = 0;
-	len = 0;
 	ret = NULL;
-	while (env[i])
+	tmp = *env;
+	while (tmp)
 	{
-		get_until_equal(env[i], &len);
-		if (!ft_strncmp_parsing(env[i], s, ft_strlen_parsing(s)) && len == ft_strlen_parsing(s))
+		if (!ft_strcmp(tmp->name, s))
 		{
-			ret = ft_strdup_parsing(env[i] + ft_strlen_parsing(s) + 1);
+			if (ft_strlen(tmp->value) > 0)
+				ret = ft_strdup_parsing(tmp->value + 1);
 			break ;
 		}
-		i++;
+		tmp = tmp->next;
 	}
 	return (ret);
 }

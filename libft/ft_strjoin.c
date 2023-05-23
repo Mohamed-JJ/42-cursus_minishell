@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 00:10:02 by imaaitat          #+#    #+#             */
-/*   Updated: 2022/12/26 01:22:04 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:41:39 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[i])
 		*tmp++ = s2[i++];
 	*tmp = '\0';
+	free((char *)s1);
 	return (rtn);
 }

@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:20:51 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/21 14:39:50 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,64 +76,43 @@ void	assign_type(t_lex *p)
 	p = tmp;
 }
 
-void	check_rest_type(t_lex *p, int *i)
+void    continue_lexing(t_data *h, t_lex **lex, char *input)
 {
-	printf("active\n");
-	if (p->type == APPEND)
-	{
-		p->next->type = OUT_FILE;
-	}
-	else if (!ft_strcmp("|", p->str))
-	{
-		*i = 0;
-		p->type = PIPE;
-	}
-	else if (p->type == WORD && (!(*i) || !p->prev))
-	{
-		*i = 1;
-		p->type = COMMAND;
-	}
-	else if (p->prev->type == REDIRECT && p->type)
-		p->type = OUT_FILE;
-	else if (p->prev->type == HEREDOC)
-		p->type = HEREDOC_DEL;
+    while (input[h->i] != ' ' && input[h->i] != '\t' && input[h->i])
+    {
+        if (input[h->i] == '\'' || input[h->i] == '\"')
+            dqoute_handler(input, h, lex, 0);
+        else if (input[h->i] == '='
+            && (input[h->i + 1] == '\'' || input[h->i + 1] == '\"'))
+        {
+            h->s = ft_strjoin_parsing_characters(h->s, input[h->i++]);
+            dqoute_handler(input, h, lex, 0);
+        }
+        else
+        h->s = ft_strjoin_parsing_characters(h->s, input[h->i++]);
+    }
+    ft_lstadd_back_lexer(lex, new_lex(h->s, WORD, 0));
 }
 
-
-
-t_lex	*lexer(char *input)
+t_lex    *lexer(char *input)
 {
-	t_data	h;
-	t_lex	*lex;
+    t_data    h;
+    t_lex    *lex;
 
-	h.i = -1;
-	lex = NULL;
-	h.s = NULL;
-	while (input[++h.i])
-	{
-		if (input[(h.i)] == '\'' || input[h.i] == '\"')
-			dqoute_handler(input, &h, &lex, 1);
-		if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
-			skip_whitespaces(input, &h.i);
-		else if (input[h.i] && input[h.i] != ' ' && input[h.i] != '\t')
-		{
-			while (input[h.i] != ' ' && input[h.i] != '\t' && input[h.i])
-			{
-				if (input[h.i] == '\'' || input[h.i] == '\"')
-					dqoute_handler(input, &h, &lex, 0);
-				else if (input[h.i] == '=' && (input[h.i + 1] == '\'' || input[h.i + 1] == '\"'))
-				{
-					h.s = ft_strjoin_parsing_characters(h.s, input[h.i++]);
-					dqoute_handler(input, &h, &lex, 0);
-				}
-				else
-				h.s = ft_strjoin_parsing_characters(h.s, input[h.i++]);
-			}
-			ft_lstadd_back_lexer(&lex, new_lex(h.s, WORD, 0));
-		}
-		free_string(&h.s);
-		if (!input[h.i])
-			break ;
-	}
-	return (lex);
+    h.i = -1;
+    lex = NULL;
+    h.s = NULL;
+    while (input[++h.i])
+    {
+        if (input[(h.i)] == '\'' || input[h.i] == '\"')
+            dqoute_handler(input, &h, &lex, 1);
+        if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
+            skip_whitespaces(input, &h.i);
+        else if (input[h.i] && input[h.i] != ' ' && input[h.i] != '\t')
+            continue_lexing(&h, &lex, input);
+        free_string(&h.s);
+        if (!input[h.i])
+            break ;
+    }
+    return (lex);
 }

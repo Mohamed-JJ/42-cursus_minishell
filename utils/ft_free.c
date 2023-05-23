@@ -6,7 +6,7 @@
 /*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:11:27 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 13:07:42 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:03:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,18 @@ void	free_array(char **arr)
 
 void	free_list(t_lex	**list)
 {
-	if (list && *list)
+	while (*list)
 	{
-		while (*list)
-		{
-			free((*list)->str);
-			free(*list);
-			if ((*list)->next == NULL)
-				break ;
-			*list = (*list)->next;
-		}
-		*list = NULL;
+		free((*list)->str);
+		(*list)->str = NULL;
+		free(*list);
+		*list = (*list)->next;
 	}
+	*list = NULL;
 }
 
 void	free_cmd_list(t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
 	if (!cmd)
 		return ;
 	if (cmd->next)
@@ -68,7 +61,6 @@ void	free_cmd_list(t_cmd *cmd)
 	if (cmd->heredoc_del)
 		free_array(cmd->heredoc_del);
 	free(cmd);
-	cmd = NULL;
 }
 
 void	free_string(char **str)
@@ -79,17 +71,3 @@ void	free_string(char **str)
 		*str = NULL;
 	}
 }
-
-// void	free_array(char **arr)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (arr[i])
-// 	{
-// 		free(arr[i]);
-// 		arr[i] = NULL;
-// 		i++;
-// 	}
-// 	arr = NULL;
-// }

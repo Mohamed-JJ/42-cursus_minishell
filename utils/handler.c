@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 13:05:44 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/21 21:00:03 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	handle_double_quote(char *s, char **ret, char **env, int *i)
+int	handle_double_quote(char *s, char **ret, t_env *env, int *i)
 {
-	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	(*i)++;
+	t_env	*tmp;
+
+	tmp = env;
+	*ret = ft_strjoin_parsing_characters(*ret, s[(*i)++]);
 	while (s[*i] && s[*i] != '\"')
 	{
 		if (s[*i] == '$' && s[*i + 1] != '\"'
@@ -26,7 +28,7 @@ int	handle_double_quote(char *s, char **ret, char **env, int *i)
 		(*i)++;
 	}
 	if (!s[*i])
-		return (printf("minishell : error in quotations\n"), 1);
+		return (printf("minishell : error in quotation\n"), 1);
 	else if (s[*i] == '\"')
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
@@ -39,7 +41,7 @@ int	handle_double_quote(char *s, char **ret, char **env, int *i)
 	return (0);
 }
 
-int	handle_single_quote(char *s, int *i, char **ret, char **env)
+int	handle_single_quote(char *s, int *i, char **ret, t_env *env)
 {
 	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 	(*i)++;
@@ -62,28 +64,28 @@ int	handle_single_quote(char *s, int *i, char **ret, char **env)
 	return (0);
 }
 
-void	handle_dollar(char *s, int *i, char **ret, char **env)
+void	handle_dollar(char *s, int *i, char **ret, t_env *env)
 {
 	char	*tmp;
 	char	*holder;
 
 	tmp = NULL;
 	holder = NULL;
-	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1])
+	if (s[*i + 1] != '\'' || s[*i + 1] != '\"')
+		return ;
+	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t'
+		&& s[*i + 1] && s[*i + 1] != '?')
 	{
-		(*i)++;
-		while (s[*i] && ft_isalnum_parsing(s[*i]))
+		while (s[(*i)++] && ft_isalnum_parsing(s[*i]))
 		{
 			tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
 			if (!s[*i + 1] || s[*i + 1] == ' '
 				|| s[*i + 1] == '\t' || !ft_isalnum_parsing(s[*i + 1]))
 				break ;
-			(*i)++;
 		}
-		holder = get_env(env, tmp);
+		holder = get_env(&env, tmp);
 		*ret = ft_strjoin_parsing(*ret, holder, 1);
-		free(tmp);
-		tmp = NULL;
+		free_string(&tmp);
 		holder = NULL;
 	}
 	else
@@ -112,7 +114,7 @@ void	handle_heredoc(char *s, int *i, char **ret)
 	}
 }
 
-void	handle_env(char	*s, char **ret, char **env, int *i)
+void	handle_env(char	*s, char **ret, t_env *env, int *i)
 {
 	char	*tmp;
 	char	*holder;
@@ -128,7 +130,7 @@ void	handle_env(char	*s, char **ret, char **env, int *i)
 			break ;
 		(*i)++;
 	}
-	holder = get_env(env, tmp);
+	holder = get_env(&env, tmp);
 	*ret = ft_strjoin_parsing(*ret, holder, 1);
 	free(tmp);
 	tmp = NULL;

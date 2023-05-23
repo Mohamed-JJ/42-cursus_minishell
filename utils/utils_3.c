@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 12:57:00 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:47:38 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ char	*ft_strjoin_parsing(char *s1, char *s2, int _free)
 		s1 = ft_strdup_parsing("");
 	if (!s2)
 		s2 = ft_strdup_parsing("");
-	str = malloc((ft_strlen_parsing(s1)
-				+ ft_strlen_parsing(s2) + 1) * sizeof(char));
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -69,6 +68,7 @@ int	skip_special_characters(char *str, int *i, char c)
 
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 {
+	static int	f;
 	data->c = str[data->i];
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
@@ -79,6 +79,7 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 	if (!str[data->i])
 		printf("error in quotation |%c|\n", str[data->i]);
 	data->i++;
+	f++;
 	if ((str[data->i] == '\'' || str[data->i] == '\"'))
 		dqoute_handler(str, data, lex, 1);
 	else if (str[data->i] == ' ' || str[data->i] == '\t' || !str[data->i])

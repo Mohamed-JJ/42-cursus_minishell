@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:49:16 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/12 22:17:14 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/21 16:02:32 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 void	free_string(char **lex);
 void	free_array(char **lex);
 int		arr_len(char **arr);
-char	*expand_var(char *s, char **env);
+char	*expand_var(char *s, t_env *env);
 void	skip_whitespaces(char *str, int *i);
 int		skip_special_characters(char *str, int *i, char c);
 char	**empty_array(void);

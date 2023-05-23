@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 20:57:18 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/20 19:47:32 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,3 @@ void	check_arr(char **r)
 	if (!r[3])
 		r[3] = ft_strdup_parsing("");
 }
-

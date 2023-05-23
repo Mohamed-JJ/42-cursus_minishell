@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 13:06:10 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/22 18:51:46 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -48,13 +49,13 @@ int		ft_strncmp_parsing(const char *s1, const char *s2, size_t n);
 
 // case managment functions
 void	handle_heredoc(char *s, int *i, char **ret);
-void	handle_dollar(char *s, int *i, char **ret, char **env);
-int		handle_single_quote(char *s, int *i, char **ret, char **env);
-int		handle_double_quote(char *s, char **ret, char **env, int *i);
-void	handle_env(char	*s, char **ret, char **env, int *i);
+void	handle_dollar(char *s, int *i, char **ret, t_env *env);
+int		handle_single_quote(char *s, int *i, char **ret, t_env *env);
+int		handle_double_quote(char *s, char **ret, t_env *env, int *i);
+void	handle_env(char	*s, char **ret, t_env *env, int *i);
 
 // variable expansion functions
-char	*get_env(char **env, char *s);
+char	*get_env(t_env **env, char *s);
 //void	print_list(t_lex *lex);
 
 // free functions
@@ -68,11 +69,12 @@ void	insert_space_between_op(char *input, int *i, char **ret);
 char	*insert_spaces(char *input);
 
 // -----------------------execution functions------------------
-void execution(char *command,char **args);
+void execution(char *command, char **args, t_env **head, char **env );
 int check_heredoc(char **del);
 void    ft_cd(char *argv);
 int ft_pwd(int fd);
 void signal_handler(int signum);
+void signal_handler2(int signum);
 int create_out_files(t_cmd *p_cmd);
 int builtin_cmd(char *command, char **args, t_env **head);
 int create_in_files(t_cmd *p_cmd);
@@ -90,7 +92,9 @@ char *get_name(char *str);
 char *get_value(char *str);
 void delete_env(t_env *head, char *name);
 void unset_env(char **args, t_env *head) ;
-void execution1(t_env *headd,t_cmd *p_cmd, char **env);
+void execution1(t_env *headd, t_cmd *p_cmd, char **env);
 void cp_arr(char **arr, char **arr1);
+int builtin_cmd2(char *command, char **args, t_env **head);
+void change_shell_level(char **env);
 
 #endif
