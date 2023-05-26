@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:39:11 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/22 18:51:46 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/26 13:05:31 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@
 # include "structs.h"
 # include "utils.h"
 # include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 # include <curses.h>
 # include <term.h>
-int status;
-// lexer functions
+
+int		g_status;
 int		check_if_operator(char *str);
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int i);
 
@@ -69,32 +70,35 @@ void	insert_space_between_op(char *input, int *i, char **ret);
 char	*insert_spaces(char *input);
 
 // -----------------------execution functions------------------
-void execution(char *command, char **args, t_env **head, char **env );
-int check_heredoc(char **del);
-void    ft_cd(char *argv);
-int ft_pwd(int fd);
-void signal_handler(int signum);
-void signal_handler2(int signum);
-int create_out_files(t_cmd *p_cmd);
-int builtin_cmd(char *command, char **args, t_env **head);
-int create_in_files(t_cmd *p_cmd);
-int ft_echo(char **argv);
-int ft_redirection(char **command, char *name_file);
-char *ft_export(char *argv);
-void print_env(t_env *env,int i);
-void free_env(t_env *env);
-t_env *sort_env(t_env **head);
-t_env *set_env(char **env, t_env *head);
-t_env *copy_env(t_env *head);
-int chek_plus(char *str);
-void serch_replace(t_env *head,char *name,char *value);
-char *get_name(char *str);
-char *get_value(char *str);
-void delete_env(t_env *head, char *name);
-void unset_env(char **args, t_env *head) ;
-void execution1(t_env *headd, t_cmd *p_cmd, char **env);
-void cp_arr(char **arr, char **arr1);
-int builtin_cmd2(char *command, char **args, t_env **head);
-void change_shell_level(char **env);
-
+int		check_heredoc(char **del);
+int		ft_pwd(int fd);
+int		create_in_files(t_cmd *p_cmd);
+int		builtin_cmd(char *command, char **args, t_env **head);
+int		create_out_files(t_cmd *p_cmd);
+int		ft_echo(char **argv);
+int		ft_redirection(char **command, char *name_file);
+int		chek_plus(char *str);
+int		builtin_cmd2(char *command, char **args, t_env **head);
+char	*ft_export(char *argv);
+char	*get_name(char *str);
+char	*get_value(char *str);
+void	execution(char *command, char **args, t_env **head, char **env );
+void	ft_cd(char *argv, t_env **head);
+void	signal_handler(int signum);
+void	print_env(t_env **env, int i);
+void	free_env(t_env *env);
+void	change_shell_level(char **env);
+void	ft_putstr_fd_echo(char	*s, int fd);
+void	ft_exit(char **args);
+void	ft_lstback(t_env **head, char *key, char *value);
+int		serch_replace(t_env *head, char *name, char *value);
+void	delete_env(t_env **head, char *name);
+void	unset_env(char **args, t_env **head);
+void	execution1(t_env **headd, t_cmd *p_cmd, char **env);
+t_env	*sort_env(t_env **head);
+t_env	*set_env(char **env, t_env *head);
+t_env	*copy_env(t_env *head);
+int		is_all_new_line(char *str);
+char	**cp_arr(char **arr, char *arr1);
+char	*get_value_env(char *name, t_env **head);
 #endif

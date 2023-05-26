@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 19:47:32 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:42:45 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	check_operator(t_lex *s)
 {
 	if (s->next == NULL)
-		return (printf("minishell : syntax error\n"), 1);
+		return (printf("minishell : syntax errors\n"), 1);
 	else if (s->next && ((s->type == APPEND && s->next->type == APPEND)
 			|| (s->type == REDIRECT && s->next->type == REDIRECT)))
 		return (printf("minishell : syntax error\n"), 1);

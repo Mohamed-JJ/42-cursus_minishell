@@ -1,25 +1,28 @@
 NAME = minishell
 
-OBJ = minishell.o \
-		utils/utils.o \
-		utils/utils_2.o \
-		utils/utils_3.o \
-		utils/utils_4.o \
-		utils/utils_5.o \
-		utils/utils_6.o \
-		lexer_cmd/lexer_lists.o \
-		lexer_cmd/lexer_main.o \
-		lexer_cmd/cmd_generator.o \
-		utils/inserting_spaces.o \
-		utils/ft_split.o \
-		utils/ft_free.o \
-		utils/handler.o ./execution/execution_utils.o  ./execution/execution_utils_1.o\
+SRC = minishell.c \
+        utils/utils.c \
+        utils/utils_2.c \
+        utils/utils_3.c \
+        utils/utils_4.c \
+        utils/utils_5.c \
+        utils/utils_6.c \
+        lexer_cmd/lexer_lists.c \
+        lexer_cmd/lexer_main.c \
+        lexer_cmd/cmd_generator.c \
+        utils/inserting_spaces.c \
+        utils/ft_split.c \
+        utils/ft_free.c \
+        utils/handler.c ./execution/execution_utils.c  ./execution/execution_utils_1.c ./execution/execution_utils_2.c \
+        ./execution/execution_utils_3.c ./execution/execution_utils_4.c ./execution/execution_utils_5.c \
+        ./execution/execution_utils_6.c  ./execution/execution_utils_7.c 
 
+OBJ = $(SRC:.c=.o)
 
 INC = includes/minishell.h \
-		includes/structs.h \
-		includes/lexer.h \
-		includes/utils.h \
+        includes/structs.h \
+        includes/lexer.h \
+        includes/utils.h \
 
 RM = rm -f
 
@@ -29,10 +32,12 @@ FLAGS = -Wall -Werror -Wextra
 
 all : $(NAME)
 
+%.o : %.c
+	@$(CC) $(CFLAGS) -I $(shell brew --prefix readline)/include -c $< -o $@
 
 $(NAME) : $(OBJ) $(INC)
 	@cd libft && make 
-	@$(CC) $(FLAGS) $(OBJ) ./libft/libft.a -lreadline -o $(NAME) -g
+	@$(CC) -L $(shell brew --prefix readline)/lib -lreadline $(FLAGS) $(OBJ) ./libft/libft.a -o $(NAME) -g
 	@echo █▀▄▀█ ░▀░ █▀▀▄ ░▀░ █▀▀ █░░█ █▀▀ █░░ █░░
 	@echo █░▀░█ ▀█▀ █░░█ ▀█▀ ▀▀█ █▀▀█ █▀▀ █░░ █░░
 	@echo ▀░░░▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀

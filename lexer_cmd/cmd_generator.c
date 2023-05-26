@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 13:47:52 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 19:52:59 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:53:07 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,5 @@ t_cmd	*create_cmd(t_lex *s)
 			break ;
 		s = s->next;
 	}
-	// puts("here");
-
 	return (ret);
 }

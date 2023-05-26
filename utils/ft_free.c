@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:11:27 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/19 18:03:11 by mjarboua         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:48:39 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_array(char **arr)
 	arr = NULL;
 }
 
-void	free_list(t_lex	**list)
+void	free_list(t_lex **list)
 {
 	while (*list)
 	{

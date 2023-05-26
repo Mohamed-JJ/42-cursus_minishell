@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/21 21:00:03 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:47:40 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	handle_double_quote(char *s, char **ret, t_env *env, int *i)
 	*ret = ft_strjoin_parsing_characters(*ret, s[(*i)++]);
 	while (s[*i] && s[*i] != '\"')
 	{
-		if (s[*i] == '$' && s[*i + 1] != '\"'
-			&& s[*i + 1] != ' ' && s[*i + 1] != '\t')
+		if (s[*i] == '$' && s[*i + 1] != '\"' && s[*i + 1]
+			!= ' ' && s[*i + 1] != '\t')
 			handle_env(s, ret, env, i);
 		else
 			*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
@@ -71,16 +71,16 @@ void	handle_dollar(char *s, int *i, char **ret, t_env *env)
 
 	tmp = NULL;
 	holder = NULL;
-	if (s[*i + 1] != '\'' || s[*i + 1] != '\"')
+	if (s[*i + 1] == '\'' || s[*i + 1] == '\"')
 		return ;
-	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t'
-		&& s[*i + 1] && s[*i + 1] != '?')
+	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1]
+		&& s[*i + 1] != '?')
 	{
 		while (s[(*i)++] && ft_isalnum_parsing(s[*i]))
 		{
 			tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
-			if (!s[*i + 1] || s[*i + 1] == ' '
-				|| s[*i + 1] == '\t' || !ft_isalnum_parsing(s[*i + 1]))
+			if (!s[*i + 1] || s[*i + 1] == ' ' || s[*i + 1] == '\t'
+				|| !ft_isalnum_parsing(s[*i + 1]))
 				break ;
 		}
 		holder = get_env(&env, tmp);
@@ -99,7 +99,6 @@ void	handle_heredoc(char *s, int *i, char **ret)
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
 		(*i)++;
 	}
-	(*i)--;
 	while (s[*i] && s[*i] == ' ')
 	{
 		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
@@ -114,7 +113,7 @@ void	handle_heredoc(char *s, int *i, char **ret)
 	}
 }
 
-void	handle_env(char	*s, char **ret, t_env *env, int *i)
+void	handle_env(char *s, char **ret, t_env *env, int *i)
 {
 	char	*tmp;
 	char	*holder;

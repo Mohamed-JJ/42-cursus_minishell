@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/17 19:10:13 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:53:33 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct l_cmd
 	int				is_red_or_app;
 	int				in_out;
 	int				fd_in;
-	int  		 	h_i;
+	int				h_i;
 	char			**infile;
 	char			**outfile;
 	char			**heredoc_del;

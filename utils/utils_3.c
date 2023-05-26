@@ -6,27 +6,16 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/20 20:47:38 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:44:53 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// int	ft_strcmp(char *s1, char *s2)
-// {
-// 	while (*s1 && (*s1 == *s2))
-// 	{
-// 		s1++;
-// 		s2++;
-// 	}
-//     return (*(unsigned char*)s1 - *(unsigned char*)s2);
-// }
-
 int	check_if_operator(char *str)
 {
-	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ">") == 0
-		|| ft_strcmp(str, "<") == 0 || ft_strcmp(str, ">>") == 0
-		|| ft_strcmp(str, "<<") == 0)
+	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ">") == 0 || ft_strcmp(str,
+			"<") == 0 || ft_strcmp(str, ">>") == 0 || ft_strcmp(str, "<<") == 0)
 		return (1);
 	return (0);
 }
@@ -69,6 +58,7 @@ int	skip_special_characters(char *str, int *i, char c)
 void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 {
 	static int	f;
+
 	data->c = str[data->i];
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
