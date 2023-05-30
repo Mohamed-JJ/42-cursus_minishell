@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:44:53 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/23 16:53:33 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:26:58 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ enum e_type
 	IN_FILE,
 	WORD,
 	HEREDOC_DEL,
-	ARGUMENT,
-	SPACE
+	ARGUMENT
 };
 
 enum e_status
@@ -71,13 +70,6 @@ typedef struct l_env
 	struct l_env	*next;
 }			t_env;
 
-typedef struct l_exp
-{
-	char			*value;
-	char			*s;
-	struct l_exp	*next;
-}			t_exp;
-
 typedef struct l_cmd
 {
 	char			*command;
@@ -92,13 +84,17 @@ typedef struct l_cmd
 	struct l_cmd	*next;
 }			t_cmd;
 
-typedef struct l_col
+typedef struct exe_fd
 {
-	char			**args;
-	char			*str;
-	t_lex			*lex;
-	t_cmd			*cmd;
-	struct l_col	*next;
-}			t_col;
+	int	fd2[2];
+	int	fd1[2];
+	int	fd_in;
+	int	fd_out;
+	int	outfile;
+	int	fd_heredoc;
+	int	out;
+	int	in;
+	int	pid;
+}		t_exe_fd;
 
 #endif

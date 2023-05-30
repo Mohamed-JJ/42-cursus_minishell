@@ -6,13 +6,12 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:52:39 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/26 13:08:28 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:44:56 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../libft/libft.h"
-#include <signal.h>
 
 //--------------------------------------herdoc-----
 void	all_heredoc(char **del, int count, char *input, int fd)
@@ -25,13 +24,13 @@ void	all_heredoc(char **del, int count, char *input, int fd)
 		if (input != NULL && ft_strcmp(input, del[i]) == 0)
 			i++;
 		free(input);
-		input = readline("heredoc>");
+		input = readline("heredoc🌼>");
 	}
 	while (input != NULL && ft_strcmp(input, del[count - 1]) != 0)
 	{
 		ft_putendl_fd(input, fd);
 		free(input);
-		input = readline("heredoc>");
+		input = readline("heredoc🌼>");
 	}
 	free(input);
 }
@@ -41,27 +40,28 @@ int	check_heredoc(char **del)
 	int		count;
 	char	*input;
 	int		fd;
-	int		i;
 
-	i = 0;
-	fd = open("/tmp/heredoc", O_RDWR | O_CREAT, 0777);
-	input = readline("heredoc>");
 	count = arr_len(del);
+	if (count > 16)
+	{
+		ft_putstr_fd("minishell :maximum here-document count exceeded\n", 2);
+		exit (2);
+	}
+	fd = open("/tmp/h_c", O_RDWR | O_CREAT, 0777);
+	input = readline("heredoc🌼>");
 	if (count == 1)
 	{
 		while (input != NULL && ft_strcmp(input, del[count - 1]) != 0)
 		{
 			ft_putendl_fd(input, fd);
 			free(input);
-			input = readline("heredoc>");
+			input = readline("heredoc🌼>");
 		}
 		free(input);
 	}
 	else
 		all_heredoc(del, count, input, fd);
-	close(fd);
-	fd = open("/tmp/heredoc", O_RDONLY);
-	return (unlink("/tmp/heredoc"), fd);
+	return (close(fd), fd = open("/tmp/h_c", O_RDONLY), unlink("/tmp/h_c"), fd);
 }
 
 int	create_in_files(t_cmd *p_cmd)
@@ -77,10 +77,14 @@ int	create_in_files(t_cmd *p_cmd)
 		{
 			fd = open(p_cmd->infile[i], O_RDWR);
 			if (fd == -1)
+			{
+				perror("open");
 				return (0);
+			}
 		}
 		else
-			printf("%s No such file or directory\n", p_cmd->infile[i]);
+			return (printf("%s No such file or directory\n",
+					p_cmd->infile[i]), -1);
 		if (p_cmd->infile[i + 1] != NULL)
 			close(fd);
 		i++;
@@ -113,15 +117,9 @@ int	create_out_files(t_cmd *p_cmd)
 	return (fd);
 }
 
-int	ft_pwd(int fd)
+int	ft_pwd(int fd, t_env **head)
 {
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (0);
-	ft_putstr_fd(pwd, fd);
+	ft_putstr_fd(get_value_env("PWD", head) + 1, fd);
 	ft_putstr_fd("\n", fd);
-	free(pwd);
 	return (1);
 }

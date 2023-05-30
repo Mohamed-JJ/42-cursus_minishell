@@ -6,81 +6,76 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:54:35 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/26 16:47:40 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:46:40 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	handle_double_quote(char *s, char **ret, t_env *env, int *i)
+void	handle_double_quote(char *s, char **ret, t_env *env, t_data *h)
 {
 	t_env	*tmp;
 
 	tmp = env;
-	*ret = ft_strjoin_parsing_characters(*ret, s[(*i)++]);
-	while (s[*i] && s[*i] != '\"')
+	*ret = ft_strjoin_parsing_characters(*ret, s[h->i++]);
+	while (s[h->i] && s[h->i] != '\"')
 	{
-		if (s[*i] == '$' && s[*i + 1] != '\"' && s[*i + 1]
-			!= ' ' && s[*i + 1] != '\t')
-			handle_env(s, ret, env, i);
+		if (s[h->i] == '$' && s[h->i + 1] != '\"' && s[h->i + 1] != ' '
+			&& s[h->i + 1] != '\t')
+			handle_env(s, ret, env, h);
 		else
-			*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-		(*i)++;
+			*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+		(h->i)++;
 	}
-	if (!s[*i])
-		return (printf("minishell : error in quotation\n"), 1);
-	else if (s[*i] == '\"')
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	(*i)++;
-	if (s[*i] == '\"')
-		handle_double_quote(s, ret, env, i);
-	else if (s[*i] == '\'')
-		handle_single_quote(s, i, ret, env);
+	if (!s[h->i])
+		return (h->j = 1, (void)printf("minishell : error in quotation\n"));
 	else
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	return (0);
+		handle_double_quote_2(s, ret, env, h);
 }
 
-int	handle_single_quote(char *s, int *i, char **ret, t_env *env)
+void	handle_single_quote(char *s, t_data *h, char **ret, t_env *env)
 {
-	*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	(*i)++;
-	while (s[*i] && s[*i] != '\'')
+	*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+	h->i++;
+	while (s[h->i] && s[h->i] != '\'')
 	{
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-		(*i)++;
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+		h->i++;
 	}
-	if (!s[*i])
-		return (printf("minishell : error in quotation\n"), 1);
+	if (!s[h->i])
+		return (h->j = 1, g_status = 258,
+			(void)printf("minishell : error in quotation\n"));
 	else
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	(*i)++;
-	if (s[*i] == '\'')
-		handle_single_quote(s, i, ret, env);
-	else if (s[*i] == '\"')
-		handle_double_quote(s, ret, env, i);
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+	(h->i)++;
+	if (s[h->i] == '\'')
+		handle_single_quote(s, h, ret, env);
+	else if (s[h->i] == '$')
+		handle_dollar(s, h, ret, env);
+	else if (s[h->i] == '\"')
+		handle_double_quote(s, ret, env, h);
 	else
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-	return (0);
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
 }
 
-void	handle_dollar(char *s, int *i, char **ret, t_env *env)
+void	handle_dollar(char *s, t_data *h, char **ret, t_env *env)
 {
 	char	*tmp;
 	char	*holder;
 
 	tmp = NULL;
 	holder = NULL;
-	if (s[*i + 1] == '\'' || s[*i + 1] == '\"')
+	if (s[h->i + 1] == '\'' || s[h->i + 1] == '\"')
 		return ;
-	if (s[*i] == '$' && s[*i + 1] != ' ' && s[*i + 1] != '\t' && s[*i + 1]
-		&& s[*i + 1] != '?')
+	if (s[h->i] == '$' && s[h->i + 1] != ' ' && s[h->i + 1])
 	{
-		while (s[(*i)++] && ft_isalnum_parsing(s[*i]))
+		while (s[h->i++])
 		{
-			tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
-			if (!s[*i + 1] || s[*i + 1] == ' ' || s[*i + 1] == '\t'
-				|| !ft_isalnum_parsing(s[*i + 1]))
+			tmp = ft_strjoin_parsing_characters(tmp, s[h->i]);
+			if (s[h->i + 1] && s[h->i + 1] == '?' && s[h->i] == '$')
+				tmp = ft_strjoin_parsing_characters(tmp, s[h->i]);
+			else if (!s[h->i + 1] || s[h->i + 1] == ' ' || s[h->i + 1] == '\t'
+				|| !ft_isalnum_parsing(s[h->i + 1]))
 				break ;
 		}
 		holder = get_env(&env, tmp);
@@ -89,45 +84,49 @@ void	handle_dollar(char *s, int *i, char **ret, t_env *env)
 		holder = NULL;
 	}
 	else
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
 }
 
-void	handle_heredoc(char *s, int *i, char **ret)
+void	handle_heredoc(char *s, t_data *h, char **ret)
 {
-	while (s[*i] && s[*i] == '<')
+	while (s[h->i] && s[h->i] == '<')
 	{
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-		(*i)++;
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+		h->i++;
 	}
-	while (s[*i] && s[*i] == ' ')
+	*ret = ft_strjoin_parsing_characters(*ret, ' ');
+	while (s[h->i] && s[h->i] == ' ')
 	{
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-		(*i)++;
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+		h->i++;
 	}
-	while (s[*i])
+	while (s[h->i])
 	{
-		if (ft_strchr_parsing("|>< ", s[*i]))
+		if (ft_strchr_parsing("|>< ", s[h->i]))
 			break ;
-		*ret = ft_strjoin_parsing_characters(*ret, s[*i]);
-		(*i)++;
+		*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
+		h->i++;
 	}
+	*ret = ft_strjoin_parsing_characters(*ret, s[h->i]);
 }
 
-void	handle_env(char *s, char **ret, t_env *env, int *i)
+void	handle_env(char *s, char **ret, t_env *env, t_data *h)
 {
 	char	*tmp;
 	char	*holder;
 
 	tmp = NULL;
 	holder = NULL;
-	while (s[*i] && s[*i] == '$')
-		(*i)++;
-	while (s[*i] && ft_isalnum_parsing(s[*i]))
+	while (s[h->i] && s[h->i] == '$')
+		h->i++;
+	while (s[h->i])
 	{
-		tmp = ft_strjoin_parsing_characters(tmp, s[*i]);
-		if (!ft_isalnum_parsing(s[*i + 1]) || !s[*i + 1])
+		tmp = ft_strjoin_parsing_characters(tmp, s[h->i]);
+		if (s[h->i + 1] && s[h->i + 1] == '?' && s[h->i] == '$')
+			tmp = ft_strjoin_parsing_characters(tmp, s[h->i]);
+		else if (!ft_isalnum_parsing(s[h->i + 1]) || !s[h->i + 1])
 			break ;
-		(*i)++;
+		h->i++;
 	}
 	holder = get_env(&env, tmp);
 	*ret = ft_strjoin_parsing(*ret, holder, 1);

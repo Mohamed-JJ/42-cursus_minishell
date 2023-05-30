@@ -6,26 +6,15 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 18:32:05 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/25 22:37:40 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:23:11 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <sys/fcntl.h>
+#include <unistd.h>
 
-typedef struct exe_fd
-{
-	int	fd2[2];
-	int	fd1[2];
-	int	fd_in;
-	int	fd_out;
-	int	outfile;
-	int	fd_heredoc;
-	int	out;
-	int	in;
-	int	pid;
-}		t_exe_fd;
-
-void	create_pip(int fd[2], t_cmd *p_cmd)
+void	create_pip(int *fd, t_cmd *p_cmd)
 {
 	if (pipe(fd) == -1)
 	{
@@ -34,11 +23,9 @@ void	create_pip(int fd[2], t_cmd *p_cmd)
 	}
 	dup2(fd[1], 1);
 	close(fd[1]);
-	if (p_cmd->outfile != NULL || p_cmd->heredoc_del != NULL)
-		write(fd[1], " ", 1);
 }
 
-void	read_pipe(t_cmd *p_cmd, int fd1[2])
+void	read_pipe(t_cmd *p_cmd, int *fd1)
 {
 	if (p_cmd->fd_in != 0 && p_cmd->infile == NULL
 		&& p_cmd->heredoc_del == NULL)
@@ -78,6 +65,9 @@ int	exec_write(t_exe_fd *exe_fd, t_cmd *p_cmd)
 
 void	exec_read(t_exe_fd *exe_fd, t_cmd *p_cmd)
 {
+	close(exe_fd->fd1[1]);
+	close(exe_fd->in);
+	close(exe_fd->out);
 	if (p_cmd->h_i == 1)
 	{
 		dup2(exe_fd->fd_heredoc, 0);
@@ -97,39 +87,33 @@ void	exec_read(t_exe_fd *exe_fd, t_cmd *p_cmd)
 		read_pipe(p_cmd, exe_fd->fd1);
 	else if (p_cmd->fd_in == 2)
 		read_pipe(p_cmd, exe_fd->fd2);
-	else if (p_cmd->infile == NULL && p_cmd->heredoc_del == NULL && p_cmd->next)
-	{
-		p_cmd->fd_in = open("/dev/null", O_RDONLY);
-		dup2(p_cmd->fd_in, 0);
-		close(p_cmd->fd_in);
-	}
 }
 
-void	execution1(t_env **headd, t_cmd *p_cmd, char **env)
+void	execution1(t_env **h, t_cmd *p, char **env)
 {
 	t_exe_fd	exe_fd;
 
 	exe_fd.out = dup(1);
 	exe_fd.in = dup(0);
-	while (p_cmd)
+	while (p)
 	{
-		if (!exec_write(&exe_fd, p_cmd) && builtin_cmd2(p_cmd->command,
-				p_cmd->args, headd))
-			g_status = 0;
+		if (!exec_write(&exe_fd, p) && bui2(p->command, p->args, h, p))
+			set_delete("?", ft_itoa(g_status), h);
 		else if (exe_fd.fd_heredoc != -1)
 		{
 			exe_fd.pid = fork();
-			if (exe_fd.pid == 0 && exe_fd.fd_heredoc != -1)
+			if (exe_fd.pid == 0 && exe_fd.fd_heredoc
+				!= -1 && exe_fd.fd_in != -1 && exe_fd.pid != -1)
 			{
-				exec_read(&exe_fd, p_cmd);
-				if (builtin_cmd(p_cmd->command, p_cmd->args, headd))
-					exit(0);
+				exec_read(&exe_fd, p);
+				if (builtin_cmd(p->command, p->args, h))
+					exit(g_status);
 				else
-					execution(p_cmd->command, p_cmd->args, headd, env);
+					execution(p->command, p->args, h, env);
 			}
+			if (p->next == NULL)
+				waitpid(exe_fd.pid, &g_status, 0);
 		}
-		waitpid(-1, &g_status, 0);
-		g_status = WEXITSTATUS(g_status);
-		p_cmd = p_cmd->next;
+		p = p->next;
 	}
 }

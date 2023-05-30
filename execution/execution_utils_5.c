@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:52:39 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/26 13:06:12 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:12:17 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ char	**cp_arr(char **arr, char *str)
 
 void	signal_handler(int signum)
 {
-	if (access("/tmp/heredoc", X_OK) == 0 && signum == SIGINT)
+	if (access("/tmp/h_c", X_OK) == 0 && signum == SIGINT)
 	{
-		unlink("/tmp/heredoc");
+		unlink("/tmp/h_c");
 		close(0);
 		g_status = 1;
 	}
-	else if (signum == SIGINT)
+	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();

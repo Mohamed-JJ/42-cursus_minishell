@@ -6,30 +6,12 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:52:39 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/26 15:07:41 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:26:44 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	ft_putstr_fd_echo(char	*s, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return ;
-	while (s[i])
-	{
-		if (s[i] == '$' && s[i + 1] == '?')
-		{
-			ft_putnbr_fd(g_status, 1);
-			i += 2;
-		}
-		write(fd, &s[i], 1);
-		i++;
-	}
-}
+#include <stdint.h>
 
 int	check_digit(char *str)
 {
@@ -69,7 +51,7 @@ void	ft_exit(char **args)
 			printf("minishell: exit: too many arguments\n");
 			g_status = 1;
 		}
-		else if (check_digit(args[0]))
+		else if (check_digit(args[0]) || ft_atoi(args[0]) < -2147483647)
 		{
 			printf("exit\n");
 			printf("minishell: exit: %s: numeric argument required\n", args[0]);
@@ -84,6 +66,32 @@ void	ft_exit(char **args)
 	else
 	{
 		printf("exit\n");
-		exit(1);
+		exit(g_status);
 	}
+}
+
+void	set_delete(char *name, char *value, t_env **head)
+{
+	char	*value2;
+	char	*eqoul;
+
+	if (name == NULL)
+		return ;
+	if (value == NULL)
+		value = ft_strdup(get_value_env("PWD", head));
+	if (value[0] != '=')
+		eqoul = ft_strdup("=");
+	else
+		eqoul = ft_strdup("");
+	value2 = ft_strjoin(eqoul, value);
+	delete_env(head, name);
+	ft_lstback(head, ft_strdup(name), value2);
+	if (value)
+		free(value);
+}
+
+void	free2(char *name, char *value)
+{
+	free(name);
+	free(value);
 }

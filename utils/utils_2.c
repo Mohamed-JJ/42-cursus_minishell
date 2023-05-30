@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:33:48 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/21 16:41:46 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:52:38 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,27 @@
 
 char	*expand_var(char *s, t_env *env)
 {
-	int		i;
-	int		r;
+	t_data	h;
 	char	*ret;
 
 	ret = NULL;
-	i = -1;
-	r = 0;
-	while (s[++i])
+	h.i = -1;
+	h.j = 0;
+	while (s[++h.i])
 	{
-		if (s[i] == '\'')
-			r = handle_single_quote(s, &i, &ret, env);
-		else if (s[i] == '\"')
-			r = handle_double_quote(s, &ret, env, &i);
-		else if (s[i] == '$')
-			handle_dollar(s, &i, &ret, env);
-		else if (s[i] == '<')
-			handle_heredoc(s, &i, &ret);
+		if (s[h.i] == '\'')
+			handle_single_quote(s, &h, &ret, env);
+		else if (s[h.i] == '\"')
+			handle_double_quote(s, &ret, env, &h);
+		else if (s[h.i] == '$')
+			handle_dollar(s, &h, &ret, env);
+		else if (s[h.i] == '<')
+			handle_heredoc(s, &h, &ret);
 		else
-			ret = ft_strjoin_parsing_characters(ret, s[i]);
-		if (r == 1)
+			ret = ft_strjoin_parsing_characters(ret, s[h.i]);
+		if (h.j == 1)
 			return (free_string(&ret), free_string(&s), NULL);
-		if (!s[i])
+		if (!s[h.i])
 			break ;
 	}
 	return (free(s), s = NULL, ret);

@@ -28,7 +28,7 @@ RM = rm -f
 
 CC = cc
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra  
 
 all : $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 21:43:22 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/25 20:42:45 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/27 17:33:06 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ int	generate_error(t_lex *s)
 		if (!tmp->ds_quote && ((tmp->str[0] == '|' && x > 1)
 				|| (tmp->str[0] == '<' && x > 2)
 				|| (tmp->str[0] == '>' && x > 2)))
-			return (printf("minishell : syntax error\n"), 1);
+			return (printf("minishell : syntax error\n"), g_status = 258, 1);
 		if (tmp->type == APPEND || tmp->type == REDIRECT
 			|| tmp->type == PIPE || tmp->type == READ_INPUT)
 		{
 			if (check_operator(tmp))
-				return (1);
+				return (g_status = 258, 1);
 		}
 		tmp = tmp->next;
 	}

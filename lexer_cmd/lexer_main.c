@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:02:29 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/25 21:41:39 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:32:07 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lexer.h"
+#include <stdio.h>
 
 void	manage_type(t_lex *p)
 {
@@ -78,20 +79,19 @@ void	assign_type(t_lex *p)
 
 void	continue_lexing(t_data *h, t_lex **lex, char *input)
 {
+	if (!input[h->i])
+		return ;
 	while (input[h->i] != ' ' && input[h->i] != '\t' && input[h->i])
 	{
 		if (input[h->i] == '\'' || input[h->i] == '\"')
 			dqoute_handler(input, h, lex, 0);
-		else if (input[h->i] == '=' && (input[h->i + 1] == '\'' || input[h->i
-					+ 1] == '\"'))
-		{
-			h->s = ft_strjoin_parsing_characters(h->s, input[h->i++]);
-			dqoute_handler(input, h, lex, 0);
-		}
 		else
 			h->s = ft_strjoin_parsing_characters(h->s, input[h->i++]);
+		if (!input[h->i])
+			break ;
 	}
-	ft_lstadd_back_lexer(lex, new_lex(h->s, WORD, 0));
+	if (!h->j)
+		ft_lstadd_back_lexer(lex, new_lex(h->s, WORD, 0));
 }
 
 t_lex	*lexer(char *input)
@@ -104,13 +104,15 @@ t_lex	*lexer(char *input)
 	h.s = NULL;
 	while (input[++h.i])
 	{
+		h.j = 0;
 		if (input[(h.i)] == '\'' || input[h.i] == '\"')
 			dqoute_handler(input, &h, &lex, 1);
 		if (input[h.i] && (input[h.i] == ' ' || input[h.i] == '\t'))
 			skip_whitespaces(input, &h.i);
-		else if (input[h.i] && input[h.i] != ' ' && input[h.i] != '\t')
+		if (input[h.i] && input[h.i] != ' ' && input[h.i] != '\t')
 			continue_lexing(&h, &lex, input);
-		free_string(&h.s);
+		if (h.s)
+			free_string(&h.s);
 		if (!input[h.i])
 			break ;
 	}

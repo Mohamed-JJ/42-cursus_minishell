@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:33:05 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/26 15:14:14 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:25:25 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void	unset_env(char **args, t_env **head)
 		return ;
 	while (args[i])
 	{
+		if (ft_strcmp(args[0], "?") == 0 || ft_strcmp(args[0], "rix") == 0)
+		{
+			i++;
+			continue ;
+		}
 		if (ft_strcmp(tmp->name, args[0]) == 0)
 		{
 			*head = tmp->next;
@@ -42,8 +47,13 @@ void	delete_env(t_env **head, char *name)
 	t_env	*prev;
 
 	if (*head == NULL)
-	{
 		return ;
+	if (ft_strcmp((*head)->name, name) == 0)
+	{
+		current = *head;
+		*head = (*head)->next;
+		free(current->name);
+		return (free(current->value), free(current));
 	}
 	current = *head;
 	prev = NULL;
@@ -60,20 +70,6 @@ void	delete_env(t_env **head, char *name)
 	free(current);
 }
 
-int	chek_plus(char *str)
-{
-	int	j;
-
-	j = 0;
-	while (str[j])
-	{
-		if (str[j] == '+' && str[j + 1] == '=' && ft_isalpha(str[j - 1]))
-			return (1);
-		j++;
-	}
-	return (0);
-}
-
 int	serch_replace(t_env *head, char *name, char *value)
 {
 	t_env	*tmp;
@@ -86,6 +82,8 @@ int	serch_replace(t_env *head, char *name, char *value)
 			value++;
 			if (ft_strcmp(tmp->value, "") != 0)
 				tmp->value = ft_strjoin(tmp->value, value);
+			else if (!ft_strcmp(tmp->value, "") && !ft_strcmp(value - 1, ""))
+				tmp->value = ft_strjoin(tmp->value, "");
 			else
 			{
 				tmp->value = ft_strjoin(tmp->value, "=");
@@ -103,10 +101,12 @@ int	ft_echo(char **argv)
 	int	i;
 
 	i = 0;
+	if (argv == NULL)
+		return (g_status = 0, printf("\n"), 1);
+	while (argv[i] && is_all_new_line(argv[i]) == 1)
+		i++;
 	while (argv[i])
 	{
-		if (is_all_new_line(argv[0]) == 1)
-			i++;
 		ft_putstr_fd(argv[i], 1);
 		if (argv[i + 1] != NULL)
 			ft_putstr_fd(" ", 1);
@@ -114,5 +114,35 @@ int	ft_echo(char **argv)
 	}
 	if (is_all_new_line(argv[0]) != 1)
 		ft_putstr_fd("\n", 1);
+	g_status = 0;
 	return (1);
+}
+
+void	handle_sig(int sig)
+{
+	int	i;
+
+	i = 0;
+	if (access("/tmp/h_c", X_OK) == 0 && sig == SIGINT)
+	{
+		unlink("/tmp/h_c");
+		close(0);
+		g_status = 1;
+		i = 1;
+	}
+	if (sig == SIGINT)
+	{
+		if (i == 0)
+			printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		g_status = 130;
+	}
+	else if (sig == SIGQUIT)
+	{
+		printf("Quit: 3\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		g_status = 131;
+	}
 }

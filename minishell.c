@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjarboua <mjarboua@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 18:40:33 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/26 15:27:55 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:49:11 by mjarboua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "includes/structs.h"
 #include "includes/utils.h"
 #include "libft/libft.h"
+#include <stdio.h>
 #include <unistd.h>
 
 static char	**get_cwd(void)
@@ -22,8 +23,7 @@ static char	**get_cwd(void)
 	char	cwd[1024];
 	char	*path;
 
-	path = ft_strdup("/Users/imaaitat/.brew/bin:/Users/imaaitat/goinfre/homebrew/bin:\
-	/Users/imaaitat/goinfre/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:\
+	path = ft_strdup("/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:\
 	/Library/Frameworks/Mono.framework/Versions/Current/Commands");
 	getcwd(cwd, sizeof(cwd));
 	env = (char **)malloc(sizeof(char *) * 5);
@@ -40,7 +40,7 @@ void	create_command_and_execute(t_lex **lex, t_env **envh, char **env)
 {
 	t_cmd	*cmd;
 
-	if (lex)
+	if (*lex)
 	{
 		assign_type(*lex);
 		manage_type(*lex);
@@ -51,6 +51,8 @@ void	create_command_and_execute(t_lex **lex, t_env **envh, char **env)
 			cmd = create_cmd(*lex);
 			if (lex)
 				free_list(lex);
+			signal(SIGINT, handle_sig);
+			signal(SIGQUIT, handle_sig);
 			execution1(envh, cmd, env);
 			if (cmd)
 				free_cmd_list(cmd);
@@ -70,7 +72,7 @@ void	prompt(t_env **envh, char **env)
 	rl_catch_signals = 0;
 	input = readline("minishell🥀>");
 	if (!input)
-		return (printf("exit\n"), exit(1));
+		return (printf("exit\n"), clear_history(), exit(0));
 	if (ft_strlen(input) > 0)
 	{
 		add_history(input);
@@ -81,6 +83,7 @@ void	prompt(t_env **envh, char **env)
 			lex = lexer(input);
 			create_command_and_execute(&lex, envh, env);
 		}
+		set_delete("?", ft_itoa(g_status), envh);
 	}
 	free(input);
 	input = NULL;
@@ -90,19 +93,26 @@ int	main(int c, char **v, char **env)
 {
 	t_env	*envh;
 	int		in;
+	int		is_null;
+	char	**args1;
 
 	(void)v;
-	if (c > 1)
-		return (printf("No arguments needed\n"), 1);
+	(void)c;
 	if (env[0] == NULL)
+	{
 		env = get_cwd();
+		is_null = 1;
+	}
+	change_shell_level(env, is_null);
 	envh = set_env(env, envh);
-	change_shell_level(env);
 	in = dup(0);
 	while (1)
 	{
 		dup2(in, 0);
 		prompt(&envh, env);
+		while (waitpid(-1, &g_status, 0) > 0)
+		g_status = WEXITSTATUS(g_status);
+		set_delete("?", ft_itoa(g_status), &envh);
 	}
 	free_env(envh);
 	return (0);

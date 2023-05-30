@@ -6,7 +6,7 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 16:10:32 by imaaitat          #+#    #+#             */
-/*   Updated: 2023/05/26 13:06:32 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/29 01:05:59 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	check_var(char *var)
 		return (0);
 	while (var[i] && var[i] != '=')
 	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
+		if (var[i] != '_' && !ft_isalnum(var[i]) && var[i] != '+')
+			return (0);
+		if (var[i] == '+' && var[i + 1] != '=')
 			return (0);
 		i++;
 	}
@@ -81,25 +83,25 @@ t_env	*set_env(char **env, t_env *head)
 	char	*name;
 	char	*value;
 
-	i = 0;
-	while (env[i])
+	i = -1;
+	while (env[++i])
 	{
-		if (chek_plus(env[i]) && check_var(env[i]))
+		if (check_var(env[i]))
 		{
 			name = get_name(env[i]);
 			value = get_value(env[i]);
-			serch_replace(head, name, value);
-			free(name);
-			free(value);
+			if (!ft_strchr(env[i], '+') && ft_strchr(env[i], '='))
+			{
+				set_delete(name, value, &head);
+				free (name);
+			}
+			else if (!serch_replace(head, name, value))
+				ft_lstback(&head, name, value);
+			else
+				free2(name, value);
 		}
-		else if (ft_strchr(env[i], '=')
-			&& !ft_strchr(env[i], '+') && check_var(env[i]))
-			ft_lstback(&head, get_name(env[i]), get_value(env[i]));
-		else if (!ft_strchr(env[i], '+') && check_var(env[i]))
-			ft_lstback(&head, get_name(env[i]), get_value(env[i]));
 		else
 			printf("invslid identifier\n");
-		i++;
 	}
 	return (head);
 }

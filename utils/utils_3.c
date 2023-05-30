@@ -6,11 +6,12 @@
 /*   By: imaaitat <imaaitat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 20:47:37 by mjarboua          #+#    #+#             */
-/*   Updated: 2023/05/25 20:44:53 by imaaitat         ###   ########.fr       */
+/*   Updated: 2023/05/27 22:10:57 by imaaitat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 int	check_if_operator(char *str)
 {
@@ -55,10 +56,8 @@ int	skip_special_characters(char *str, int *i, char c)
 	return (2);
 }
 
-void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
+int	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 {
-	static int	f;
-
 	data->c = str[data->i];
 	data->i++;
 	while (str[data->i] && str[data->i] != data->c)
@@ -67,14 +66,17 @@ void	dqoute_handler(char *str, t_data *data, t_lex **lex, int flag)
 		data->i++;
 	}
 	if (!str[data->i])
-		printf("error in quotation |%c|\n", str[data->i]);
+		return (printf("error in quotation\n"), data->j = 1, 1);
 	data->i++;
-	f++;
 	if ((str[data->i] == '\'' || str[data->i] == '\"'))
 		dqoute_handler(str, data, lex, 1);
 	else if (str[data->i] == ' ' || str[data->i] == '\t' || !str[data->i])
 	{
 		if (data->s && flag == 1)
+		{
 			ft_lstadd_back_lexer(lex, new_lex(data->s, WORD, 1));
+			data->j = 1;
+		}
 	}
+	return (0);
 }
