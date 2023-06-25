@@ -158,7 +158,7 @@ Don't forget to give the project a star! Thanks again!
 
 <!-- LICENSE -->
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
@@ -169,7 +169,7 @@ Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - simojarboue2
 
 Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name) -->
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 
 
