@@ -128,6 +128,9 @@ basic knowledge of how parsers work , and how a general knowledge of what are fi
    ```js
    const API_KEY = 'ENTER YOUR API';
    ``` -->
+### Installation
+
+you must have brew on your devicem if you are on a window device you must have the c/c++ compiler/interpreter and you must install cmake, and install brew on your windows machine
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -135,7 +138,7 @@ basic knowledge of how parsers work , and how a general knowledge of what are fi
 
 <!-- USAGE EXAMPLES -->
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [Documentation](https://harm-smits.github.io/42docs/projects/minishell)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
