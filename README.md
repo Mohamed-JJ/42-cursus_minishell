@@ -81,7 +81,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://www.gnu.org/software/bash/)
+<!-- [![Product Name Screen Shot][product-screenshot]](https://www.gnu.org/software/bash/) -->
 
 this project aims to make stuudentss understand file descriptors in depth for it is a very hard concept to get a hold of it, and teaches us how the bash interprets the commands and how a close up of how it does all the work by coding a smaller version of it
 
